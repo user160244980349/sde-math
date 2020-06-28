@@ -1,4 +1,4 @@
-from sympy import S, symbols, integrate, pprint
+from sympy import S, symbols, integrate
 
 from symmath.legendre_polynomial import polynomial
 
@@ -16,7 +16,7 @@ def getc(indices):
     return c
 
 
-def getcdash(indices):
+def getcw(indices):
     n = len(indices)
     c = S(1)
 
@@ -27,7 +27,7 @@ def getcdash(indices):
     return -c
 
 
-def getcdash(indices, weights):
+def getcw(indices, weights):
     n = len(indices)
     w = list(reversed(weights))
     c = S(1)
