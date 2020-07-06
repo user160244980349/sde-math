@@ -7,7 +7,7 @@ class Window(QtWidgets.QMainWindow):
     def __init__(self):
         super(Window, self).__init__()
 
-        self.title = "SDEmath"
+        self.title = "SDE math"
         self.left = 0
         self.top = 0
         self.right = 800

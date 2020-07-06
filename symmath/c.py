@@ -16,17 +16,6 @@ def getc(indices):
     return c
 
 
-def getcw(indices):
-    n = len(indices)
-    c = S(1)
-
-    for i in reversed(range(1, n)):
-        c = integrate(polynomial(indices[i], x) * c, (x, -1, y)).subs(y, x)
-    c = integrate(polynomial(indices[0], x) * c, (x, -1, 1))
-
-    return -c
-
-
 def getcw(indices, weights):
     n = len(indices)
     w = list(reversed(weights))

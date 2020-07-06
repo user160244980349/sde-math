@@ -1,31 +1,28 @@
-import os
-import sys
-from os.path import join
+from PyQt5.QtWidgets import QApplication
 
-from PyQt5 import QtWidgets
-
-from config import database as dbname, resources
+from config import database
 from init.init import init
-from tools import database, fsys
+from tools import fsys
+from tools.database import connect, disconnect
 from ui.Window import Window
 
 
 def main():
-    database.connect(dbname)
+    connect(database)
 
-    if not fsys.is_locked(join(resources, '.init.lock')):
+    if not fsys.is_locked():
         init()
-        fsys.lock(join(resources, '.init.lock'))
+        fsys.lock()
 
-    app = QtWidgets.QApplication([])
+    app = QApplication([])
     window = Window()
     window.show()
-    sys.exit(app_exit(app))
+    exit(app_exit(app))
 
 
 def app_exit(app):
     app.exec()
-    database.disconnect()
+    disconnect()
     pass
 
 
