@@ -4,11 +4,11 @@ from sympy import Symbol, simplify
 
 from symmath.legendre_polynomial import polynomial
 
-x = Symbol('x')
-
 
 class LegendrePolynomial(unittest.TestCase):
     def test_polynomials(self):
+
+        x = Symbol('x')
 
         polynomials = [
             1,

@@ -23,7 +23,6 @@ def main():
 def app_exit(app):
     app.exec()
     disconnect()
-    pass
 
 
 if __name__ == '__main__':
