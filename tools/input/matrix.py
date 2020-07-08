@@ -1,15 +1,17 @@
+from numpy import zeros
 
 
 def matrix(n, m, s):
-    mat = [[0 for _ in range(n)] for _ in range(m)]
-    for i in range(m):
+    mat = zeros((n, m))
+
+    for i in range(n):
         row = input().strip().split(s)
-        
-        if len(row) > n:
+
+        if len(row) != m:
             raise BoundExceedError()
         
-        for j in range(n):
-            mat[i][j] = int(row[j])
+        for j in range(m):
+            mat[i, j] = int(row[j])
 
     return mat
 

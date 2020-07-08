@@ -2,8 +2,8 @@ from numpy import zeros, transpose
 
 
 def convert(mat_a, n):
-    mat_a_conv = zeros(n, n)
-    mat_one_1 = zeros(n, n)
+    mat_a_conv = zeros((n, n))
+    mat_one_1 = zeros((n, n))
     rr1 = 1
     for jj1 in range(1, n):
         nb1 = n - jj1 + 1
