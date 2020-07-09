@@ -1,4 +1,6 @@
-from tools.input.matrix import matrix
+from ito.linear.dindet import dindet
+from ito.linear.stoch import stoch
+from tools.matrix import input_ndarray
 from numpy import transpose, zeros
 
 
@@ -18,7 +20,6 @@ def linito():
     n, k, m >= 1
     ''')
 
-    # title
     # type title.doc
     
     # input sizes
@@ -36,19 +37,19 @@ def linito():
 
     # input matrices
     print('A = ? - n x n')
-    mat_a = matrix(n, n, ' ')
+    mat_a = input_ndarray(n, n, ' ')
 
     print('B = ? - n x k')
-    mat_b = matrix(n, k, ' ')
+    mat_b = input_ndarray(n, k, ' ')
 
     print('F = ? - n x m')
-    mat_f = matrix(n, m, ' ')
+    mat_f = input_ndarray(n, m, ' ')
 
     print('H = ? - 1 x n')
-    mat_h = matrix(1, n, ' ')
+    mat_h = input_ndarray(1, n, ' ')
 
     print('x0 = ? - n x 1')
-    x0 = matrix(n, 1, ' ')
+    x0 = input_ndarray(n, 1, ' ')
     print(transpose(x0))
 
     # integration range
@@ -62,11 +63,12 @@ def linito():
         tk = float(input('input new tk = ? (tk > t0 + dt)\n'))
 
     # type uprav.doc
+
     keysym = input('key = ? [c,p,h,o,z]\n')
     if keysym == 'c':
         print('U = u0 - k x 1 ')
         print('u0 = ? - k x 1 ')
-        mat_u0 = matrix(k, 1, ' ')
+        mat_u0 = input_ndarray(k, 1, ' ')
         un = 1
 
     elif keysym == 'p':
@@ -74,50 +76,75 @@ def linito():
         p = int(input('degree of polynomial p = ?\n'))
         mat_u = zeros((k, p))
         for i in range(p):
-            print('i = %d\nU(i) = ? - k x 1 ' % i)
-            mat_u[:, i] = matrix(k, 1, ' ')[:, 0]
+            print('i = %d\nU(i) = ? - k x 1' % i)
+            mat_u[:, i] = input_ndarray(k, 1, ' ')[:, 0]
         un = 2
         print(mat_u)
 
     elif keysym == 'h':
         print('U = D * sin(w * t + fi) - k x 1\nD = ? - k x 1')
-        mat_d = matrix(k, 1, ' ')
+        mat_d = input_ndarray(k, 1, ' ')
         print('w = ? - k x 1')
-        mat_w = matrix(k, 1, ' ')
+        mat_w = input_ndarray(k, 1, ' ')
         print('fi = ? - k x 1')
-        mat_fi = matrix(k, 1, ' ')
+        mat_fi = input_ndarray(k, 1, ' ')
         un = 3
         
-   # elif key == 'o'
-	# un = 4;
-   # elif key == 'z'
-   #     for i = 1:k,
-	#         type upr.doc;
-   #        disp('i = ');
-	#   disp(i);
-	#   key=input('key = ? [c,p,h]  ','s');
-	#      if key == 'c',
-	#          u00 = input('u00 = ? ');
-   #               ua(i) = 1;
-   #                  key = 0;
-   #            elif key == 'p'
-   #               u01 = input('u01 = ? ');
-   #               u02 = input('u02 = ? ');
-   #               u03 = input('u03 = ? ');
-   #               ua(i) = 2;
-   #                  key = 0;
-   #            elif key == 'h'
-   #               D0 = input('D0 = ? ');
-   #               w0 = input('w0 = ? ');
-   #               fi0 = input('fi0 = ? ');
-   #               ua(i) = 3;
-   #                  key = 0;
-   #           else
-   #            end; %if
-   #   	     end; % for
-   #   	     un = 5;
-   #         else
-   #         end; % if key == 'z'
+    elif keysym == 'o':
+        un = 4
+    
+    elif keysym == 'z':
+        for i in range(k):
+            # type upr.doc
+            print('i = %d\n' % i)
+            keysym = input('key = ? [c,p,h]')
+
+            if keysym == 'c':
+                u00 = input('u00 = ? ')
+                ua = []
+                ua[i] = 1
+                keysym = 0
+
+            elif keysym == 'p':
+                u01 = input('u01 = ? ')
+                u02 = input('u02 = ? ')
+                u03 = input('u03 = ? ')
+                ua = []
+                ua[i] = 2
+                keysym = 0
+
+            elif keysym == 'h':
+                d0 = input('D0 = ? ')
+                w0 = input('w0 = ? ')
+                fi0 = input('fi0 = ? ')
+                ua = []
+                ua[i] = 3
+                keysym = 0
+
+            else:
+                un = 5
+    
+    print('''
+    CALCULATION OF MATRICES OF DYNAMICAL 
+    PART OF SOLUTION - Ad AND DETERMINISTIC 
+    PART OF SOLUTION - Bd (ALGORITHM 11.2)
+    ''')
+
+    mat_ad, mat_bd = dindet(n, k, mat_a, mat_b, dt)
+
+    ans = input('see ad and bd? [y/n]')
+    if ans == 'y':
+        print('Ab =')
+        print(mat_ad)
+        print('Bb =')
+        print(mat_bd)
+        
+    print('''
+    CALCULATION OF MATRIX OF STOCHASTIC
+    PART OF SOLUTION - Fd (ALGORITHM 11.6)	
+    ''')
+
+    mat_fd = stoch(n, mat_a, mat_f, dt)
 
 
 if __name__ == '__main__':
