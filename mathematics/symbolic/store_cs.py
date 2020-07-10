@@ -1,17 +1,15 @@
 from os.path import join
 from sympy import Symbol
 from config import resources
-from symmath.c import getcw, getc
+from mathematics.symbolic.c import getcw, getc
 
 
 def main():
     x = Symbol('x')
     
-    w = {
-        '001': [1, 1, x + 1],
-        '010': [1, x + 1, 1],
-        '100': [x + 1, 1, 1]
-    }
+    w = {'001': [1, 1, x + 1],
+         '010': [1, x + 1, 1],
+         '100': [x + 1, 1, 1]}
     
     content = ''
     

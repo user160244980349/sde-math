@@ -2,7 +2,7 @@ import unittest
 
 from sympy import S, Symbol
 
-from symmath.c import getc, getcw
+from mathematics.symbolic import getc, getcw
 
 x = Symbol('x')
 

@@ -5,7 +5,7 @@ class BoundExceedError(Exception):
     pass
 
 
-def input_ndarray(n, m, s):
+def input_matrix(n, m, s):
     mat = ndarray((n, m))
 
     for i in range(n):
@@ -20,7 +20,7 @@ def input_ndarray(n, m, s):
     return mat
 
 
-def extending_set(matrix, i, j, value):
+def extending_assignment(matrix, i, j, value):
 
     if shape(matrix)[0] <= i:
         matrix = vstack((matrix, zeros((i - shape(matrix)[0] + 1, shape(matrix)[1]))))
@@ -41,12 +41,4 @@ def vec_to_eye(vector):
     for i in range(len(matrix)):
         matrix[i][i] = vector[i]
     
-    return matrix
-
-
-def print_with_precision(matrix):
-
-    for i in range(len(matrix)):
-        print(' '.join("%2.4f" % e for e in matrix[i]))
-
     return matrix

@@ -2,7 +2,7 @@ import unittest
 
 from sympy import Symbol, simplify
 
-from symmath.legendre_polynomial import polynomial
+from mathematics.symbolic import polynomial
 
 
 class LegendrePolynomial(unittest.TestCase):

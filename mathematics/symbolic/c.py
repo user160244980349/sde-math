@@ -1,6 +1,6 @@
 from sympy import S, symbols, integrate
 
-from symmath.legendre_polynomial import polynomial
+from mathematics.symbolic import polynomial
 
 x, y = symbols('x y')
 
