@@ -1,6 +1,6 @@
 from numpy import transpose, zeros, ndarray, sqrt
 from numpy.linalg import eig
-from mathematics.ito.linear.dindet import dindet
+from mathematics.sde.linear.dindet import dindet
 from mathematics.matrix import extending_assignment, vec_to_eye
 
 

@@ -1,6 +1,7 @@
-from mathematics.ito.linear.dindet import dindet
-from mathematics.ito.linear.stoch import stoch
-from mathematics.matrix import input_matrix, extending_assignment
+from mathematics.sde.linear.dindet import dindet
+from mathematics.sde.linear.stoch import stoch
+from mathematics.input import input_matrix
+from mathematics.matrix import extending_assignment
 from numpy import transpose, zeros, array
 from numpy.random import randn
 from scipy.linalg import expm
@@ -277,6 +278,9 @@ def linito():
                 mat_kt = extending_assignment(mat_kt, 0, kk, t)
                 mat_x0, mat_mx0, mat_dx0 = xt, mx, mat_dx
                 t0, tk = tk2, tk2 + t2
+                
+                print('\n Xt = ')
+                print(xt)
 
                 # plot(kt,yt,'b',kt,my,'r'),
                 # ylabel('blue - SDE, red - ODE'),

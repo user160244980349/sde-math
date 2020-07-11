@@ -1,12 +1,12 @@
 import unittest
 from numpy import array, transpose, sqrt
 from numpy.testing import assert_array_almost_equal
-from mathematics.ito.linear import dindet
-from mathematics.ito.linear import algorithm_11_5, algorithm_11_3, algorithm_11_4, algorithm_11_2
+from mathematics.sde.linear.dindet import dindet
+from mathematics.sde.linear.stoch import algorithm_11_5, algorithm_11_3, algorithm_11_4, algorithm_11_2
 from mathematics.matrix import vec_to_eye
 
 
-class ItoLinear(unittest.TestCase):
+class SdeLinear(unittest.TestCase):
     def test_algorithm_11_2(self):
 
         n, dt = 4, 0.001

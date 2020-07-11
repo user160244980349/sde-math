@@ -1,23 +1,4 @@
-from numpy import ndarray, shape, vstack, hstack, zeros
-
-
-class BoundExceedError(Exception):
-    pass
-
-
-def input_matrix(n, m, s):
-    mat = ndarray((n, m))
-
-    for i in range(n):
-        row = input().strip().split(s)
-
-        if len(row) != m:
-            raise BoundExceedError()
-        
-        for j in range(m):
-            mat[i, j] = int(row[j])
-
-    return mat
+from numpy import shape, vstack, hstack, zeros
 
 
 def extending_assignment(matrix, i, j, value):
