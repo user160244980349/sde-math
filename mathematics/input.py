@@ -1,5 +1,4 @@
-from numpy import ndarray
-from sympy import S
+from numpy import array
 
 
 class BoundExceedError(Exception):
@@ -7,7 +6,7 @@ class BoundExceedError(Exception):
 
 
 def input_matrix(n, m, s):
-    mat = ndarray((n, m))
+    mat = []
 
     for i in range(n):
         row = input().strip().split(s)
@@ -15,13 +14,8 @@ def input_matrix(n, m, s):
         if len(row) != m:
             raise BoundExceedError()
 
+        mat.append([])
         for j in range(m):
-            mat[i][j] = int(row[j])
+            mat[i].append(row[j])
 
-    return mat
-
-
-def input_formula():
-    f_str = input()
-    f = S(f_str)
-    return f
+    return array(mat)

@@ -43,19 +43,19 @@ def linito():
     #
     # # input matrices
     # print('A = ? - n x n')
-    # mat_a = input_matrix(n, n, ' ')
+    # mat_a = input_matrix(n, n, ' ').astype(float)
     #
     # print('B = ? - n x k')
-    # mat_b = input_matrix(n, k, ' ')
+    # mat_b = input_matrix(n, k, ' ').astype(float)
     #
     # print('F = ? - n x m')
-    # mat_f = input_matrix(n, m, ' ')
+    # mat_f = input_matrix(n, m, ' ').astype(float)
     #
     # print('H = ? - 1 x n')
-    # mat_h = input_matrix(1, n, ' ')
+    # mat_h = input_matrix(1, n, ' ').astype(float)
     #
     # print('x0 = ? - n x 1')
-    # mat_x0 = input_matrix(n, 1, ' ')
+    # mat_x0 = input_matrix(n, 1, ' ').astype(float)
     # print(transpose(mat_x0))
     #
     # # integration range
@@ -105,7 +105,7 @@ def linito():
     if keysym == 'c':
         print('U = u0 - k x 1')
         print('u0 = ? - k x 1')
-        mat_u0 = input_matrix(k, 1, ' ')
+        mat_u0 = input_matrix(k, 1, ' ').astype(float)
         un = 1
 
     elif keysym == 'p':
@@ -115,18 +115,18 @@ def linito():
 
         for i in range(p):
             print('i = #d\nU(i) = ? - k x 1' % i)
-            mat_u[:, i] = input_matrix(k, 1, ' ')[:, 0]
+            mat_u[:, i] = input_matrix(k, 1, ' ').astype(float)[:, 0]
 
         un = 2
         print(mat_u)
 
     elif keysym == 'h':
         print('U = D * sin(w * t + fi) - k x 1\nD = ? - k x 1\n')
-        mat_d = input_matrix(k, 1, ' ')
+        mat_d = input_matrix(k, 1, ' ').astype(float)
         print('w = ? - k x 1\n')
-        mat_w = input_matrix(k, 1, ' ')
+        mat_w = input_matrix(k, 1, ' ').astype(float)
         print('fi = ? - k x 1\n')
-        mat_fi = input_matrix(k, 1, ' ')
+        mat_fi = input_matrix(k, 1, ' ').astype(float)
         un = 3
 
     elif keysym == 'o':
