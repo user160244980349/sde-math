@@ -1,14 +1,15 @@
 import unittest
+
 from numpy import array, transpose, sqrt
 from numpy.testing import assert_array_almost_equal
+
+from mathematics.matrix import vec_to_eye
 from mathematics.sde.linear.dindet import dindet
 from mathematics.sde.linear.stoch import algorithm_11_5, algorithm_11_3, algorithm_11_4, algorithm_11_2
-from mathematics.matrix import vec_to_eye
 
 
 class SdeLinear(unittest.TestCase):
     def test_algorithm_11_2(self):
-
         n, dt = 4, 0.001
 
         mat_a = array([[-1, 0, 0, 0],
@@ -28,7 +29,6 @@ class SdeLinear(unittest.TestCase):
         self.assertIsNone(assert_array_almost_equal(mat_d1, mat_d2, 4))
 
     def test_algorithm_11_3(self):
-
         n = 4
 
         mat_g = array([[0.0800, 0.0500, 0.0700, 0.0700],
@@ -52,7 +52,6 @@ class SdeLinear(unittest.TestCase):
         self.assertIsNone(assert_array_almost_equal(e_mat_gv, mat_gv, 4))
 
     def test_algorithm_11_4(self):
-
         n = 4
 
         mat_dv = array([[0.7992],
@@ -76,7 +75,6 @@ class SdeLinear(unittest.TestCase):
         self.assertIsNone(assert_array_almost_equal(e_mat_d1, mat_d1, 4))
 
     def test_algorithm_11_5(self):
-
         n = 4
 
         mat_a = array([[-1, 0, 0, 0],

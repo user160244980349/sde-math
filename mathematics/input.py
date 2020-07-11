@@ -1,5 +1,5 @@
-from sympy import S
 from numpy import ndarray
+from sympy import S
 
 
 class BoundExceedError(Exception):

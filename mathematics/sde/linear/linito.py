@@ -1,11 +1,13 @@
-from mathematics.sde.linear.dindet import dindet
-from mathematics.sde.linear.stoch import stoch
-from mathematics.input import input_matrix
-from mathematics.matrix import extending_assignment
+from math import sin
+
 from numpy import transpose, zeros, array
 from numpy.random import randn
 from scipy.linalg import expm
-from math import sin
+
+from mathematics.input import input_matrix
+from mathematics.matrix import extending_assignment
+from mathematics.sde.linear.dindet import dindet
+from mathematics.sde.linear.stoch import stoch
 
 
 def linito():
@@ -244,7 +246,7 @@ def linito():
                             mat_ut[j][0] = u00
 
                         elif vec_ua[j] == 2:
-                            mat_ut[j][0] = u01 + u02 * t + u03 * t**2
+                            mat_ut[j][0] = u01 + u02 * t + u03 * t ** 2
 
                         elif vec_ua[j] == 3:
                             mat_ut[j][0] = d0 * sin(w0 * t + fi0)
@@ -278,7 +280,7 @@ def linito():
                 mat_kt = extending_assignment(mat_kt, 0, kk, t)
                 mat_x0, mat_mx0, mat_dx0 = xt, mx, mat_dx
                 t0, tk = tk2, tk2 + t2
-                
+
                 print('\n Xt = ')
                 print(xt)
 
