@@ -5,7 +5,7 @@ from sympy import Symbol, simplify
 from mathematics.symbolic.legendre_polynomial import polynomial
 
 
-class LegendrePolynomial(unittest.TestCase):
+class TestLegendrePolynomial(unittest.TestCase):
     def test_polynomials(self):
         x = Symbol('x')
 

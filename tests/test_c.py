@@ -5,7 +5,7 @@ from sympy import S, Symbol
 from mathematics.symbolic.c import getc, getcw
 
 
-class C(unittest.TestCase):
+class TestC(unittest.TestCase):
     def test_c_xxx(self):
         samples = [[[0, 0, 0], S(4) / S(3)],
                    [[0, 0, 1], S(-2) / S(3)],

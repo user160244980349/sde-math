@@ -8,7 +8,7 @@ from mathematics.sde.linear.dindet import dindet
 from mathematics.sde.linear.stoch import algorithm_11_5, algorithm_11_3, algorithm_11_4, algorithm_11_2
 
 
-class SdeLinear(unittest.TestCase):
+class TestSdeLinear(unittest.TestCase):
     def test_algorithm_11_2(self):
         n, dt = 4, 0.001
 

@@ -6,7 +6,7 @@ from numpy.testing import assert_array_equal
 from mathematics.matrix import vec_to_eye, extending_assignment
 
 
-class Matrix(unittest.TestCase):
+class TestMatrix(unittest.TestCase):
     def test_vec_to_eye(self):
         vec = array([1, 2, 3])
         mat = vec_to_eye(vec)

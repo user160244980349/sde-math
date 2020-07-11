@@ -7,7 +7,7 @@ from sympy import Symbol, pprint, diff
 from mathematics.input import input_matrix, input_formula
 
 
-class Input(unittest.TestCase):
+class TestInput(unittest.TestCase):
     def test_input_formula(self):
         print('\nf(x, y) = x**2 + 2*x + y**2 + y + 2')
         f = input_formula()
