@@ -1,12 +1,11 @@
-from numpy import array, zeros
-
 import plotly.graph_objects as go
+from numpy import array, zeros
 
 from mathematics.input import zero, harmonic, polynomial, const
 from mathematics.sde.linear.dindet import dindet
+from mathematics.sde.linear.distortion import Distortion
 from mathematics.sde.linear.integration import Integral
 from mathematics.sde.linear.stoch import stoch
-from mathematics.sde.linear.distortion import Distortion
 
 
 def linito():

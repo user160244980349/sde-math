@@ -1,4 +1,5 @@
 import unittest
+
 import plotly.graph_objects as go
 
 from mathematics.sde.linear.distortion import Harmonic, Zero, Const, Polynomial

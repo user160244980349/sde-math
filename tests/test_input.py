@@ -10,7 +10,6 @@ from mathematics.input import input_matrix
 class TestInput(unittest.TestCase):
     @unittest.skip('')
     def test_formula_matrix(self):
-
         print()
         mat = input_matrix(2, 2, ';')
 

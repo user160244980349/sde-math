@@ -1,5 +1,6 @@
-from numpy import array
 from math import sin
+
+from numpy import array
 
 
 class Zero:
@@ -23,7 +24,6 @@ class Polynomial:
         self._p = len(u)
 
     def t(self, t):
-        
         ut = 0
         for i in range(self._p):
             ut = ut + self._u[i] * t ** i

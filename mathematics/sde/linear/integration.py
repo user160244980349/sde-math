@@ -1,6 +1,6 @@
 from numpy import transpose, hstack, ndarray
-from scipy.linalg import expm
 from numpy.random import randn
+from scipy.linalg import expm
 
 from mathematics.matrix import diagonal_to_column
 
@@ -15,25 +15,21 @@ class Integral:
         self.vec_yt, self.vec_my, self.vec_dy, self.vec_t, self.vec_ry = [], [], [], [], []
         self.distortion = None
 
-        pass
-
     def integrate(self):
-        
         integration_limit = int((self.tk - self.t0) / self.dt + 1)
 
         for integration_step in range(0, integration_limit):
             t = self.t0 + integration_step * self.dt
-
             ft = randn(self.n, 1)
             mat_ut = self.distortion.t(t)
 
             # solution of sde
             xt = self.mat_ad.dot(self.mat_x0) + self.mat_bd.dot(mat_ut) + self.mat_fd.dot(ft)
             # exit process of stochastic system
-            
+
             self.mat_xt = hstack((self.mat_xt, xt))
             self.vec_yt.append(self.mat_h.dot(xt)[0][0])
-    
+
             # expectation of solution of sde
             mx = self.mat_ad.dot(self.mat_mx0) + self.mat_bd.dot(mat_ut)
             # expectation of exit process
