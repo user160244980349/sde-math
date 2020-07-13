@@ -155,9 +155,9 @@ def linito():
             fig1.add_trace(go.Scatter(x=integral.vec_t, y=integral.mat_mx[i],
                                       mode='lines',
                                       name="expectation of component %d" % i))
-        fig2.add_trace(go.Scatter(x=integral.vec_t, y=integral.mat_dx[0],
-                                  mode='lines',
-                                  name="dispersion of component %d" % 0))
+            fig2.add_trace(go.Scatter(x=integral.vec_t, y=integral.mat_dx[i],
+                                      mode='lines',
+                                      name="dispersion of component %d" % 0))
         fig1.show()
         fig2.show()
 

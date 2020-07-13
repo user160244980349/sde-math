@@ -2,6 +2,8 @@ from numpy import transpose, hstack, ndarray
 from scipy.linalg import expm
 from numpy.random import randn
 
+from mathematics.matrix import diagonal_to_column
+
 
 class Integral:
     def __init__(self, n):
@@ -41,7 +43,7 @@ class Integral:
             # dispersion of solution of sde
             dx = self.mat_ad.dot(self.mat_dx0).dot(transpose(self.mat_ad)) + self.mat_fd.dot(transpose(self.mat_fd))
             # dispersion of exit process
-            self.mat_dx = hstack((self.mat_dx, dx))
+            self.mat_dx = hstack((self.mat_dx, diagonal_to_column(dx)))
             self.vec_dy.append(self.mat_h.dot(dx).dot(transpose(self.mat_h))[0][0])
 
             # covariance matrix of solution of sde
