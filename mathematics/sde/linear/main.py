@@ -1,4 +1,4 @@
-import plotly.graph_objects as go
+from plotly import graph_objects
 from numpy import array, zeros
 
 from mathematics.input import zero, harmonic, polynomial, const
@@ -8,7 +8,7 @@ from mathematics.sde.linear.integration import Integral
 from mathematics.sde.linear.stoch import stoch
 
 
-def linito():
+def main():
     print('''
     NUMERICAL SOLUTION OF LINEAR
     STATIONARY SYSTEM OF STOCHASTIC
@@ -145,18 +145,18 @@ def linito():
         integral.integrate()
 
         # create traces
-        fig1 = go.Figure()
-        fig2 = go.Figure()
+        fig1 = graph_objects.Figure()
+        fig2 = graph_objects.Figure()
         for i in trajectories:
-            fig1.add_trace(go.Scatter(x=integral.vec_t, y=integral.mat_xt[i],
-                                      mode='lines',
-                                      name="component %d" % i))
-            fig1.add_trace(go.Scatter(x=integral.vec_t, y=integral.mat_mx[i],
-                                      mode='lines',
-                                      name="expectation of component %d" % i))
-            fig2.add_trace(go.Scatter(x=integral.vec_t, y=integral.mat_dx[i],
-                                      mode='lines',
-                                      name="dispersion of component %d" % 0))
+            fig1.add_trace(graph_objects.Scatter(x=integral.vec_t, y=integral.mat_xt[i],
+                                                 mode='lines',
+                                                 name="component %d" % i))
+            fig1.add_trace(graph_objects.Scatter(x=integral.vec_t, y=integral.mat_mx[i],
+                                                 mode='lines',
+                                                 name="expectation of component %d" % i))
+            fig2.add_trace(graph_objects.Scatter(x=integral.vec_t, y=integral.mat_dx[i],
+                                                 mode='lines',
+                                                 name="dispersion of component %d" % 0))
         fig1.show()
         fig2.show()
 
@@ -168,4 +168,4 @@ def linito():
 
 
 if __name__ == '__main__':
-    linito()
+    main()

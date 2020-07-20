@@ -26,7 +26,6 @@ class Integral:
             # solution of sde
             xt = self.mat_ad.dot(self.mat_x0) + self.mat_bd.dot(mat_ut) + self.mat_fd.dot(ft)
             # exit process of stochastic system
-
             self.mat_xt = hstack((self.mat_xt, xt))
             self.vec_yt.append(self.mat_h.dot(xt)[0][0])
 
