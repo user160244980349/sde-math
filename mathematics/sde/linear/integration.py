@@ -14,31 +14,37 @@ class Integral:
             None, None, None, ndarray((n, 0)), ndarray((n, 0)), ndarray((n, 0))
         self.vec_yt, self.vec_my, self.vec_dy, self.vec_t, self.vec_ry = [], [], [], [], []
         self.distortion = None
+        self.integration_step = 0
 
     def integrate(self):
-        integration_limit = int((self.tk - self.t0) / self.dt + 1)
+        higher_limit = self.integration_step + int((self.tk - self.t0) / self.dt + 1)
+        lower_limit = self.integration_step
 
-        for integration_step in range(0, integration_limit):
-            t = self.t0 + integration_step * self.dt
+        self.mat_xt = hstack((self.mat_xt, ndarray((self.n, higher_limit - lower_limit))))
+        self.mat_mx = hstack((self.mat_mx, ndarray((self.n, higher_limit - lower_limit))))
+        self.mat_dx = hstack((self.mat_dx, ndarray((self.n, higher_limit - lower_limit))))
+
+        for self.integration_step in range(lower_limit, higher_limit):
+            t = self.t0 + self.integration_step * self.dt
             ft = randn(self.n, 1)
             mat_ut = self.distortion.t(t)
 
             # solution of sde
             xt = self.mat_ad.dot(self.mat_x0) + self.mat_bd.dot(mat_ut) + self.mat_fd.dot(ft)
             # exit process of stochastic system
-            self.mat_xt = hstack((self.mat_xt, xt))
+            self.mat_xt[:, self.integration_step] = xt[:, 0]
             self.vec_yt.append(self.mat_h.dot(xt)[0][0])
 
             # expectation of solution of sde
             mx = self.mat_ad.dot(self.mat_mx0) + self.mat_bd.dot(mat_ut)
             # expectation of exit process
-            self.mat_mx = hstack((self.mat_mx, mx))
+            self.mat_mx[:, self.integration_step] = mx[:, 0]
             self.vec_my.append(self.mat_h.dot(mx)[0][0])
 
             # dispersion of solution of sde
             dx = self.mat_ad.dot(self.mat_dx0).dot(transpose(self.mat_ad)) + self.mat_fd.dot(transpose(self.mat_fd))
             # dispersion of exit process
-            self.mat_dx = hstack((self.mat_dx, diagonal_to_column(dx)))
+            self.mat_dx[:, self.integration_step] = diagonal_to_column(dx)[:, 0]
             self.vec_dy.append(self.mat_h.dot(dx).dot(transpose(self.mat_h))[0][0])
 
             # covariance matrix of solution of sde

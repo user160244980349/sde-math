@@ -1,5 +1,6 @@
 from plotly import graph_objects
 from numpy import array, zeros
+from time import time
 
 from mathematics.input import zero, harmonic, polynomial, const
 from mathematics.sde.linear.dindet import dindet
@@ -66,7 +67,8 @@ def main():
 
     integral = Integral(4)
 
-    integral.k, integral.m, integral.dt, integral.t0, integral.tk = 3, 5, 0.001, 0, 10
+    integral.k, integral.m, integral.dt, integral.t0, integral.tk = \
+        3, 5, 0.001, 0, 10
 
     integral.mat_a = array([[-1, 0, 0, 0],
                             [0, -2, 0, 0],
@@ -142,7 +144,10 @@ def main():
     print('\ncalculating...')
 
     while True:
+        t1 = int(round(time() * 1000))
         integral.integrate()
+        t2 = int(round(time() * 1000))
+        print("integration took %d" % (t2 - t1))        
 
         # create traces
         fig1 = graph_objects.Figure()
