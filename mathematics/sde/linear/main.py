@@ -165,7 +165,6 @@ def main():
         fig1.show()
         fig2.show()
 
-        integral.t0 = integral.tk
         integral.tk = integral.tk * 2
 
         if input('\nnext?\n') != 'y':
