@@ -1,6 +1,4 @@
-from sympy import S, Matrix, MatrixSymbol, pprint, diff, symbols
-
-from mathematics.input import input_matrix
+from sympy import Matrix, pprint, diff
 
 
 def main():
@@ -9,13 +7,13 @@ def main():
     # b = input_matrix(n, 1, ';')
 
     n = 3
-    
+
     a = [['x1**2 * x2**2 * t'],
          ['x2 * x1**2 * 5 * t**3']]
 
     b = [['sin(x1)', 'cos(x2)', 'cos(2 * x1)'],
          ['x2**2', 't * x1**2', 't * x2**3']]
-    
+
     mat_a = Matrix(a)
     mat_b = Matrix(b)
 

@@ -1,8 +1,10 @@
 from numpy import transpose, hstack, ndarray
 from numpy.random import randn
-# from scipy.linalg import expm
 
 from mathematics.matrix import diagonal_to_column
+
+
+# from scipy.linalg import expm
 
 
 class Integral:

@@ -1,5 +1,6 @@
-from sympy import S, symbols, integrate
 from array import array
+
+from sympy import S, symbols, integrate
 
 from mathematics.symbolic.legendre_polynomial import polynomial
 
