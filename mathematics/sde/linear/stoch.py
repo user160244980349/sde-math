@@ -5,13 +5,13 @@ from mathematics.matrix import extending_assignment, vec_to_eye
 from mathematics.sde.linear.dindet import dindet
 
 
-def stoch(n, mat_a, mat_f, dt):
+def stoch(n: int, mat_a: ndarray, mat_f: ndarray, dt: float):
     vec_l2, mat_s, mat_d1 = algorithm_11_2(n, mat_a, mat_f, dt)
     mat_l = vec_to_eye(sqrt(vec_l2))
     return mat_s.dot(mat_l)
 
 
-def algorithm_11_2(n, mat_a, mat_f, dt):
+def algorithm_11_2(n: int, mat_a: ndarray, mat_f: ndarray, dt: float):
     mat_ac = algorithm_11_5(n, mat_a)
     mat_g = mat_f.dot(transpose(mat_f))
     mat_gv = algorithm_11_3(n, mat_g)
@@ -21,7 +21,7 @@ def algorithm_11_2(n, mat_a, mat_f, dt):
     return eigenvalues, eigenvectors, mat_d1
 
 
-def algorithm_11_3(n, mat_g):
+def algorithm_11_3(n: int, mat_g: ndarray):
     mat_vec = ndarray((1, 1))
 
     i2 = 0
@@ -37,7 +37,7 @@ def algorithm_11_3(n, mat_g):
     return mat_vec
 
 
-def algorithm_11_4(n, mat_dv):
+def algorithm_11_4(n: int, mat_dv: ndarray):
     mat_d1 = ndarray((1, 1))
 
     i2 = 0
@@ -54,7 +54,7 @@ def algorithm_11_4(n, mat_dv):
     return mat_d1
 
 
-def algorithm_11_5(n, mat_a):
+def algorithm_11_5(n: int, mat_a: ndarray):
     mat_one1 = zeros((n, n))
     mat_ac = ndarray((1, 1))
 

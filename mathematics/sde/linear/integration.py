@@ -6,7 +6,7 @@ from mathematics.matrix import diagonal_to_column
 
 
 class Integral:
-    def __init__(self, n):
+    def __init__(self, n: int):
         self.n, self.t0, self.tk, self.dt, self.integration_step = \
             n, 0, 0, 0, 0
         self.mat_a, self.mat_ad, self.mat_bd, self.mat_h, self.mat_fd, self.distortion = \

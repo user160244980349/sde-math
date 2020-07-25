@@ -1,9 +1,9 @@
-from numpy import zeros, eye, hstack, vstack
+from numpy import ndarray, zeros, eye, hstack, vstack
 from scipy.linalg import expm
 
 
 # algorithm 11.2
-def dindet(n, k, mat_a, mat_b, dt):
+def dindet(n: int, k: int, mat_a: ndarray, mat_b: ndarray, dt: float):
     mat_okn = zeros((k, n))
     mat_okk = zeros((k, k))
     mat_idt = eye(n + k) * dt
