@@ -1,7 +1,7 @@
 import sqlite3
 
-connection = None
-cursor = None
+connection: sqlite3.Connection
+cursor: sqlite3.Cursor
 
 
 def connect(db):

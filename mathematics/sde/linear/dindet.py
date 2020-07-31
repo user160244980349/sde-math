@@ -2,6 +2,12 @@ from numpy import ndarray, zeros, eye, hstack, vstack
 from scipy.linalg import expm
 
 
+"""
+Algorithm in this module are implementation
+from the book named "xxx" in chapter nnn
+"""
+
+
 # algorithm 11.2
 def dindet(n: int, k: int, mat_a: ndarray, mat_b: ndarray, dt: float):
     mat_okn = zeros((k, n))

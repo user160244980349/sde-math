@@ -7,4 +7,4 @@ def filter_args(symbols: tuple):
 
 
 def unwrap_1x1_matrix(matrix: Matrix):
-    return matrix[0][0]
+    return matrix[0, 0]

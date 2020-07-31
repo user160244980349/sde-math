@@ -2,7 +2,7 @@ import unittest
 
 from sympy import Matrix, symbols, pprint
 
-from mathematics.symbolic.operators import g, l, gradient, hessian
+from mathematics.symbolic.operators import g, l, gradient, hessian, two_dim_l, two_dim_g
 
 
 class TestOperators(unittest.TestCase):
@@ -64,6 +64,50 @@ class TestOperators(unittest.TestCase):
         res = g(exp, mat_b)
 
         print()
+        pprint(res)
+
+        self.assertEqual(True, True)
+
+    # @unittest.skip('Is tested manually.')
+    def test_two_dim_l(self):
+        x1, x2, x3, x4, t = symbols('x1 x2 x3 x4, t')
+        exp = Matrix([x1 ** 2 * x2 ** 2 * t ** 3,
+                      x1 ** 2 * x2 ** 2 * t ** 3,
+                      x1 ** 2 * x2 ** 2 * t ** 3])
+
+        a = [['x1**2 * x2**2 * t'],
+             ['x2 * x1**2 * 5 * t**3']]
+
+        b = [['sin(x1)', 'cos(x2)', 'cos(2 * x1)'],
+             ['x2**2', 't * x1**2', 't * x2**3']]
+
+        mat_a = Matrix(a)
+        mat_b = Matrix(b)
+
+        res = two_dim_l(exp, mat_a, mat_b)
+
+        print()
+        print(res.shape)
+        pprint(res)
+
+        self.assertEqual(True, True)
+
+    # @unittest.skip('Is tested manually.')
+    def test_two_dim_g(self):
+        x1, x2, x3, x4, t = symbols('x1 x2 x3 x4, t')
+        exp = Matrix([x1 ** 2 * x2 ** 2 * t ** 3,
+                      x1 ** 2 * x2 ** 2 * t ** 3,
+                      x1 ** 2 * x2 ** 2 * t ** 3])
+
+        b = [['sin(x1)', 'cos(x2)', 'cos(2 * x1)'],
+             ['x2**2', 't * x1**2', 't * x2**3']]
+
+        mat_b = Matrix(b)
+
+        res = two_dim_g(exp, mat_b)
+
+        print()
+        print(res.shape)
         pprint(res)
 
         self.assertEqual(True, True)

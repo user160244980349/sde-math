@@ -5,6 +5,12 @@ from mathematics.matrix import vec_to_eye
 from mathematics.sde.linear.dindet import dindet
 
 
+"""
+Algorithms in this module are implementation
+from the book named "xxx" in chapter nnn
+"""
+
+
 def stoch(n: int, mat_a: ndarray, mat_f: ndarray, dt: float):
     vec_l2, mat_s, mat_d1 = algorithm_11_2(n, mat_a, mat_f, dt)
     mat_l = vec_to_eye(sqrt(vec_l2))
@@ -96,7 +102,7 @@ def algorithm_11_5(n: int, mat_a: ndarray):
                 o = o + n - k
             r = r + 1
 
-    mat_one1 = zeros((n, n))
+    mat_ones = zeros((n, n))
     mat_ac = ndarray((v_size + 1, h_size + 1))
 
     # actual algorithm
@@ -105,16 +111,16 @@ def algorithm_11_5(n: int, mat_a: ndarray):
         n2 = n - i
         for j in range(n2):
             i2 = j + i
-            mat_one1[j][i2] = 1
-            mat_one1[i2][j] = 1
-            mat_one_a = mat_one1.dot(transpose(mat_a)) + mat_a.dot(mat_one1)
+            mat_ones[j][i2] = 1
+            mat_ones[i2][j] = 1
+            mat_one_a = mat_ones.dot(transpose(mat_a)) + mat_a.dot(mat_ones)
             o = 0
             for k in range(n):
                 n3 = n - k
                 for m in range(n3):
                     mat_ac[m + o][r] = mat_one_a[m][m + k]
                 o = o + n - k
-            mat_one1 = zeros((n, n))
+            mat_ones = zeros((n, n))
             r = r + 1
 
     return mat_ac
