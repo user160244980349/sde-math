@@ -2,10 +2,10 @@ from array import array
 
 from sympy import S, symbols, integrate
 
-from mathematics.symbolic.legendre_polynomial import polynomial
+from mathematics.sde.nonlinear.legendre_polynomial import polynomial
 
 
-def getc(indices: array):
+def getc(indices: list):
     x, y = symbols('x y')
     n = len(indices)
     c = S(1)
@@ -17,7 +17,7 @@ def getc(indices: array):
     return c
 
 
-def getcw(indices: array, weights: array):
+def getcw(indices: list, weights: list):
     x, y = symbols('x y')
     n = len(indices)
     w = list(reversed(weights))

@@ -3,7 +3,7 @@ import unittest
 from numpy import array, transpose, sqrt
 from numpy.testing import assert_array_almost_equal
 
-from mathematics.matrix import vec_to_eye
+from mathematics.sde.linear.matrix import vec_to_eye
 from mathematics.sde.linear.dindet import dindet
 from mathematics.sde.linear.stoch import algorithm_11_5, algorithm_11_3, algorithm_11_4, algorithm_11_2
 

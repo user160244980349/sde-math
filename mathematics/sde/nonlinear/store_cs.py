@@ -3,7 +3,7 @@ from os.path import join
 from sympy import Symbol
 
 from config import resources
-from mathematics.symbolic.c import getcw, getc
+from mathematics.sde.nonlinear.c import getcw, getc
 
 
 def main():

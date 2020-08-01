@@ -1,10 +1,10 @@
-from sympy import S, Expr, Matrix, transpose, derive_by_array, trace, pprint
+from sympy import S, Expr, Matrix, transpose, derive_by_array, trace
 
-from mathematics.helpers import filter_args, unwrap_1x1_matrix
+from mathematics.sde.nonlinear.helpers import filter_args, unwrap_1x1_matrix
 
 
 def l(f: Expr, mat_a: Matrix, mat_b: Matrix):
-    diff_args = filter_args(f.free_symbols)
+    diff_args = tuple(filter_args(f.free_symbols, [S('t')]))
     return f.diff(S('t')) + unwrap_1x1_matrix(transpose(gradient(f, diff_args)) * mat_a) \
            + S(1) / 2 * trace(transpose(mat_b) * hessian(f, diff_args) * mat_b)
 
@@ -17,7 +17,7 @@ def two_dim_l(f: Matrix, mat_a: Matrix, mat_b: Matrix):
 
 
 def g(f: Expr, mat_b: Matrix):
-    diff_args = filter_args(f.free_symbols)
+    diff_args = tuple(filter_args(f.free_symbols, [S('t')]))
     return transpose(gradient(f, diff_args)) * mat_b
 
 

@@ -3,7 +3,7 @@ from time import time
 from numpy import array, zeros
 from plotly import graph_objects
 
-from mathematics.input import zero, harmonic, polynomial, const
+from mathematics.sde.linear.distortion_input import zero, harmonic, polynomial, const
 from mathematics.sde.linear.dindet import dindet
 from mathematics.sde.linear.distortion import Distortion
 from mathematics.sde.linear.integration import Integral

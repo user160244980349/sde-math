@@ -2,7 +2,7 @@ import unittest
 
 from sympy import Matrix, symbols, pprint
 
-from mathematics.symbolic.operators import g, l, gradient, hessian, two_dim_l, two_dim_g
+from mathematics.sde.nonlinear.operators import g, l, gradient, hessian, two_dim_l, two_dim_g
 
 
 class TestOperators(unittest.TestCase):
@@ -68,7 +68,7 @@ class TestOperators(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    # @unittest.skip('Is tested manually.')
+    @unittest.skip('Is tested manually.')
     def test_two_dim_l(self):
         x1, x2, x3, x4, t = symbols('x1 x2 x3 x4, t')
         exp = Matrix([x1 ** 2 * x2 ** 2 * t ** 3,
@@ -87,12 +87,12 @@ class TestOperators(unittest.TestCase):
         res = two_dim_l(exp, mat_a, mat_b)
 
         print()
-        print(res.shape)
+        print("Shape is: ", res.shape)
         pprint(res)
 
         self.assertEqual(True, True)
 
-    # @unittest.skip('Is tested manually.')
+    @unittest.skip('Is tested manually.')
     def test_two_dim_g(self):
         x1, x2, x3, x4, t = symbols('x1 x2 x3 x4, t')
         exp = Matrix([x1 ** 2 * x2 ** 2 * t ** 3,
@@ -107,7 +107,7 @@ class TestOperators(unittest.TestCase):
         res = two_dim_g(exp, mat_b)
 
         print()
-        print(res.shape)
+        print("Shape is: ", res.shape)
         pprint(res)
 
         self.assertEqual(True, True)

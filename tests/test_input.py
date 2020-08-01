@@ -4,7 +4,7 @@ from numpy import array
 from numpy.testing import assert_array_equal
 from sympy import S, Symbol, pprint, diff
 
-from mathematics.input import input_matrix
+from tools.input import input_matrix
 
 
 class TestInput(unittest.TestCase):

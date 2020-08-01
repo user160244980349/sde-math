@@ -2,7 +2,7 @@ import unittest
 
 from sympy import S, Symbol
 
-from mathematics.symbolic.c import getc, getcw
+from mathematics.sde.nonlinear.c import getc, getcw
 
 
 class TestC(unittest.TestCase):

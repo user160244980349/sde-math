@@ -3,7 +3,7 @@ import unittest
 from numpy import array
 from numpy.testing import assert_array_equal
 
-from mathematics.matrix import vec_to_eye, extending_assignment
+from mathematics.sde.linear.matrix import vec_to_eye, extending_assignment
 
 
 class TestMatrix(unittest.TestCase):

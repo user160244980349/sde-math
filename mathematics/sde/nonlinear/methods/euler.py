@@ -1,0 +1,4 @@
+
+
+def euler():
+    pass

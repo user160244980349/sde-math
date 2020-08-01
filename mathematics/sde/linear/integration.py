@@ -1,7 +1,7 @@
 from numpy import transpose, hstack, ndarray
 from numpy.random import randn
 
-from mathematics.matrix import diagonal_to_column
+from mathematics.sde.linear.matrix import diagonal_to_column
 
 
 # from scipy.linalg import expm
