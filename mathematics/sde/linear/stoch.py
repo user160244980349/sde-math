@@ -1,9 +1,8 @@
 from numpy import transpose, zeros, ndarray, sqrt
 from numpy.linalg import eig
 
-from mathematics.sde.linear.matrix import vec_to_eye
 from mathematics.sde.linear.dindet import dindet
-
+from mathematics.sde.linear.matrix import vec_to_eye
 
 """
 Algorithms in this module are implementation

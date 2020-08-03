@@ -1,5 +1,5 @@
-from tools.input import input_vector
 from mathematics.sde.linear.distortion import Zero, Const, Polynomial, Harmonic
+from tools.input import input_vector
 
 
 def zero():

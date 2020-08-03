@@ -1,5 +1,3 @@
-from array import array
-
 from sympy import S, symbols, integrate
 
 from mathematics.sde.nonlinear.legendre_polynomial import polynomial

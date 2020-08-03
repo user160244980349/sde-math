@@ -1,7 +1,6 @@
 from numpy import ndarray, zeros, eye, hstack, vstack
 from scipy.linalg import expm
 
-
 """
 Algorithm in this module are implementation
 from the book named "xxx" in chapter nnn
