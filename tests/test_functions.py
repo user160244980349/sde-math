@@ -68,7 +68,7 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    @unittest.skip('Success')
+    # @unittest.skip('Success')
     def test_G(self):
         x1, x2, x3, x4, t = symbols('x1 x2 x3 x4, t')
 

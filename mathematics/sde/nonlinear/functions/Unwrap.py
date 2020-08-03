@@ -2,7 +2,7 @@ from sympy import Function, Transpose, MatMul
 
 
 class Unwrap(Function):
-    nargs = 3
+    nargs = 1
 
     @classmethod
     def eval(cls, m):
