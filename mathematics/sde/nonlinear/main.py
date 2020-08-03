@@ -11,7 +11,6 @@ from mathematics.sde.nonlinear.methods.milstein import milstein
 def main():
     seed(0)
 
-    # y0 = Matrix([1, 2])
     y0 = array([[1], [2]])
 
     mat_a = Matrix(['-5 * x1',

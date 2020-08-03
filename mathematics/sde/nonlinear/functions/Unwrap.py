@@ -1,4 +1,4 @@
-from sympy import Function, Transpose, MatMul
+from sympy import Function
 
 
 class Unwrap(Function):
