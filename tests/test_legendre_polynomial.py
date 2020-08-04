@@ -28,7 +28,7 @@ class TestLegendrePolynomial(unittest.TestCase):
 
         for i in range(1, 11):
             with self.subTest(i=i):
-                self.assertEqual(simplify(polynomial(i, x)), polynomials[i])
+                self.assertEqual(simplify(polynomial(i)), polynomials[i])
 
 
 if __name__ == '__main__':

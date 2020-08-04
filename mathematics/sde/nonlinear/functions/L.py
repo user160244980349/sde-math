@@ -1,25 +1,33 @@
-from sympy import S, Function, Matrix, Symbol, Transpose, Trace
+from sympy import Function, Symbol, Transpose, Trace, Derivative, Rational
 
 from mathematics.sde.nonlinear.functions.Grad import Grad
 from mathematics.sde.nonlinear.functions.Hess import Hess
-from mathematics.sde.nonlinear.helpers import unwrap_1x1_matrix
+from mathematics.sde.nonlinear.functions.Unwrap import Unwrap
 
 
 class L(Function):
+    """
+    Function to perform L operation with function
+    """
     nargs = 4
 
     @classmethod
-    def eval(cls, f, a, b, dx):
-        if f.is_Expr:
+    def eval(cls, f, a, b, dxs):
+        """
+        Applies G operator on function
+        Important: t variable is implicit differentiate argument
+        Parameters
+        ----------
+            f - function to apply G operator
+            a - matrix a
+            b - matrix b
+            dxs - arguments to apply Grad
+
+        Returns
+        -------
+            Scalar result of L operator
+        """
+        if not a.is_symbol and not a.is_symbol and not f.is_symbol:
             t = Symbol('t')
-            return f.diff(t) + unwrap_1x1_matrix(Transpose(Grad(f, dx)) * a) \
-                   + S(1) / 2 * Trace(Transpose(b) * Hess(f, dx) * b)
-
-
-class L2(Function):
-    nargs = 4
-
-    @classmethod
-    def eval(cls, f, a, b, dx):
-        if f.is_Matrix:
-            return Matrix([f2 for f2 in [L(f1, b, dx) for f1 in f]])
+            return Derivative(f, t) + Unwrap(Transpose(Grad(f, dxs)) * a) + \
+                   Rational(1, 2) * Trace(Transpose(b) * Hess(f, dxs) * b)

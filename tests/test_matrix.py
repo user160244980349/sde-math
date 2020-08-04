@@ -3,7 +3,7 @@ import unittest
 from numpy import array
 from numpy.testing import assert_array_equal
 
-from mathematics.sde.linear.matrix import vec_to_eye, extending_assignment
+from mathematics.sde.linear.matrix import vec_to_eye
 
 
 class TestMatrix(unittest.TestCase):
@@ -13,22 +13,6 @@ class TestMatrix(unittest.TestCase):
         e_mat = array([[1, 0, 0],
                        [0, 2, 0],
                        [0, 0, 3]])
-
-        self.assertEqual(assert_array_equal(mat, e_mat), None)
-
-    def test_extending_assignment(self):
-        mat = array([[]])
-        mat = extending_assignment(mat, 0, 0, 1)
-        mat = extending_assignment(mat, 0, 5, 1)
-        mat = extending_assignment(mat, 5, 0, 1)
-        mat = extending_assignment(mat, 5, 5, 1)
-
-        e_mat = array([[1, 0, 0, 0, 0, 1],
-                       [0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0],
-                       [1, 0, 0, 0, 0, 1]])
 
         self.assertEqual(assert_array_equal(mat, e_mat), None)
 

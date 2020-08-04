@@ -8,7 +8,6 @@ from tools.input import input_matrix
 
 
 class TestInput(unittest.TestCase):
-    @unittest.skip('')
     def test_formula_matrix(self):
         print()
         mat = input_matrix(2, 2, ';')
@@ -17,7 +16,6 @@ class TestInput(unittest.TestCase):
         print()
         pprint(diff(mat, x))
 
-    # @unittest.skip('')
     def test_input_formula(self):
         print('\nf(x, y) = x**2 + 2*x + y**2 + y + 2')
         f = S(input())
@@ -35,7 +33,6 @@ class TestInput(unittest.TestCase):
         self.assertEqual(f, x ** 2 + 2 * x + y ** 2 + y + 2)
         self.assertEqual(f1, f2)
 
-    # @unittest.skip('')
     def test_input_matrix(self):
         print('\nA[4, 3] =')
         mat_a1 = array([[1, 2, 3],

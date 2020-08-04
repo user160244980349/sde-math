@@ -5,25 +5,32 @@ from numpy.random import seed
 from plotly import graph_objects
 from sympy import Matrix
 
-from mathematics.sde.nonlinear.methods.milstein import milstein
+from mathematics.sde.nonlinear.methods.milstein import milstein_s
 
 
 def main():
     seed(0)
 
-    y0 = array([[1], [2]])
+    y0 = array([[1],
+                [2]])
 
     mat_a = Matrix(['-5 * x1',
                     '-5 * x2'])
 
-    mat_b = Matrix([['0.5 * sin(x1) - 0.5 * cos(x2)', '0.75 * sin(x1) - 0.75 * cos(x2)'],
-                    ['-0.5 * sin(x1) + 0.5 * cos(x2)', '-0.75 * sin(x1) + 0.75 * cos(x2)']])
+    mat_b = Matrix([['0.1 * x1 - 0.1 * x2', '0.1 * x2 - 0.1 * x1'],
+                    ['-0.1 * sin(x1) + 0.1 * cos(x2)', '-0.1 * sin(x1) + 0.1 * cos(x2)']])
+
+    milstein_args = [y0, mat_a, mat_b, 10, (0, 0.001, 1)]
+    euler_args = [y0, mat_a, mat_b, (0, 0.001, 1)]
 
     t1 = int(round(time() * 1000))
-    y, t = milstein(2, 2, y0, mat_a, mat_b, 0, 1, 0.001)
-    # y, t = euler(2, 2, y0, mat_a, mat_b, 0, 1, 0.001)
+
+    # y, t = milstein2(*milstein_args)
+    y, t = milstein_s(*milstein_args)
+    # y, t = euler(*euler_args)
+
     t2 = int(round(time() * 1000))
-    print("%s solve time: %d" % ('Euler', t2 - t1))
+    print("Solve time: %d" % (t2 - t1))
 
     fig1 = graph_objects.Figure()
     fig1.add_trace(graph_objects.Scatter(x=t, y=array(list(y[0, :])).astype(float),

@@ -2,12 +2,12 @@ import unittest
 
 from sympy import S, Function, Matrix, MatrixSymbol, Symbol, symbols, pprint
 
-from mathematics.sde.nonlinear.functions.G import G
+from mathematics.sde.nonlinear.functions.G import G, G2
 from mathematics.sde.nonlinear.functions.Grad import Grad
 from mathematics.sde.nonlinear.functions.Ind import Ind
 from mathematics.sde.nonlinear.functions.Io import Io
 from mathematics.sde.nonlinear.functions.Ioo import Ioo
-from mathematics.sde.nonlinear.functions.L import L, L2
+from mathematics.sde.nonlinear.functions.L import L
 
 
 class MyTestCase(unittest.TestCase):
@@ -28,28 +28,7 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    @unittest.skip('Failure')
-    def test_L2(self):
-        x1, x2, x3, x4, t = symbols('x1 x2 x3 x4, t')
-        exp = Matrix([x1 ** 2 * x2 ** 2 * t ** 3,
-                      x1 ** 2 * x2 ** 2 * t ** 3,
-                      x1 ** 2 * x2 ** 2 * t ** 3])
-
-        a = [['x1**2 * x2**2 * t'],
-             ['x2 * x1**2 * 5 * t**3']]
-
-        b = [['sin(x1)', 'cos(x2)', 'cos(2 * x1)'],
-             ['x2**2', 't * x1**2', 't * x2**3']]
-
-        L2.context(Matrix(a), Matrix(b))
-
-        print()
-        res = L2(exp)
-        pprint(res)
-
-        self.assertEqual(True, True)
-
-    @unittest.skip('Failure')
+    # @unittest.skip('Failure')
     def test_L(self):
         x1, x2, x3, x4, t = symbols('x1 x2 x3 x4, t')
         exp = x1 ** 2 * x2 ** 2 * t ** 3
@@ -60,31 +39,66 @@ class MyTestCase(unittest.TestCase):
         b = [['sin(x1)', 'cos(x2)', 'cos(2 * x1)'],
              ['x2**2', 't * x1**2', 't * x2**3']]
 
-        L.context(Matrix(a), Matrix(b))
-        res = L(exp)
+        mat_a = Matrix(a)
+        mat_b = Matrix(b)
+
+        diff_args = symbols('x1 x2')
+
+        res = L(exp, mat_a, mat_b, diff_args)
 
         print()
-        pprint(res)
+        pprint(res.doit())
 
         self.assertEqual(True, True)
 
-    # @unittest.skip('Success')
+    @unittest.skip('Success')
     def test_G(self):
-        x1, x2, x3, x4, t = symbols('x1 x2 x3 x4, t')
+        a = Matrix(['-5 * x1',
+                    '-5 * x2'])
+        sym_a = MatrixSymbol('a', 2, 1)
 
-        exp = x1 ** 2 + 5 * x2 ** 2
-        sym_exp = Symbol('z')
+        # b = Matrix([['0.5 * sin(x1) - 0.5 * cos(x2)', '0.75 * sin(x1) - 0.75 * cos(x2)'],
+        #             ['-0.5 * sin(x1) + 0.5 * cos(x2)', '-0.75 * sin(x1) + 0.75 * cos(x2)']])
 
-        b = Matrix([['sin(x1)', 'cos(x1)'],
-                    ['sin(x2)', 'cos(x2)']])
-
-        diff_args = tuple([S('x1'), S('x2')])
-
-        print()
-        pprint(G(b[:, 0], exp, diff_args))
+        b = Matrix([['sin(x1)', 'cos(x2)', 'x1**2 + x3**2'],
+                    ['x3**(1/2)', 'x1 * x2', '5'],
+                    ['cos(2 * x3)', 'sin(x1 / 2)', 'x1**2 * x3**2']])
 
         sym_b = MatrixSymbol('b', 2, 2)
-        pprint(G(sym_b[:, 0], sym_exp, diff_args))
+
+        diff_args = symbols('x1 x2 x3')
+
+        print()
+        pprint(G(b[:, 0], b[0, 0], diff_args))
+        pprint(G(b[:, 1], b[1, 0], diff_args))
+        pprint(G(b[:, 1], b[2, 1], diff_args))
+
+        pprint(G(sym_b[:, 0], sym_a[0, 0], diff_args))
+
+        self.assertEqual(True, True)
+
+    @unittest.skip('Success')
+    def test_G2(self):
+        a = Matrix(['-5 * x1',
+                    '-5 * x2'])
+        sym_a = MatrixSymbol('a', 2, 1)
+
+        # b = Matrix([['0.5 * sin(x1) - 0.5 * cos(x2)', '0.75 * sin(x1) - 0.75 * cos(x2)'],
+        #             ['-0.5 * sin(x1) + 0.5 * cos(x2)', '-0.75 * sin(x1) + 0.75 * cos(x2)']])
+
+        b = Matrix([['sin(x1)', 'cos(x2)', 'x1**2 + x3**2'],
+                    ['x3**(1/2)', 'x1 * x2', '5'],
+                    ['cos(2 * x3)', 'sin(x1 / 2)', 'x1**2 * x3**2']])
+
+        sym_b = MatrixSymbol('b', 2, 2)
+
+        diff_args = symbols('x1 x2 x3')
+
+        print()
+        pprint(G2(Matrix(b[:, 0]), Matrix(b[:, 0]), diff_args).doit())
+        pprint(G2(Matrix(b[:, 1]), Matrix(b[:, 0]), diff_args).doit())
+        pprint(G2(Matrix(b[:, 1]), Matrix(b[:, 2]), diff_args).doit())
+        gs = G2(sym_b, sym_a, diff_args)
 
         self.assertEqual(True, True)
 

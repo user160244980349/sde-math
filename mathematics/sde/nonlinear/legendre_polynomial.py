@@ -1,5 +1,6 @@
-from sympy import S, Symbol, factorial, diff
+from sympy import Rational, RisingFactorial, Derivative
 
 
-def polynomial(n: int, sym: Symbol):
-    return S(1) / 2 ** n / factorial(n) * diff((sym ** 2 - 1) ** n, sym, n)
+def polynomial(n: int):
+    from sympy.abc import x
+    return Rational(1, 2) ** n / RisingFactorial(n) * Derivative((x ** 2 - 1) ** n, x, n)

@@ -9,8 +9,8 @@ def getc(indices: list):
     c = S(1)
 
     for i in reversed(range(1, n)):
-        c = integrate(polynomial(indices[i], x) * c, (x, -1, y)).subs(y, x)
-    c = integrate(polynomial(indices[0], x) * c, (x, -1, 1))
+        c = integrate(polynomial(indices[i]) * c, (x, -1, y)).subs(y, x)
+    c = integrate(polynomial(indices[0]) * c, (x, -1, 1))
 
     return c
 
@@ -22,7 +22,7 @@ def getcw(indices: list, weights: list):
     c = S(1)
 
     for i in reversed(range(1, n)):
-        c = integrate(polynomial(indices[i], x) * w[i] * c, (x, -1, y)).subs(y, x)
-    c = integrate(polynomial(indices[0], x) * w[0] * c, (x, -1, 1))
+        c = integrate(polynomial(indices[i]) * w[i] * c, (x, -1, y)).subs(y, x)
+    c = integrate(polynomial(indices[0]) * w[0] * c, (x, -1, 1))
 
     return -c
