@@ -68,7 +68,7 @@ def milstein_s(y0: array, mat_a: Matrix, mat_b: Matrix, q: int, times: tuple):
     return y, t
 
 
-def milstein_(y0: array, mat_a: Matrix, mat_b: Matrix, q: int, times: tuple):
+def milstein_c(y0: array, mat_a: Matrix, mat_b: Matrix, q: int, times: tuple):
     """
     Performs modeling with Milstein method with matrix substitutions in cycle
     Parameters

@@ -5,7 +5,7 @@ from numpy.random import seed
 from plotly import graph_objects
 from sympy import Matrix
 
-from mathematics.sde.nonlinear.methods.milstein import milstein_s
+from mathematics.sde.nonlinear.methods.milstein import milstein_s, milstein_c
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
 
     t1 = int(round(time() * 1000))
 
-    # y, t = milstein2(*milstein_args)
+    # y, t = milstein_c(*milstein_args)
     y, t = milstein_s(*milstein_args)
     # y, t = euler(*euler_args)
 
