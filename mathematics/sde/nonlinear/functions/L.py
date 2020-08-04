@@ -28,6 +28,6 @@ class L(Function):
             Scalar result of L operator
         """
         if not a.is_symbol and not a.is_symbol and not f.is_symbol:
-            t = Symbol('t')
+            from sympy.abc import t
             return Derivative(f, t) + Unwrap(Transpose(Grad(f, dxs)) * a) + \
                    Rational(1, 2) * Trace(Transpose(b) * Hess(f, dxs) * b)

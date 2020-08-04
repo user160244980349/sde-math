@@ -49,11 +49,11 @@ class MilsteinS(Function):
         -------
             Calculated value or symbolic expression
         """
-        i1, i2 = symbols('i1 i2')
+        from sympy.abc import j, k
         return cls.yp[cls.i, 0] + cls.a[cls.i, 0] * cls.dt + \
-               Sum(cls.b[cls.i, i1] * Io(i1, cls.dt, cls.ksi), (i1, 0, cls.m - 1)).doit() + \
-               Sum(Sum(G(cls.b[:, i1], cls.b[cls.i, i2], cls.dxs) *
-                       Ioo(i1, i2, cls.q, cls.dt, cls.ksi), (i2, 0, cls.m - 1)).doit(), (i1, 0, cls.m - 1)).doit()
+               Sum(cls.b[cls.i, j] * Io(j, cls.dt, cls.ksi), (j, 0, cls.m - 1)).doit() + \
+               Sum(Sum(G(cls.b[:, j], cls.b[cls.i, k], cls.dxs) *
+                       Ioo(j, k, cls.q, cls.dt, cls.ksi), (k, 0, cls.m - 1)).doit(), (j, 0, cls.m - 1)).doit()
 
 
 class MilsteinC(Function):
@@ -98,8 +98,8 @@ class MilsteinC(Function):
         -------
             Calculated value or symbolic expression
         """
-        i1, i2 = symbols('i1 i2')
+        from sympy.abc import j, k
         return cls.yp[:, 0] + cls.a[:, 0] * cls.dt + \
-               Sum(cls.b[:, i1] * Io(i1, cls.dt, cls.ksi), (i1, 0, cls.m - 1)).doit() + \
-               Sum(Sum(G2(cls.b[:, i1], cls.b[:, i2], cls.dxs) *
-                       Ioo(i1, i2, cls.q, cls.dt, cls.ksi), (i2, 0, cls.m - 1)).doit(), (i1, 0, cls.m - 1)).doit()
+               Sum(cls.b[:, j] * Io(j, cls.dt, cls.ksi), (j, 0, cls.m - 1)).doit() + \
+               Sum(Sum(G2(cls.b[:, j], cls.b[:, k], cls.dxs) *
+                       Ioo(j, k, cls.q, cls.dt, cls.ksi), (k, 0, cls.m - 1)).doit(), (j, 0, cls.m - 1)).doit()

@@ -28,7 +28,7 @@ class Ioo(Function):
             Calculated value or symbolic expression
         """
         if i1.is_Number and i2.is_Number and q.is_Number:
-            i = Symbol('i')
+            from sympy.abc import i
             return dt / 2 * (ksi[0, i1] * ksi[0, i2] +
                              Sum(S(1) / sqrt(S(4) * i ** 2 - 1) * (ksi[i - 1, i1] * ksi[i, i2] -
                                                                    ksi[i, i1] * ksi[i - 1, i2]),
