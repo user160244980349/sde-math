@@ -10,7 +10,6 @@ class Hess(Function):
     def eval(cls, f, dxs):
         """
         Applies hessian operator on function
-        TODO: force evaluation since it is fully symbolic
         Parameters
         ----------
             f - function to apply on

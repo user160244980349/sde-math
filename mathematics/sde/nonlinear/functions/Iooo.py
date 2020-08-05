@@ -7,10 +7,10 @@ class Ioo(Function):
     """
     Iterated stochastic Ito integral
     """
-    nargs = 5
+    nargs = 6
 
     @classmethod
-    def eval(cls, i1, i2, q, dt, ksi):
+    def eval(cls, i1, i2, i3, q, dt, ksi):
         """
         Function evaluation method
         If i1, i2, q are numbers then evaluation performs

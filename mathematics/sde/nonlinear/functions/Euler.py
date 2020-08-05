@@ -1,47 +1,95 @@
-from sympy import Matrix, Symbol, MatrixSymbol, Function, Sum, sqrt
+from sympy import Symbol, MatrixSymbol, Function, Sum, symbols
+
+from mathematics.sde.nonlinear.functions.Io import Io
 
 
 class Euler(Function):
     """
-    Euler method
+    Milstein method with focus on columns
     """
-    nargs = 0
+    nargs = 2
 
-    @classmethod
-    def context(cls, n, m):
+    i = Symbol('i')
+
+    def __new__(cls, *args, **kwargs):
         """
-        Function evaluation method
-        If i1, i2, q are numbers then evaluation performs
-        TODO: greek alphabet
+        Creating method context with sizes of it`s components and symbols
         Parameters
         ----------
-            i1 - index
-            dt - delta time
-            ksi - matrix of independent random variables
+            n - a column size
+            m - b matrix width
+            q - independent random variables dimension size
+            dxs - tuple of variables to perform differentiation
 
         Returns
         -------
             Calculated value or symbolic expression
         """
-        cls.m = m
-        cls.n = n
-        cls.t = Symbol('t')
-        cls.dt = Symbol('dt')
-        cls.a = MatrixSymbol('a', n, 1)
-        cls.b = MatrixSymbol('b', n, m)
-        cls.yp = MatrixSymbol('yp', n, 1)
-        cls.ksi = MatrixSymbol('ksi', 1, m)
+        obj = super(Euler, cls).__new__(cls, *args, **kwargs)
+        n, m = args
+        obj.m, obj.n = n, m
+        obj.t = Symbol('t')
+        obj.dt = Symbol('dt')
+        obj.a = MatrixSymbol('a', n, 1)
+        obj.b = MatrixSymbol('b', n, m)
+        obj.yp = MatrixSymbol('yp', n, 1)
+        obj.ksi = MatrixSymbol('ksi', 1, m)
+        return obj
 
-    @classmethod
-    def eval(cls):
+    def doit(self, **hints):
         """
         Function evaluation method
-        If i1, i2, q are numbers then evaluation performs
-        Important: sum iterators may be messed
+        This formula works as it is with symbols such it
+        has no limits for it`s components
         Returns
         -------
             Calculated value or symbolic expression
         """
-        from sympy.abc import i
-        return cls.yp + cls.a * cls.dt + \
-               sqrt(cls.dt) * Sum(Matrix(cls.b[:, i]) * cls.ksi[0, i], (i, 0, cls.m - 1)).doit()
+        i1 = symbols('i1')
+        return self.yp[self.i, 0] + self.a[self.i, 0] * self.dt + \
+               Sum(self.b[self.i, i1] * Io(i1, self.dt, self.ksi), (i1, 0, self.m - 1)).doit()
+
+
+class EulerC(Function):
+    """
+    Milstein method with focus on columns
+    """
+    nargs = 2
+
+    def __new__(cls, *args, **kwargs):
+        """
+        Creating method context with sizes of it`s components and symbols
+        Parameters
+        ----------
+            n - a column size
+            m - b matrix width
+            q - independent random variables dimension size
+            dxs - tuple of variables to perform differentiation
+
+        Returns
+        -------
+            Calculated value or symbolic expression
+        """
+        obj = super(EulerC, cls).__new__(cls, *args, **kwargs)
+        n, m = args
+        obj.m, obj.n = n, m
+        obj.t = Symbol('t')
+        obj.dt = Symbol('dt')
+        obj.a = MatrixSymbol('a', n, 1)
+        obj.b = MatrixSymbol('b', n, m)
+        obj.yp = MatrixSymbol('yp', n, 1)
+        obj.ksi = MatrixSymbol('ksi', 1, m)
+        return obj
+
+    def doit(self, **hints):
+        """
+        Function evaluation method
+        This formula works as it is with symbols such it
+        has no limits for it`s components
+        Returns
+        -------
+            Calculated value or symbolic expression
+        """
+        i1 = symbols('i1')
+        return self.yp[:, 0] + self.a[:, 0] * self.dt + \
+               Sum(self.b[:, i1] * Io(i1, self.dt, self.ksi), (i1, 0, self.m - 1)).doit()

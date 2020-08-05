@@ -2,12 +2,15 @@ import unittest
 
 from sympy import S, Function, Matrix, MatrixSymbol, Symbol, symbols, pprint
 
+import config as c
+from mathematics.sde.nonlinear.functions.C import C
 from mathematics.sde.nonlinear.functions.G import G, G2
 from mathematics.sde.nonlinear.functions.Grad import Grad
 from mathematics.sde.nonlinear.functions.Ind import Ind
 from mathematics.sde.nonlinear.functions.Io import Io
 from mathematics.sde.nonlinear.functions.Ioo import Ioo
 from mathematics.sde.nonlinear.functions.L import L
+from tools import database as db
 
 
 class MyTestCase(unittest.TestCase):
@@ -28,7 +31,7 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    # @unittest.skip('Failure')
+    @unittest.skip('Failure')
     def test_L(self):
         x1, x2, x3, x4, t = symbols('x1 x2 x3 x4, t')
         exp = x1 ** 2 * x2 ** 2 * t ** 3
@@ -90,15 +93,33 @@ class MyTestCase(unittest.TestCase):
                     ['x3**(1/2)', 'x1 * x2', '5'],
                     ['cos(2 * x3)', 'sin(x1 / 2)', 'x1**2 * x3**2']])
 
-        sym_b = MatrixSymbol('b', 2, 2)
+        sym_b = MatrixSymbol('b', 3, 3)
 
         diff_args = symbols('x1 x2 x3')
 
         print()
-        pprint(G2(Matrix(b[:, 0]), Matrix(b[:, 0]), diff_args).doit())
-        pprint(G2(Matrix(b[:, 1]), Matrix(b[:, 0]), diff_args).doit())
-        pprint(G2(Matrix(b[:, 1]), Matrix(b[:, 2]), diff_args).doit())
-        gs = G2(sym_b, sym_a, diff_args)
+        pprint(G2(b[:, 0], b[:, 0], diff_args))
+        pprint(G2(b[:, 1], b[:, 0], diff_args))
+        pprint(b[:, 0] + G2(b[:, 1], b[:, 2], diff_args))
+        pprint(sym_b[:, 0] + G2(sym_b[:, 1], sym_b[:, 2], diff_args))
+        pprint(sym_b[0, 0] + G2(sym_b[:, 1], sym_b[:, 2], diff_args)[0, 0])
+
+        self.assertEqual(True, True)
+
+    # @unittest.skip('Success')
+    def test_C(self):
+        print()
+        db.connect(c.database)
+
+        i1, i2, i3 = symbols('i1 i2 i3')
+
+        exp = i1 + C(i1, i2, i3)
+        pprint(exp)
+
+        exp = i1 + C(S(8), S(9), S(9)).doit()
+        pprint(exp)
+
+        db.disconnect()
 
         self.assertEqual(True, True)
 

@@ -7,9 +7,6 @@ class Io(Function):
     """
     nargs = 3
 
-    is_scalar = True
-    is_commutative = True
-
     @classmethod
     def eval(cls, i1, dt, ksi):
         """

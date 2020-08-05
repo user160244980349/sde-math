@@ -1,4 +1,4 @@
-from sympy import Function, Symbol, Transpose, Trace, Derivative, Rational
+from sympy import Function, Transpose, Trace, Derivative, Rational
 
 from mathematics.sde.nonlinear.functions.Grad import Grad
 from mathematics.sde.nonlinear.functions.Hess import Hess

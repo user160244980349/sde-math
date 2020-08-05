@@ -1,7 +1,16 @@
+import re
 import sqlite3
 
-connection: sqlite3.Connection
-cursor: sqlite3.Cursor
+connection = None
+cursor = None
+
+
+def is_connected():
+    global connection
+    if connection is None:
+        return False
+    else:
+        return True
 
 
 def connect(db):
@@ -10,6 +19,8 @@ def connect(db):
         global cursor
 
         connection = sqlite3.connect(db)
+        connection.create_function("REGEXP", 2, regex)
+
         cursor = connection.cursor()
         print("SQLite Database is successfully connected")
 
@@ -49,3 +60,8 @@ def execute(query):
 
     except sqlite3.Error as error:
         print("Error while connecting to sqlite:", error)
+
+
+def regex(value, pattern):
+    c_pattern = re.compile(r"\b" + pattern.lower() + r"\b")
+    return c_pattern.search(value) is not None

@@ -10,7 +10,6 @@ class G(Function):
     """
     nargs = 3
 
-    is_scalar = True
     is_commutative = True
 
     @classmethod
@@ -31,13 +30,35 @@ class G(Function):
             return Unwrap(MatMul(Transpose(c), Grad(f, dxs)))
 
 
-# TODO: beautify output!!!
-class G2(MatrixExpr):
+class G2(Function, MatrixExpr):
     """
     Function to perform G operation with functions column
     """
-    is_scalar = False
-    is_commutative = False
+    nargs = 3
+    is_commutative = True
+
+    rows = None  # type: int
+    cols = None  # type: int
+    _simplify = None
+
+    def __new__(cls, *args, **kwargs):
+        obj = super(G2, cls).__new__(cls, *args, **kwargs)
+        obj.rows = args[0].shape[0]
+        obj.cols = args[0].shape[1]
+        return obj
+
+    def __abs__(self):
+        pass
+
+    def __rpow__(self, other):
+        pass
+
+    def __rdiv__(self, other):
+        pass
+
+    def _entry(self, i, j, **kwargs):
+        exp = self.doit()
+        return exp[i, j]
 
     @property
     def shape(self):
@@ -47,23 +68,7 @@ class G2(MatrixExpr):
         -------
             Shape tuple
         """
-        return self.arg[1].shape
-
-    @property
-    def arg(self):
-        return self.args
-
-    def __rpow__(self, other):
-        pass
-
-    def __rdiv__(self, other):
-        pass
-
-    def __abs__(self):
-        pass
-
-    def _entry(self, i, j, **kwargs):
-        pass
+        return self._args[1].shape
 
     def doit(self):
         """
@@ -78,11 +83,11 @@ class G2(MatrixExpr):
         -------
             Column result of G operator
         """
-        args = self.arg
-        if args[0].is_Matrix and args[1].is_Matrix and not args[0].is_symbol and not args[1].is_symbol:
-            c = args[0]
-            f = args[1]
-            dxs = args[2]
+        c, f, dxs = self.args
+        if c.is_Matrix and \
+                f.is_Matrix and \
+                not c.is_symbol and \
+                not f.is_symbol:
             return Matrix([G(c, f[i, 0], dxs) for i in range(c.shape[0])])
         else:
-            return G2(*args)
+            return G2(c, f, dxs)
