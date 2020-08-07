@@ -1,21 +1,35 @@
-from sympy import Function, Transpose, MatMul, Matrix, MatrixExpr
+from sympy import Function, Transpose, MatMul, Matrix, MatrixExpr, Expr, pprint, S, Derivative
 
-from mathematics.sde.nonlinear.functions.Grad import Grad
 from mathematics.sde.nonlinear.functions.Unwrap import Unwrap
+from mathematics.sde.nonlinear.functions.Operator import Operator
 
 
-class G(Function):
+class G(Operator):
     """
     Function to perform G operation with function
     """
     nargs = 3
 
-    is_commutative = True
+    # is_commutative = True
+    is_Operator = True
 
-    @classmethod
-    def eval(cls, c, f, dxs):
+    def __new__(cls, *args, **kwargs):
+        obj = super(G, cls).__new__(cls, *args, **kwargs)
+        return obj
+
+    def diff(self, *symbols, **assumptions):
+        c, f, dxs = self.args
+        c = c.doit()
+        f = f.doit()
+        return G(c, f, dxs).doit()
+
+    def doit(self):
         """
         Applies G operator on function
+        TIPS:
+            Always use doit on args,
+            Check for instance type,
+            Use is_symbol to filter dummies
         Parameters
         ----------
             c - b matrix column to apply G operator
@@ -26,68 +40,15 @@ class G(Function):
         -------
             Scalar result of G operator
         """
-        if c.is_Matrix and not c.is_symbol and not f.is_symbol:
-            return Unwrap(MatMul(Transpose(c), Grad(f, dxs)))
-
-
-class G2(Function, MatrixExpr):
-    """
-    Function to perform G operation with functions column
-    """
-    nargs = 3
-    is_commutative = True
-
-    rows = None  # type: int
-    cols = None  # type: int
-    _simplify = None
-
-    def __new__(cls, *args, **kwargs):
-        obj = super(G2, cls).__new__(cls, *args, **kwargs)
-        obj.rows = args[0].shape[0]
-        obj.cols = args[0].shape[1]
-        return obj
-
-    def __abs__(self):
-        pass
-
-    def __rpow__(self, other):
-        pass
-
-    def __rdiv__(self, other):
-        pass
-
-    def _entry(self, i, j, **kwargs):
-        exp = self.doit()
-        return exp[i, j]
-
-    @property
-    def shape(self):
-        """
-        Gives a shape of G2 operator result column
-        Returns
-        -------
-            Shape tuple
-        """
-        return self._args[1].shape
-
-    def doit(self):
-        """
-        Applies G operator on functions column
-        Parameters
-        ----------
-            c - b matrix to apply G operator
-            f - functions column to apply operator
-            dxs - arguments to apply gradient
-
-        Returns
-        -------
-            Column result of G operator
-        """
         c, f, dxs = self.args
-        if c.is_Matrix and \
-                f.is_Matrix and \
-                not c.is_symbol and \
-                not f.is_symbol:
-            return Matrix([G(c, f[i, 0], dxs) for i in range(c.shape[0])])
+        c = c.doit()
+        f = f.doit()
+        if (f.is_Number or f.has(*dxs)) and not isinstance(f, Operator):
+        # if f.is_Number or f.has(*dxs):
+        #     print('\n-----------------------------------------')
+        #     pprint((Unwrap(MatMul(Transpose(c.doit()), Matrix([Derivative(f, dxi)
+        #                                                        for dxi in dxs])))).doit())
+            return (Unwrap(MatMul(Transpose(c.doit()), Matrix([Derivative(f, dxi)
+                                                               for dxi in dxs])))).doit()
         else:
-            return G2(c, f, dxs)
+            return G(c, f, dxs)

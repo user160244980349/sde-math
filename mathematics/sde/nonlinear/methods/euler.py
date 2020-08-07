@@ -1,3 +1,4 @@
+from time import time
 from numpy import zeros, array
 from numpy.random import randn
 from sympy import symbols, Matrix
@@ -32,18 +33,20 @@ def euler(y0: array, mat_a: Matrix, mat_b: Matrix, times: tuple):
     ticks = int((t2 - t1) / dt)
 
     # Symbols
-    y = EulerS(n, m)
+    y = Euler(n, m)
     args = symbols("x1:%d" % (n + 1))
     args_extended = list()
     args_extended.extend(args)
     args_extended.extend([y.t, y.ksi])
 
     # Static substitutions
-    y = y.doit().subs([(y.dt, dt),
-                       (y.yp, Matrix(args)),
+    tt1 = int(round(time() * 1000))
+    y = y.doit().subs([(y.yp, Matrix(args)),
                        (y.dt, dt),
                        (y.b, mat_b),
                        (y.a, mat_a)]).doit()
+    tt2 = int(round(time() * 1000))
+    print("Sub time: %d" % (tt2 - tt1))
 
     # Compilation of formulas
     y_compiled = list()

@@ -1,6 +1,7 @@
+from time import time
 from numpy import zeros, array
 from numpy.random import randn
-from sympy import Matrix, symbols
+from sympy import Matrix, symbols, pprint
 from sympy.utilities.lambdify import lambdify
 
 from mathematics.sde.nonlinear.functions.Milstein import Milstein
@@ -34,21 +35,24 @@ def milstein(y0: array, mat_a: Matrix, mat_b: Matrix, q: int, times: tuple):
     ticks = int((t2 - t1) / dt)
 
     # Symbols
-    y = MilsteinS(n, m, q, args)
+    y = Milstein(n, m, q, args)
     args_extended = list()
     args_extended.extend(args)
     args_extended.extend([y.t, y.ksi])
 
     # Static substitutions
+    tt1 = int(round(time() * 1000))
     y = y.doit().subs([(y.yp, Matrix(args)),
                        (y.b, mat_b),
                        (y.a, mat_a),
                        (y.dt, dt)]).doit()
+    tt2 = int(round(time() * 1000))
+    print("Sub time: %d" % (tt2 - tt1))
 
     # Compilation of formulas
     y_compiled = list()
     for tr in range(n):
-        y_compiled.append(lambdify(args_extended, y.subs(Milstein.i, tr), 'numpy'))
+        y_compiled.append(lambdify(args_extended, y.subs(Milstein.i, tr).doit(), 'numpy'))
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]

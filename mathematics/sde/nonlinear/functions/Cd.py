@@ -1,15 +1,13 @@
-from sympy import Rational, Function, sqrt, pprint
+from sympy import Rational, Function
 
 import tools.database as db
 from mathematics.sde.nonlinear.c import getc
-from mathematics.sde.nonlinear.functions.Cd import Cd
 
 
-class C(Function):
+class Cd(Function):
     """
     Function to perform G operation with function
     """
-    nargs = 4
 
     def __new__(cls, *args, **kwargs):
         """
@@ -25,9 +23,9 @@ class C(Function):
         -------
             Calculated value or symbolic expression
         """
-        obj = super(C, cls).__new__(cls, *args, **kwargs)
-        j1, j2, j3, dt = args
-        obj.j1, obj.j2, obj.j3, obj.dt = j1, j2, j3, dt
+        obj = super(Cd, cls).__new__(cls, *args, **kwargs)
+        j1, j2, j3 = args
+        obj.j1, obj.j2, obj.j3 = j1, j2, j3
         return obj
 
     @property
@@ -48,9 +46,23 @@ class C(Function):
             Scalar result of G operator
         """
         args = self.argv
-        j1, j2, j3, dt = args
-        if j1.is_Number and j2.is_Number and j3.is_Number and dt.is_Number:
-            return sqrt((self.j1 * 2 + 1) * (self.j2 * 2 + 1) * (self.j3 * 2 + 1)) * \
-                   dt ** (Rational(3, 2)) * Cd(self.j1, self.j2, self.j3).doit() / 8
+        cond = True
+        for arg in args:
+            cond *= arg.is_Number
+
+        if cond:
+            index = ':'.join([str(i) for i in args])
+            respond = db.execute("SELECT `value` FROM `C`"
+                                 "WHERE REGEXP(`index`, '^%s$')" % index)
+            # print("GETTING C_%s" % index)
+
+            if len(respond) == 0:
+                new_c = getc(args)
+                print("ADD NEW C_%s = %s" % (index, new_c))
+                db.execute("INSERT INTO `C` (`index`, `value`) VALUES {}"
+                           .format("('%s', '%s')" % (index, new_c)))
+                return Rational(new_c)
+            else:
+                return Rational(respond[0][0])
         else:
-            return C(j1, j2, j3, dt)
+            return Cd(*args)

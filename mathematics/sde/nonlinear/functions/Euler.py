@@ -27,7 +27,7 @@ class Euler(Function):
         """
         obj = super(Euler, cls).__new__(cls, *args, **kwargs)
         n, m = args
-        obj.m, obj.n = n, m
+        obj.n, obj.m = n, m
         obj.t = Symbol('t')
         obj.dt = Symbol('dt')
         obj.a = MatrixSymbol('a', n, 1)
