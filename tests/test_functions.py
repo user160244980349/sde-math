@@ -125,11 +125,8 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    @unittest.skip('Success')
+    # @unittest.skip('Success')
     def test_Io(self):
-        i = symbols('i')
-        ksi = MatrixSymbol('ksi', 100, 100)
-        dt = Symbol('dt')
 
         print()
         exp = Io(i, dt, ksi)
