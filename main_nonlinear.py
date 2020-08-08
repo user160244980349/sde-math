@@ -36,9 +36,10 @@ def main():
     # mat_b = sp.Matrix(['x1',
     #                    'x2'])
 
-    taylor_args = [y0, mat_a, mat_b, 20, 1, (0, 0.1, 5)]
-    milstein_args = [y0, mat_a, mat_b, 20, (0, 0.1, 5)]
-    euler_args = [y0, mat_a, mat_b, (0, 0.1, 5)]
+    euler_args = [y0, mat_a, mat_b, (0, 0.05, 2.5)]
+    milstein_args = [y0, mat_a, mat_b, 40, (0, 0.05, 2.5)]
+    taylor1p5_args = [y0, mat_a, mat_b, 40, 5, (0, 0.05, 2.5)]
+    taylor2p0_args = [y0, mat_a, mat_b, 40, 5, 3, 3, (0, 0.05, 2.5)]
 
     # Euler
     t1 = int(round(time() * 1000))
@@ -54,10 +55,17 @@ def main():
     t2 = int(round(time() * 1000))
     print("Milstein solve time: %d" % (t2 - t1))
 
-    # Taylor
+    # Taylor 1.5
     t1 = int(round(time() * 1000))
     np.random.seed(703)
-    y3, t = met.taylor1p5(*taylor_args)
+    y3, t = met.taylor1p5(*taylor1p5_args)
+    t2 = int(round(time() * 1000))
+    print("Taylor solve time: %d" % (t2 - t1))
+
+    # Taylor 2.0
+    t1 = int(round(time() * 1000))
+    np.random.seed(703)
+    y4, t = met.taylor2p0(*taylor2p0_args)
     t2 = int(round(time() * 1000))
     print("Taylor solve time: %d" % (t2 - t1))
 
@@ -70,7 +78,10 @@ def main():
                               name="Milstein"))
     fig1.add_trace(go.Scatter(x=t, y=np.array(list(y3[0, :])).astype(float),
                               mode='lines',
-                              name="Taylor"))
+                              name="Taylor1.5"))
+    fig1.add_trace(go.Scatter(x=t, y=np.array(list(y4[0, :])).astype(float),
+                              mode='lines',
+                              name="Taylor2.0"))
     fig1.show()
 
     db.disconnect()

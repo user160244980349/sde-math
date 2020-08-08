@@ -12,9 +12,7 @@ class Taylor1p5(sp.Function):
     """
     Milstein method with focus on columns
     """
-    nargs = 5
-
-    i = sp.Symbol('i')
+    nargs = 9
 
     def __new__(cls, *args, **kwargs):
         """

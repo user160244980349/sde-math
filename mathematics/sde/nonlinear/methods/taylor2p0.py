@@ -6,8 +6,8 @@ import sympy as sp
 import mathematics.sde.nonlinear.functions as f
 
 
-def taylor1p5(y0: np.array, a: sp.Matrix, b: sp.Matrix,
-              q: int, q1: int, times: tuple):
+def taylor2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
+              q: int, q1: int, q2: int, q3: int, times: tuple):
     """
     Performs modeling with Milstein method with scalar substitutions in cycle
     Parameters
@@ -42,8 +42,8 @@ def taylor1p5(y0: np.array, a: sp.Matrix, b: sp.Matrix,
     sym_t = sp.Symbol('t')
     sym_dt = sp.Symbol('dt')
     sym_ksi = sp.MatrixSymbol('ksi', q + 1, m)
-    y = f.Taylor1p5(sym_i, sym_yp, sym_a, sym_b,
-                    q, q1, sym_dt, sym_ksi, args)
+    y = f.Taylor2p0(sym_i, sym_yp, sym_a, sym_b,
+                    q, q1, q2, q3, sym_dt, sym_ksi, args)
 
     args_extended = list()
     args_extended.extend(args)

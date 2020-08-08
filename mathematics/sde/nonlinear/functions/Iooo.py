@@ -1,7 +1,7 @@
 import sympy as sp
 
-from .C import C
 from .Ind import Ind
+from .Cooo import Cooo
 
 
 class Iooo(sp.Function):
@@ -18,14 +18,15 @@ class Iooo(sp.Function):
             return \
                 sp.Sum(
                     sp.Sum(
-                        sp.Sum(C(j1, j2, j3, dt).doit() *
-                               (ksi[j1, i1] * ksi[j2, i2] * ksi[j3, i3] -
-                                Ind(i1, i2) * Ind(j1, j2) * ksi[j3, i3] -
-                                Ind(i1, i3) * Ind(j1, j3) * ksi[j2, i2] -
-                                Ind(i2, i3) * Ind(j2, j3) * ksi[j1, i1]),
-                               (j3, 0, q1 - 1)).doit(),
-                        (j2, 0, q1 - 1)).doit(),
-                    (j1, 0, q1 - 1)).doit()
+                        sp.Sum(
+                            Cooo(j3, j2, j1, dt) *
+                            (ksi[j1, i1] * ksi[j2, i2] * ksi[j3, i3] -
+                             Ind(i1, i2) * Ind(j1, j2) * ksi[j3, i3] -
+                             Ind(i1, i3) * Ind(j1, j3) * ksi[j2, i2] -
+                             Ind(i2, i3) * Ind(j2, j3) * ksi[j1, i1]),
+                            (j3, 0, q1)).doit(),
+                        (j2, 0, q1)).doit(),
+                    (j1, 0, q1)).doit()
         else:
             return super(Iooo, cls).__new__(cls, *args, **kwargs)
 

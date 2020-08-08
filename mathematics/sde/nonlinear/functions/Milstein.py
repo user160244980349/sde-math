@@ -9,7 +9,7 @@ class Milstein(sp.Function):
     """
     Milstein method with focus on columns
     """
-    nargs = 4
+    nargs = 8
 
     def __new__(cls, *args, **kwargs):
         """

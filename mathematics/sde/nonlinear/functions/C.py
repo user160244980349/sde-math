@@ -1,26 +1,48 @@
 import sympy as sp
 
-from .Cd import Cd
+import mathematics.sde.nonlinear.c as c
+import tools.database as db
 
 
 class C(sp.Function):
     """
     Function to perform G operation with function
     """
-    nargs = 4
 
     def __new__(cls, *args, **kwargs):
-        j1, j2, j3, dt = sp.sympify(args)
-        if isinstance(j1, sp.Number) and isinstance(j2, sp.Number) and \
-                isinstance(j3, sp.Number) and isinstance(dt, sp.Number):
-            return sp.sqrt((j1 * 2 + 1) * (j2 * 2 + 1) * (j3 * 2 + 1)) * \
-                   dt ** (sp.Rational(3, 2)) * Cd(j1, j2, j3).doit() / 8
+        """
+        Creating method context with sizes of it`s components and symbols
+
+        Parameters
+        ----------
+            n - a column size
+            m - b matrix width
+            q - independent random variables dimension size
+            dxs - tuple of variables to perform differentiation
+
+        Returns
+        -------
+            Calculated value or symbolic expression
+        """
+        if all([isinstance(sp.sympify(arg), sp.Number) for arg in args]):
+            index = ':'.join([str(i) for i in args])
+            respond = db.execute("SELECT `value` FROM `C`"
+                                 "WHERE REGEXP(`index`, '^%s$')" % index)
+            if len(respond) == 0:
+                new_c = c.getc(list(args))
+                print("ADD NEW C_%s = %s" % (index, new_c))
+                db.execute("INSERT INTO `C` (`index`, `value`) VALUES {}"
+                           .format("('%s', '%s')" % (index, new_c)))
+                return sp.Rational(new_c)
+            else:
+                return sp.Rational(respond[0][0])
         else:
             return super(C, cls).__new__(cls, *args, **kwargs)
 
     def doit(self, **hints):
         """
         Applies G operator on function
+
         Parameters
         ----------
             c - b matrix column to apply G operator
@@ -31,4 +53,4 @@ class C(sp.Function):
         -------
             Scalar result of G operator
         """
-        return C(*self.args, **hints)
+        return Cd(*self.args, **hints)
