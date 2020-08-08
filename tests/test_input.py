@@ -1,8 +1,7 @@
 import unittest
 
-from numpy import array
-from numpy.testing import assert_array_equal
-from sympy import S, Symbol, pprint, diff
+import numpy as np
+import sympy as sp
 
 from tools.input import input_matrix
 
@@ -12,39 +11,39 @@ class TestInput(unittest.TestCase):
         print()
         mat = input_matrix(2, 2, ';')
 
-        x = Symbol('x')
+        x = sp.Symbol('x')
         print()
-        pprint(diff(mat, x))
+        sp.pprint(sp.diff(mat, x))
 
     def test_input_formula(self):
         print('\nf(x, y) = x**2 + 2*x + y**2 + y + 2')
-        f = S(input())
+        f = sp.sympify(input())
         print('f(x, y) = ')
-        pprint(f)
+        sp.pprint(f)
 
-        x, y = Symbol('x'), Symbol('y')
+        x, y = sp.Symbol('x'), sp.Symbol('y')
         print('f\'xy(x, y) =')
-        f1 = diff(diff(f, x), y)
-        pprint(f1)
+        f1 = sp.diff(sp.diff(f, x), y)
+        sp.pprint(f1)
         print('f\'yx(x, y) =')
-        f2 = diff(diff(f, y), x)
-        pprint(f2)
+        f2 = sp.diff(sp.diff(f, y), x)
+        sp.pprint(f2)
 
         self.assertEqual(f, x ** 2 + 2 * x + y ** 2 + y + 2)
         self.assertEqual(f1, f2)
 
     def test_input_matrix(self):
         print('\nA[4, 3] =')
-        mat_a1 = array([[1, 2, 3],
-                        [4, 5, 6],
-                        [7, 8, 9],
-                        [10, 11, 12]])
+        mat_a1 = sp.array([[1, 2, 3],
+                           [4, 5, 6],
+                           [7, 8, 9],
+                           [10, 11, 12]])
         print(mat_a1)
 
         print('A[4, 3] =')
         mat_a2 = input_matrix(4, 3, ' ')
 
-        self.assertEqual(assert_array_equal(mat_a1, mat_a2.astype(int)), None)
+        self.assertEqual(np.testing.assert_array_equal(mat_a1, mat_a2.astype(int)), None)
 
 
 if __name__ == '__main__':

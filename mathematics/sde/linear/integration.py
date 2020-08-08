@@ -1,10 +1,6 @@
-from numpy import transpose, hstack, ndarray
-from numpy.random import randn
+import numpy as np
 
-from mathematics.sde.linear.matrix import diagonal_to_column
-
-
-# from scipy.linalg import expm
+from .matrix import diagonal_to_column
 
 
 class Integral:
@@ -14,7 +10,7 @@ class Integral:
         self.mat_a, self.mat_ad, self.mat_bd, self.mat_h, self.mat_fd, self.distortion = \
             None, None, None, None, None, None
         self.mat_x0, self.mat_mx0, self.mat_dx0, self.mat_xt, self.mat_mx, self.mat_dx = \
-            None, None, None, ndarray((n, 0)), ndarray((n, 0)), ndarray((n, 0))
+            None, None, None, np.ndarray((n, 0)), np.ndarray((n, 0)), np.ndarray((n, 0))
         self.vec_yt, self.vec_my, self.vec_dy, self.vec_t = \
             [], [], [], []
         # self.vec_ry = []
@@ -23,13 +19,13 @@ class Integral:
         higher_limit = self.integration_step + int((self.tk - self.t0) / self.dt + 1)
         lower_limit = self.integration_step
 
-        self.mat_xt = hstack((self.mat_xt, ndarray((self.n, higher_limit - lower_limit))))
-        self.mat_mx = hstack((self.mat_mx, ndarray((self.n, higher_limit - lower_limit))))
-        self.mat_dx = hstack((self.mat_dx, ndarray((self.n, higher_limit - lower_limit))))
+        self.mat_xt = np.hstack((self.mat_xt, np.ndarray((self.n, higher_limit - lower_limit))))
+        self.mat_mx = np.hstack((self.mat_mx, np.ndarray((self.n, higher_limit - lower_limit))))
+        self.mat_dx = np.hstack((self.mat_dx, np.ndarray((self.n, higher_limit - lower_limit))))
 
         for self.integration_step in range(lower_limit, higher_limit):
             t = self.t0 + self.integration_step * self.dt
-            ft = randn(self.n, 1)
+            ft = np.random.randn(self.n, 1)
             mat_ut = self.distortion.t(t)
 
             # solution of sde
@@ -45,7 +41,8 @@ class Integral:
             # self.vec_my.append(self.mat_h.dot(mx)[0][0])
 
             # dispersion of solution of sde
-            dx = self.mat_ad.dot(self.mat_dx0).dot(transpose(self.mat_ad)) + self.mat_fd.dot(transpose(self.mat_fd))
+            dx = self.mat_ad.dot(self.mat_dx0).dot(np.transpose(self.mat_ad)) + \
+                 self.mat_fd.dot(np.transpose(self.mat_fd))
             # dispersion of exit process
             self.mat_dx[:, self.integration_step] = diagonal_to_column(dx)[:, 0]
             # self.vec_dy.append(self.mat_h.dot(dx).dot(transpose(self.mat_h))[0][0])

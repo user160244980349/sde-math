@@ -1,5 +1,5 @@
-from sympy import Function
+import sympy as sp
 
 
-class Operator(Function):
+class Operator(sp.Function):
     pass

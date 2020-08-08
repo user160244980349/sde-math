@@ -2,7 +2,7 @@ import unittest
 
 import plotly.graph_objects as go
 
-from mathematics.sde.linear.distortion import Harmonic, Zero, Const, Polynomial
+import mathematics.sde.linear.distortion as dist
 
 
 class MyTestCase(unittest.TestCase):
@@ -11,7 +11,7 @@ class MyTestCase(unittest.TestCase):
         dt = 0.01
         fig1 = go.Figure()
 
-        d = Zero()
+        d = dist.Zero()
 
         vec_x = [i * dt for i in range(0, 500)]
         vec_y = [d.t(i) for i in vec_x]
@@ -28,7 +28,7 @@ class MyTestCase(unittest.TestCase):
         dt = 0.01
         fig1 = go.Figure()
 
-        d = Const(3)
+        d = dist.Const(3)
 
         vec_x = [i * dt for i in range(0, 500)]
         vec_y = [d.t(i) for i in vec_x]
@@ -45,7 +45,7 @@ class MyTestCase(unittest.TestCase):
         dt = 0.01
         fig1 = go.Figure()
 
-        d = Polynomial([1, 2, 3])
+        d = dist.Polynomial([1, 2, 3])
 
         vec_x = [i * dt for i in range(0, 500)]
         vec_y = [d.t(i) for i in vec_x]
@@ -62,7 +62,7 @@ class MyTestCase(unittest.TestCase):
         dt = 0.01
         fig1 = go.Figure()
 
-        d = Harmonic([1, 2, 3])
+        d = dist.Harmonic([1, 2, 3])
 
         vec_x = [i * dt for i in range(0, 500)]
         vec_y = [d.t(i) for i in vec_x]

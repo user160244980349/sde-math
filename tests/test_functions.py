@@ -1,16 +1,9 @@
 import unittest
 
-from sympy import S, Matrix, MatrixSymbol, Symbol, symbols, pprint, Integral, sin
+import sympy as sp
 
 import config as c
-from mathematics.sde.nonlinear.functions.G import G
-from mathematics.sde.nonlinear.functions.L import L
-from mathematics.sde.nonlinear.functions.Io import Io
-from mathematics.sde.nonlinear.functions.Ioo import Ioo
-from mathematics.sde.nonlinear.functions.Iooo import Iooo
-from mathematics.sde.nonlinear.functions.C import C
-from mathematics.sde.nonlinear.functions.Cd import Cd
-from mathematics.sde.nonlinear.functions.Ind import Ind
+import mathematics.sde.nonlinear.functions as f
 from tools import database as db
 
 
@@ -21,9 +14,9 @@ class MyTestCase(unittest.TestCase):
 
         db.connect(c.database)
 
-        dt = symbols('dt')
-        ksi = MatrixSymbol('ksi', q + 1, m)
-        pprint(Iooo(1, 1, 1, q, dt, ksi))
+        dt = sp.symbols('dt')
+        ksi = sp.MatrixSymbol('ksi', q + 1, m)
+        sp.pprint(f.Iooo(1, 1, 1, q, dt, ksi))
 
         db.disconnect()
 
@@ -31,7 +24,7 @@ class MyTestCase(unittest.TestCase):
 
     @unittest.skip('Success')
     def test_L(self):
-        x1, x2, x3, x4, t = symbols('x1 x2 x3 x4, t')
+        x1, x2, x3, x4, t = sp.symbols('x1 x2 x3 x4, t')
         exp = x1 ** 2 * x2 ** 2 * t ** 3
 
         a = [['x1**2 * x2**2 * t'],
@@ -40,28 +33,29 @@ class MyTestCase(unittest.TestCase):
         b = [['sin(x1)', 'cos(x2)', 'cos(2 * x1)'],
              ['x2**2', 't * x1**2', 't * x2**3']]
 
-        mat_a = Matrix(a)
-        mat_b = Matrix(b)
+        mat_a = sp.Matrix(a)
+        mat_b = sp.Matrix(b)
 
-        diff_args = symbols('x1 x2')
+        diff_args = sp.symbols('x1 x2')
 
         print()
-        pprint(L(mat_a, mat_b, L(mat_a, mat_b, exp, diff_args) + L(mat_a, mat_b, exp, diff_args), diff_args).doit())
-        pprint(L(mat_a, mat_b, S(1) + L(mat_a, mat_b, exp, diff_args), diff_args).doit())
-        pprint(L(mat_a, mat_b, diff_args[0], diff_args).doit())
-        pprint(L(mat_a, mat_b, mat_b[0, 0], diff_args).doit())
-        pprint(L(mat_a, mat_b, L(mat_a, mat_b, S(1), diff_args), diff_args).doit())
+        sp.pprint(f.L(mat_a, mat_b, f.L(mat_a, mat_b, exp, diff_args) +
+                      f.L(mat_a, mat_b, exp, diff_args), diff_args).doit())
+        sp.pprint(f.L(mat_a, mat_b, sp.S.One + f.L(mat_a, mat_b, exp, diff_args), diff_args).doit())
+        sp.pprint(f.L(mat_a, mat_b, diff_args[0], diff_args).doit())
+        sp.pprint(f.L(mat_a, mat_b, mat_b[0, 0], diff_args).doit())
+        sp.pprint(f.L(mat_a, mat_b, f.L(mat_a, mat_b, sp.S.One, diff_args), diff_args).doit())
 
         self.assertEqual(True, True)
 
     @unittest.skip('Success')
     def test_G(self):
-        a = Matrix(['-5 * x1',
-                    '-5 * x2'])
-        sym_a = MatrixSymbol('a', 2, 1)
+        a = sp.Matrix(['-5 * x1',
+                       '-5 * x2'])
+        sym_a = sp.MatrixSymbol('a', 2, 1)
 
-        b = Matrix([['sin(x1)', 'x2'],
-                    ['x2', 'cos(x1)']])
+        b = sp.Matrix([['sin(x1)', 'x2'],
+                       ['x2', 'cos(x1)']])
 
         # b = Matrix([['0.5 * sin(x1) - 0.5 * cos(x2)', '0.75 * sin(x1) - 0.75 * cos(x2)'],
         #             ['-0.5 * sin(x1) + 0.5 * cos(x2)', '-0.75 * sin(x1) + 0.75 * cos(x2)']])
@@ -74,23 +68,24 @@ class MyTestCase(unittest.TestCase):
         #             ['x3**(1/2)', 'x1 * x2', '5'],
         #             ['cos(2 * x3)', 'sin(x1 / 2)', 'x1**2 * x3**2']])
 
-        sym_b = MatrixSymbol('b', 2, 2)
+        sym_b = sp.MatrixSymbol('b', 2, 2)
 
-        diff_args = symbols('x1 x2')
+        diff_args = sp.symbols('x1 x2')
 
         print()
-        # pprint(G(b[:, 1], b[1, 0], diff_args))
-        # pprint(G(b[:, 1], b[2, 1], diff_args))
-        # pprint(G(b[:, 0], G(b[:, 0], b[0, 0], diff_args).doit(), diff_args))
-        # pprint(G(sym_b[:, 0], sym_a[0, 0], diff_args))
-        # pprint(G(sym_b[:, 0], G(b[:, 0], sym_b[0, 0], diff_args) + G(b[:, 0], b[0, 0], diff_args), diff_args).doit())
-        # pprint(G(b[:, 0], G(b[:, 0], b[0, 0], diff_args), diff_args).doit())
-        # pprint(G(b[:, 0], G(b[:, 0], diff_args[0], diff_args), diff_args).doit())
-        # pprint(G(b[:, 0], G(b[:, 0], S(1), diff_args), diff_args).doit())
-        pprint(G(b[:, 0], G(b[:, 1], S(1), diff_args), diff_args).doit())
-        pprint(G(b[:, 0], G(b[:, 1], b[0, 0], diff_args), diff_args).doit())
-        pprint(G(b[:, 1], G(b[:, 0], b[0, 0], diff_args), diff_args).doit())
-        pprint(G(b[:, 1], G(b[:, 1], b[0, 0], diff_args), diff_args).doit())
+        # sp.pprint(G(b[:, 1], b[1, 0], diff_args))
+        # sp.pprint(G(b[:, 1], b[2, 1], diff_args))
+        # sp.pprint(G(b[:, 0], G(b[:, 0], b[0, 0], diff_args).doit(), diff_args))
+        # sp.pprint(G(sym_b[:, 0], sym_a[0, 0], diff_args))
+        # sp.pprint(G(sym_b[:, 0], G(b[:, 0], sym_b[0, 0], diff_args) + 
+        # G(b[:, 0], b[0, 0], diff_args), diff_args).doit())
+        # sp.pprint(G(b[:, 0], G(b[:, 0], b[0, 0], diff_args), diff_args).doit())
+        # sp.pprint(G(b[:, 0], G(b[:, 0], diff_args[0], diff_args), diff_args).doit())
+        # sp.pprint(G(b[:, 0], G(b[:, 0], S(1), diff_args), diff_args).doit())
+        sp.pprint(f.G(b[:, 0], f.G(b[:, 1], sp.S.One, diff_args), diff_args).doit())
+        sp.pprint(f.G(b[:, 0], f.G(b[:, 1], b[0, 0], diff_args), diff_args).doit())
+        sp.pprint(f.G(b[:, 1], f.G(b[:, 0], b[0, 0], diff_args), diff_args).doit())
+        sp.pprint(f.G(b[:, 1], f.G(b[:, 1], b[0, 0], diff_args), diff_args).doit())
 
         self.assertEqual(True, True)
 
@@ -99,13 +94,13 @@ class MyTestCase(unittest.TestCase):
         print()
         db.connect(c.database)
 
-        i1, i2, i3 = symbols('i1 i2 i3')
+        i1, i2, i3 = sp.symbols('i1 i2 i3')
 
-        exp = i1 + Cd(i1, i2, i3)
-        pprint(exp)
+        exp = i1 + f.Cd(i1, i2, i3)
+        sp.pprint(exp)
 
-        exp = i1 + C(S(8), S(9), S(9), S(0.001)).doit()
-        pprint(exp)
+        exp = i1 + f.C(sp.S(8), sp.S(9), sp.S(9), sp.S(0.001)).doit()
+        sp.pprint(exp)
 
         db.disconnect()
 
@@ -113,55 +108,60 @@ class MyTestCase(unittest.TestCase):
 
     @unittest.skip('Success')
     def test_Ind(self):
-        i1, i2 = symbols('i1 i2')
+        i1, i2 = sp.symbols('i1 i2')
 
         print()
-        exp = Ind(i1, i2)
-        pprint(exp)
+        exp = f.Ind(i1, i2)
+        sp.pprint(exp)
 
         print()
-        exp = Ind(1, 2)
-        pprint(exp)
+        exp = f.Ind(1, 2)
+        sp.pprint(exp)
 
         self.assertEqual(True, True)
 
-    # @unittest.skip('Success')
+    @unittest.skip('Success')
     def test_Io(self):
-        i = symbols('i')
-        ksi = MatrixSymbol('ksi', 100, 100)
-        dt = Symbol('dt')
+        i = sp.symbols('i')
+        ksi = sp.MatrixSymbol('ksi', 100, 100)
+        dt = sp.Symbol('dt')
 
         print()
-        exp = Io(i, dt)
-        pprint(exp)
+        exp = f.Io(i, dt, ksi).doit()
+        sp.pprint(exp)
 
         print()
-        exp = Io(i, ksi)
-        pprint(exp)
+        exp = f.Io(1, dt, ksi).doit()
+        sp.pprint(exp)
 
         print()
-        exp = Io(i, dt, ksi)
-        pprint(exp)
+        try:
+            exp = f.Io(i).doit()
+            sp.pprint(exp)
+        except Exception as e:
+            print(e)
 
         print()
-        exp = Io(1, dt, ksi)
-        pprint(exp)
+        f.Io.dt = sp.Symbol('dt')
+        f.Io.ksi = sp.MatrixSymbol('ksi', 2, 2)
+        exp = f.Io(i).doit()
+        sp.pprint(exp)
 
         self.assertEqual(True, True)
 
     @unittest.skip('Success')
     def test_Ioo(self):
-        i1, i2, q = symbols('i1 i2 q')
-        ksi = MatrixSymbol('ksi', 100, 100)
-        dt = Symbol('dt')
+        i1, i2, q = sp.symbols('i1 i2 q')
+        ksi = sp.MatrixSymbol('ksi', 100, 100)
+        dt = sp.Symbol('dt')
 
         print()
-        exp = Ioo(i1, i2, q, dt, ksi)
-        pprint(exp)
+        exp = f.Ioo(i1, i2, q, dt, ksi)
+        sp.pprint(exp)
 
         print()
-        exp = Ioo(1, 2, 10, dt, ksi)
-        pprint(exp)
+        exp = f.Ioo(1, 2, 10, dt, ksi)
+        sp.pprint(exp)
 
         self.assertEqual(True, True)
 

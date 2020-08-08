@@ -1,13 +1,12 @@
 from time import time
-from numpy import zeros, array
-from numpy.random import randn
-from sympy import symbols, Matrix
-from sympy.utilities.lambdify import lambdify
 
-from mathematics.sde.nonlinear.functions.Euler import Euler
+import numpy as np
+import sympy as sp
+
+import mathematics.sde.nonlinear.functions as f
 
 
-def euler(y0: array, mat_a: Matrix, mat_b: Matrix, times: tuple):
+def euler(y0: np.array, mat_a: sp.Matrix, mat_b: sp.Matrix, times: tuple):
     """
     Performs modeling with Euler method with matrix substitutions in cycle
     Parameters
@@ -33,15 +32,16 @@ def euler(y0: array, mat_a: Matrix, mat_b: Matrix, times: tuple):
     ticks = int((t2 - t1) / dt)
 
     # Symbols
-    y = Euler(n, m)
-    args = symbols("x1:%d" % (n + 1))
+    f.Euler.i = sp.Symbol('i')
+    y = f.Euler(n, m)
+    args = sp.symbols("x1:%d" % (n + 1))
     args_extended = list()
     args_extended.extend(args)
     args_extended.extend([y.t, y.ksi])
 
     # Static substitutions
     tt1 = int(round(time() * 1000))
-    y = y.doit().subs([(y.yp, Matrix(args)),
+    y = y.doit().subs([(y.yp, sp.Matrix(args)),
                        (y.dt, dt),
                        (y.b, mat_b),
                        (y.a, mat_a)]).doit()
@@ -51,16 +51,16 @@ def euler(y0: array, mat_a: Matrix, mat_b: Matrix, times: tuple):
     # Compilation of formulas
     y_compiled = list()
     for tr in range(n):
-        y_compiled.append(lambdify(args_extended, y.subs(Euler.i, tr), 'numpy'))
+        y_compiled.append(sp.utilities.lambdify(args_extended, y.subs(f.Euler.i, tr), 'numpy'))
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]
-    y = zeros((n, ticks))
+    y = np.zeros((n, ticks))
     y[:, 0] = y0[:, 0]
 
     # Dynamic substitutions with integration
     for p in range(ticks - 1):
-        ksi = randn(1, m)
+        ksi = np.random.randn(1, m)
         values = list(y[:, p])
         values.extend([t[p], ksi])
         for tr in range(n):

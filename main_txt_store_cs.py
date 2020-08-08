@@ -1,13 +1,13 @@
-from os.path import join
+import os.path as p
 
-from sympy import Symbol
+import sympy as sp
 
-from config import resources
-from mathematics.sde.nonlinear.c import getcw, getc
+import config as conf
+import mathematics.sde.nonlinear.c as ct
 
 
 def main():
-    x = Symbol('x')
+    x = sp.Symbol('x')
 
     w = {'001': [1, 1, x + 1],
          '010': [1, x + 1, 1],
@@ -19,9 +19,9 @@ def main():
         for i in range(0, 3):
             for j in range(0, 3):
                 for k in range(0, 3):
-                    content += "C_%d%d%d(%s) = %s\n" % (i, j, k, c, getcw([i, j, k], v))
+                    content += "C_%d%d%d(%s) = %s\n" % (i, j, k, c, ct.getcw([i, j, k], v))
 
-    file = open(join(resources, 'c_xxx(xxx).txt'), 'w')
+    file = open(p.join(conf.resources, 'c_xxx(xxx).txt'), 'w')
     file.write(content)
     file.close()
 
@@ -30,9 +30,9 @@ def main():
     for i in range(0, 7):
         for j in range(0, 7):
             for k in range(0, 7):
-                content += "C_%d%d%d = %s\n" % (i, j, k, getc([i, j, k]))
+                content += "C_%d%d%d = %s\n" % (i, j, k, ct.getc([i, j, k]))
 
-    file = open(join(resources, 'c_xxx.txt'), 'w')
+    file = open(p.join(conf.resources, 'c_xxx.txt'), 'w')
     file.write(content)
     file.close()
 
@@ -42,9 +42,9 @@ def main():
         for j in range(0, 3):
             for k in range(0, 3):
                 for m in range(0, 3):
-                    content += "C_%d%d%d%d = %s\n" % (i, j, k, m, getc([i, j, k, m]))
+                    content += "C_%d%d%d%d = %s\n" % (i, j, k, m, ct.getc([i, j, k, m]))
 
-    file = open(join(resources, 'c_xxxx.txt'), 'w')
+    file = open(p.join(conf.resources, 'c_xxxx.txt'), 'w')
     file.write(content)
     file.close()
 
@@ -55,9 +55,9 @@ def main():
             for k in range(0, 2):
                 for m in range(0, 2):
                     for n in range(0, 2):
-                        content += "C_%d%d%d%d%d = %s\n" % (i, j, k, m, n, getc([i, j, k, m, n]))
+                        content += "C_%d%d%d%d%d = %s\n" % (i, j, k, m, n, ct.getc([i, j, k, m, n]))
 
-    file = open(join(resources, 'c_xxxxx.txt'), 'w')
+    file = open(p.join(conf.resources, 'c_xxxxx.txt'), 'w')
     file.write(content)
     file.close()
 

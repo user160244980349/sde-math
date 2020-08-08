@@ -1,7 +1,7 @@
-from sympy import Function, sqrt, Rational
+import sympy as sp
 
 
-class Ii(Function):
+class Ii(sp.Function):
     """
     Stochastic Ito integral
     """
@@ -23,4 +23,4 @@ class Ii(Function):
             Calculated value or symbolic expression
         """
         if i1.is_Number:
-            return -dt**(Rational(3, 2)) / 2 * (ksi[0, i1] + 1 / sqrt(3) * ksi[1, i1])
+            return -dt ** (sp.Rational(3, 2)) / 2 * (ksi[0, i1] + 1 / sp.sqrt(3) * ksi[1, i1])

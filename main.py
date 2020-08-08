@@ -1,14 +1,14 @@
 from PyQt5.QtWidgets import QApplication
 
+import init as i
+import tools.database as db
 from config import database
-from init.init import init
-from tools.database import connect, disconnect
 from ui.Window import Window
 
 
 def main():
-    init()
-    connect(database)
+    i.init()
+    db.connect(database)
 
     app = QApplication([])
     window = Window()
@@ -18,7 +18,7 @@ def main():
 
 def app_exit(app):
     app.exec()
-    disconnect()
+    db.disconnect()
 
 
 if __name__ == '__main__':

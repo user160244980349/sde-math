@@ -1,10 +1,10 @@
 import config as c
-from init.database import init as init_db_if_not
-from tools import database as db
+import init.database as idb
+import tools.database as db
 
 
 def main():
-    init_db_if_not()
+    idb.init()
     db.connect(c.database)
     print(db.execute("SELECT * FROM C"))
     db.disconnect()

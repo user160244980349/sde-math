@@ -1,33 +1,31 @@
-from sympy import Rational, Function, sqrt, pprint
+import sympy as sp
 
-import tools.database as db
-from mathematics.sde.nonlinear.c import getc
-from mathematics.sde.nonlinear.functions.Cd import Cd
+from .Cd import Cd
+from .CustomFunction import CustomFunction
 
 
-class C(Function):
+class C(CustomFunction):
     """
     Function to perform G operation with function
     """
-    nargs = 4
+    nargs = (3, 4)
+
+    j1 = None
+    j2 = None
+    j3 = None
+    dt = None
+
+    @classmethod
+    def _get_defaults(cls):
+        return [
+            cls.j1,
+            cls.j2,
+            cls.j3,
+            cls.dt
+        ]
 
     def __new__(cls, *args, **kwargs):
-        """
-        Creating method context with sizes of it`s components and symbols
-        Parameters
-        ----------
-            n - a column size
-            m - b matrix width
-            q - independent random variables dimension size
-            dxs - tuple of variables to perform differentiation
-
-        Returns
-        -------
-            Calculated value or symbolic expression
-        """
         obj = super(C, cls).__new__(cls, *args, **kwargs)
-        j1, j2, j3, dt = args
-        obj.j1, obj.j2, obj.j3, obj.dt = j1, j2, j3, dt
         return obj
 
     @property
@@ -47,10 +45,10 @@ class C(Function):
         -------
             Scalar result of G operator
         """
-        args = self.argv
-        j1, j2, j3, dt = args
-        if j1.is_Number and j2.is_Number and j3.is_Number and dt.is_Number:
-            return sqrt((self.j1 * 2 + 1) * (self.j2 * 2 + 1) * (self.j3 * 2 + 1)) * \
-                   dt ** (Rational(3, 2)) * Cd(self.j1, self.j2, self.j3).doit() / 8
+        j1, j2, j3, dt = self.validated_args
+        if isinstance(j1, sp.Number) and isinstance(j2, sp.Number) and \
+                isinstance(j3, sp.Number) and isinstance(dt, sp.Number):
+            return sp.sqrt((j1 * 2 + 1) * (j2 * 2 + 1) * (j3 * 2 + 1)) * \
+                   dt ** (sp.Rational(3, 2)) * Cd(j1, j2, j3).doit() / 8
         else:
-            return C(j1, j2, j3, dt)
+            return C(*self.args)

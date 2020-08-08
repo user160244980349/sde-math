@@ -1,9 +1,9 @@
-from sympy import S, Function, Sum, sqrt
+import sympy as sp
 
-from mathematics.sde.nonlinear.functions.Ind import Ind
+from .Ind import Ind
 
 
-class Ioo(Function):
+class Ioo(sp.Function):
     """
     Iterated stochastic Ito integral
     """
@@ -27,6 +27,6 @@ class Ioo(Function):
         if i1.is_Number and i2.is_Number and q.is_Number:
             from sympy.abc import i
             return dt / 2 * (ksi[0, i1] * ksi[0, i2] +
-                             Sum(S(1) / sqrt(S(4) * i ** 2 - 1) * (ksi[i - 1, i1] * ksi[i, i2] -
-                                                                   ksi[i, i1] * ksi[i - 1, i2]),
-                                 (i, 1, q)).doit() - Ind(i1, i2))
+                             sp.Sum(sp.S.One / sp.sqrt(i ** 2 * 4 - 1) * (ksi[i - 1, i1] * ksi[i, i2] -
+                                                                          ksi[i, i1] * ksi[i - 1, i2]),
+                                    (i, 1, q)).doit() - Ind(i1, i2))

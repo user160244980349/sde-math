@@ -1,4 +1,4 @@
-from numpy import shape, zeros
+import numpy as np
 
 
 class NotASquareMatrix(Exception):
@@ -7,7 +7,7 @@ class NotASquareMatrix(Exception):
 
 def vec_to_eye(vector):
     n = len(vector)
-    matrix = zeros((n, n))
+    matrix = np.zeros((n, n))
 
     for i in range(len(matrix)):
         matrix[i][i] = vector[i]
@@ -16,11 +16,11 @@ def vec_to_eye(vector):
 
 
 def diagonal_to_column(matrix):
-    height = shape(matrix)[0]
-    if height != shape(matrix)[1]:
+    height = np.shape(matrix)[0]
+    if height != np.shape(matrix)[1]:
         raise NotASquareMatrix()
 
-    column = zeros((height, 1))
+    column = np.zeros((height, 1))
     for i in range(height):
         column[i][0] = matrix[i][i]
 

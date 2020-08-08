@@ -1,17 +1,17 @@
-from sympy import Function, Sum, Symbol, MatrixSymbol, symbols
+import sympy as sp
 
-from mathematics.sde.nonlinear.functions.G import G
-from mathematics.sde.nonlinear.functions.Io import Io
-from mathematics.sde.nonlinear.functions.Ioo import Ioo
+from .G import G
+from .Io import Io
+from .Ioo import Ioo
 
 
-class Milstein(Function):
+class Milstein(sp.Function):
     """
     Milstein method with focus on columns
     """
     nargs = 4
 
-    i = Symbol('i')
+    i = sp.Symbol('i')
 
     def __new__(cls, *args, **kwargs):
         """
@@ -30,12 +30,12 @@ class Milstein(Function):
         obj = super(Milstein, cls).__new__(cls, *args, **kwargs)
         n, m, q, dxs = args
         obj.n, obj.m, obj.q, obj.dxs = n, m, q, dxs
-        obj.t = Symbol('t')
-        obj.dt = Symbol('dt')
-        obj.a = MatrixSymbol('a', n, 1)
-        obj.b = MatrixSymbol('b', n, m)
-        obj.yp = MatrixSymbol('yp', n, 1)
-        obj.ksi = MatrixSymbol('ksi', q + 1, m)
+        obj.t = sp.Symbol('t')
+        obj.dt = sp.Symbol('dt')
+        obj.a = sp.MatrixSymbol('a', n, 1)
+        obj.b = sp.MatrixSymbol('b', n, m)
+        obj.yp = sp.MatrixSymbol('yp', n, 1)
+        obj.ksi = sp.MatrixSymbol('ksi', q + 1, m)
         return obj
 
     def doit(self, **hints):
@@ -47,8 +47,10 @@ class Milstein(Function):
         -------
             Calculated value or symbolic expression
         """
-        i1, i2 = symbols('i1 i2')
+        i1, i2 = sp.symbols('i1 i2')
+        Io.dt, Io.ksi = self.dt, self.ksi
         return self.yp[self.i, 0] + self.a[self.i, 0] * self.dt + \
-               Sum(self.b[self.i, i1] * Io(i1, self.dt, self.ksi), (i1, 0, self.m - 1)).doit() + \
-               Sum(Sum(G(self.b[:, i1], self.b[self.i, i2], self.dxs) *
-                       Ioo(i1, i2, self.q, self.dt, self.ksi), (i2, 0, self.m - 1)).doit(), (i1, 0, self.m - 1)).doit()
+               sp.Sum(self.b[self.i, i1] * Io(i1), (i1, 0, self.m - 1)).doit() + \
+               sp.Sum(sp.Sum(G(self.b[:, i1], self.b[self.i, i2], self.dxs) *
+                             Ioo(i1, i2, self.q, self.dt, self.ksi), (i2, 0, self.m - 1)).doit(),
+                      (i1, 0, self.m - 1)).doit()

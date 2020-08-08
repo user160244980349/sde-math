@@ -1,7 +1,7 @@
-from sympy import S, Function
+import sympy as sp
 
 
-class Ind(Function):
+class Ind(sp.Function):
     """
     Stochastic Ito integral
     """
@@ -23,6 +23,6 @@ class Ind(Function):
         """
         if i1.is_Number and i2.is_Number:
             if i1 == i2:
-                return S.One
+                return sp.S.One
             else:
-                return S.Zero
+                return sp.S.Zero

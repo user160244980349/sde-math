@@ -1,6 +1,6 @@
-from math import sin
+import math as m
 
-from numpy import array, ndarray
+import numpy as np
 
 
 class Zero:
@@ -19,7 +19,7 @@ class Const:
 
 
 class Polynomial:
-    def __init__(self, u: array):
+    def __init__(self, u: np.array):
         self._u = u
         self._p = len(u)
 
@@ -32,18 +32,18 @@ class Polynomial:
 
 
 class Harmonic:
-    def __init__(self, u: array):
+    def __init__(self, u: np.array):
         self._u = u
 
     def t(self, t):
-        return self._u[0] * sin(self._u[1] * t + self._u[2])
+        return self._u[0] * m.sin(self._u[1] * t + self._u[2])
 
 
 class Distortion:
-    def __init__(self, n: int, mat_u: ndarray):
+    def __init__(self, n: int, mat_u: np.ndarray):
         self._size = n
         self._mat_u = mat_u
-        self._mat_ut = array([[0.0]] * n)
+        self._mat_ut = np.array([[0.0]] * n)
 
     def t(self, t: float):
         for i in range(self._size):

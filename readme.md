@@ -46,7 +46,7 @@
 - [x] (impossible, needs to be vectorized) Trajectory as substitution arg
 - [x] Beautify G2 output
 - [x] is_symbol check is not working
-- [ ] Clean up
+- [x] Clean up
 - [ ] Comments actualization
 - [ ] Context for formulas to beat redundancy
 - [ ] Precision calculation with q

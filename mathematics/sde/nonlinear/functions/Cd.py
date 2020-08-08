@@ -1,10 +1,10 @@
-from sympy import Rational, Function
+import sympy as sp
 
+import mathematics.sde.nonlinear.c as c
 import tools.database as db
-from mathematics.sde.nonlinear.c import getc
 
 
-class Cd(Function):
+class Cd(sp.Function):
     """
     Function to perform G operation with function
     """
@@ -12,6 +12,7 @@ class Cd(Function):
     def __new__(cls, *args, **kwargs):
         """
         Creating method context with sizes of it`s components and symbols
+
         Parameters
         ----------
             n - a column size
@@ -24,17 +25,12 @@ class Cd(Function):
             Calculated value or symbolic expression
         """
         obj = super(Cd, cls).__new__(cls, *args, **kwargs)
-        j1, j2, j3 = args
-        obj.j1, obj.j2, obj.j3 = j1, j2, j3
         return obj
-
-    @property
-    def argv(self):
-        return self.args
 
     def doit(self):
         """
         Applies G operator on function
+
         Parameters
         ----------
             c - b matrix column to apply G operator
@@ -45,24 +41,19 @@ class Cd(Function):
         -------
             Scalar result of G operator
         """
-        args = self.argv
-        cond = True
-        for arg in args:
-            cond *= arg.is_Number
+        args = self.args
 
-        if cond:
+        if all([isinstance(arg, sp.Number) for arg in args]):
             index = ':'.join([str(i) for i in args])
             respond = db.execute("SELECT `value` FROM `C`"
                                  "WHERE REGEXP(`index`, '^%s$')" % index)
-            # print("GETTING C_%s" % index)
-
             if len(respond) == 0:
-                new_c = getc(args)
+                new_c = c.getc(args)
                 print("ADD NEW C_%s = %s" % (index, new_c))
                 db.execute("INSERT INTO `C` (`index`, `value`) VALUES {}"
                            .format("('%s', '%s')" % (index, new_c)))
-                return Rational(new_c)
+                return sp.Rational(new_c)
             else:
-                return Rational(respond[0][0])
+                return sp.Rational(respond[0][0])
         else:
             return Cd(*args)

@@ -1,7 +1,7 @@
-from sympy import Function, Transpose, MatMul, Matrix, MatrixExpr, Expr, pprint, S, Derivative
+import sympy as sp
 
-from mathematics.sde.nonlinear.functions.Unwrap import Unwrap
-from mathematics.sde.nonlinear.functions.Operator import Operator
+from .Operator import Operator
+from .Unwrap import Unwrap
 
 
 class G(Operator):
@@ -9,9 +9,6 @@ class G(Operator):
     Function to perform G operation with function
     """
     nargs = 3
-
-    # is_commutative = True
-    is_Operator = True
 
     def __new__(cls, *args, **kwargs):
         obj = super(G, cls).__new__(cls, *args, **kwargs)
@@ -43,12 +40,8 @@ class G(Operator):
         c, f, dxs = self.args
         c = c.doit()
         f = f.doit()
-        if (f.is_Number or f.has(*dxs)) and not isinstance(f, Operator):
-        # if f.is_Number or f.has(*dxs):
-        #     print('\n-----------------------------------------')
-        #     pprint((Unwrap(MatMul(Transpose(c.doit()), Matrix([Derivative(f, dxi)
-        #                                                        for dxi in dxs])))).doit())
-            return (Unwrap(MatMul(Transpose(c.doit()), Matrix([Derivative(f, dxi)
-                                                               for dxi in dxs])))).doit()
+        if (isinstance(f, sp.Number) or f.has(*dxs)) and not isinstance(f, Operator):
+            return (Unwrap(sp.MatMul(sp.Transpose(c.doit()), sp.Matrix([sp.Derivative(f, dxi)
+                                                                        for dxi in dxs])))).doit()
         else:
             return G(c, f, dxs)

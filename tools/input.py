@@ -1,4 +1,4 @@
-from numpy import array
+import numpy as np
 
 
 class BoundExceedError(Exception):
@@ -16,7 +16,7 @@ def input_matrix(n, m, s):
 
         mat.append(row)
 
-    return array(mat)
+    return np.array(mat)
 
 
 def input_vector(n, s):
@@ -25,4 +25,4 @@ def input_vector(n, s):
     if len(row) != n:
         raise BoundExceedError()
 
-    return array(row)
+    return np.array(row)

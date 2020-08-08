@@ -1,7 +1,7 @@
-from sympy import Transpose, Trace, Derivative, Rational, Matrix
+import sympy as sp
 
-from mathematics.sde.nonlinear.functions.Operator import Operator
-from mathematics.sde.nonlinear.functions.Unwrap import Unwrap
+from .Operator import Operator
+from .Unwrap import Unwrap
 
 
 class L(Operator):
@@ -10,7 +10,6 @@ class L(Operator):
     """
     nargs = 4
 
-    # is_commutative = True
     is_Operator = True
 
     def __new__(cls, *args, **kwargs):
@@ -40,11 +39,11 @@ class L(Operator):
         b = b.doit()
         f = f.doit()
         if (f.is_Number or f.has(*dxs)) and not isinstance(f, Operator):
-            return (Derivative(f, t) +
-                    Unwrap(Transpose(Matrix([Derivative(f, dxi)
-                                             for dxi in dxs])) * a) +
-                    Rational(1, 2) * Trace(Transpose(b) * Matrix([[Derivative(f, dxi, dxj)
-                                                                   for dxi in dxs]
-                                                                  for dxj in dxs]) * b)).doit()
+            return (sp.Derivative(f, t) +
+                    Unwrap(sp.Transpose(sp.Matrix([sp.Derivative(f, dxi)
+                                                   for dxi in dxs])) * a) +
+                    sp.Rational(1, 2) * sp.Trace(sp.Transpose(b) * sp.Matrix([[sp.Derivative(f, dxi, dxj)
+                                                                               for dxi in dxs]
+                                                                              for dxj in dxs]) * b)).doit()
         else:
             return L(a, b, f, dxs)

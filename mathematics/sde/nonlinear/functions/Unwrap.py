@@ -1,7 +1,7 @@
-from sympy import Function
+import sympy as sp
 
 
-class Unwrap(Function):
+class Unwrap(sp.Function):
     """
     Simple function to unwrap matrix
     """
