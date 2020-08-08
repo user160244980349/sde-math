@@ -1,6 +1,5 @@
 from .C import *
 from .Cd import *
-from .CustomFunction import *
 from .Euler import *
 from .G import *
 from .Ii import *

@@ -1,31 +1,20 @@
 import sympy as sp
 
-from .CustomFunction import CustomFunction
 
-
-class Io(CustomFunction):
+class Io(sp.Function):
     """
     Stochastic Ito integral
     """
-    nargs = (1, 3)
-
-    i1 = None
-    dt = None
-    ksi = None
-
-    @classmethod
-    def _get_defaults(cls):
-        return [
-            cls.i1,
-            cls.dt,
-            cls.ksi
-        ]
+    nargs = 3
 
     def __new__(cls, *args, **kwargs):
-        obj = super().__new__(cls, *args)
-        return obj
+        i1, dt, ksi = sp.sympify(args)
+        if isinstance(i1, sp.Number):
+            return ksi[0, i1] * sp.sqrt(dt)
+        else:
+            return super(Io, cls).__new__(cls, *args, **kwargs)
 
-    def doit(self):
+    def doit(self, **hints):
         """
         Function evaluation method
         If i1 is number then evaluation performs
@@ -40,8 +29,4 @@ class Io(CustomFunction):
         -------
             Calculated value or symbolic expression
         """
-        i1, dt, ksi = self.validated_args
-        if isinstance(i1, sp.Number):
-            return ksi[0, i1] * sp.sqrt(dt)
-        else:
-            return Io(*self.args)
+        return Io(*self.args, **hints)

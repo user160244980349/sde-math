@@ -48,7 +48,7 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    @unittest.skip('Success')
+    # @unittest.skip('Success')
     def test_G(self):
         a = sp.Matrix(['-5 * x1',
                        '-5 * x2'])
@@ -82,10 +82,11 @@ class MyTestCase(unittest.TestCase):
         # sp.pprint(G(b[:, 0], G(b[:, 0], b[0, 0], diff_args), diff_args).doit())
         # sp.pprint(G(b[:, 0], G(b[:, 0], diff_args[0], diff_args), diff_args).doit())
         # sp.pprint(G(b[:, 0], G(b[:, 0], S(1), diff_args), diff_args).doit())
-        sp.pprint(f.G(b[:, 0], f.G(b[:, 1], sp.S.One, diff_args), diff_args).doit())
-        sp.pprint(f.G(b[:, 0], f.G(b[:, 1], b[0, 0], diff_args), diff_args).doit())
-        sp.pprint(f.G(b[:, 1], f.G(b[:, 0], b[0, 0], diff_args), diff_args).doit())
-        sp.pprint(f.G(b[:, 1], f.G(b[:, 1], b[0, 0], diff_args), diff_args).doit())
+        # sp.pprint(f.G(b[:, 0], f.G(b[:, 1], sp.S.One, diff_args), diff_args).doit())
+        # sp.pprint(f.G(b[:, 0], f.G(b[:, 1], b[0, 0], diff_args), diff_args).doit())
+        # sp.pprint(f.G(b[:, 1], f.G(b[:, 0], b[0, 0], diff_args), diff_args).doit())
+        # sp.pprint(f.G(b[:, 1], f.G(b[:, 1], b[0, 0], diff_args), diff_args).doit())
+        sp.pprint(f.G(b[:, 1], sp.S.One + f.G(b[:, 1], b[0, 0], diff_args), diff_args).doit())
 
         self.assertEqual(True, True)
 

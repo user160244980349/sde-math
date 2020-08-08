@@ -7,8 +7,14 @@ class Unwrap(sp.Function):
     """
     nargs = 1
 
-    @classmethod
-    def eval(cls, m):
+    def __new__(cls, *args, **kwargs):
+        m = sp.sympify(args[0])
+        if isinstance(m, sp.MatrixExpr):
+            return m[0, 0]
+        else:
+            return super(Unwrap, cls).__new__(cls, *args, **kwargs)
+
+    def doit(self, **hints):
         """
         Performs modeling with Milstein method with scalar substitutions in cycle
         Parameters
@@ -19,5 +25,4 @@ class Unwrap(sp.Function):
         -------
             Unwraped matrix
         """
-        if m.is_Matrix and not m.is_symbol:
-            return m[0, 0]
+        return Unwrap(*self.args, **hints)

@@ -24,10 +24,22 @@ class Cd(sp.Function):
         -------
             Calculated value or symbolic expression
         """
-        obj = super(Cd, cls).__new__(cls, *args, **kwargs)
-        return obj
+        if all([isinstance(sp.sympify(arg), sp.Number) for arg in args]):
+            index = ':'.join([str(i) for i in args])
+            respond = db.execute("SELECT `value` FROM `C`"
+                                 "WHERE REGEXP(`index`, '^%s$')" % index)
+            if len(respond) == 0:
+                new_c = c.getc(*args)
+                print("ADD NEW C_%s = %s" % (index, new_c))
+                db.execute("INSERT INTO `C` (`index`, `value`) VALUES {}"
+                           .format("('%s', '%s')" % (index, new_c)))
+                return sp.Rational(new_c)
+            else:
+                return sp.Rational(respond[0][0])
+        else:
+            return super(Cd, cls).__new__(cls, *args, **kwargs)
 
-    def doit(self):
+    def doit(self, **hints):
         """
         Applies G operator on function
 
@@ -41,19 +53,4 @@ class Cd(sp.Function):
         -------
             Scalar result of G operator
         """
-        args = self.args
-
-        if all([isinstance(arg, sp.Number) for arg in args]):
-            index = ':'.join([str(i) for i in args])
-            respond = db.execute("SELECT `value` FROM `C`"
-                                 "WHERE REGEXP(`index`, '^%s$')" % index)
-            if len(respond) == 0:
-                new_c = c.getc(args)
-                print("ADD NEW C_%s = %s" % (index, new_c))
-                db.execute("INSERT INTO `C` (`index`, `value`) VALUES {}"
-                           .format("('%s', '%s')" % (index, new_c)))
-                return sp.Rational(new_c)
-            else:
-                return sp.Rational(respond[0][0])
-        else:
-            return Cd(*args)
+        return Cd(*self.args, **hints)

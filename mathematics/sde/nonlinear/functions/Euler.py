@@ -7,9 +7,7 @@ class Euler(sp.Function):
     """
     Milstein method with focus on columns
     """
-    nargs = 2
-
-    i = None
+    nargs = 6
 
     def __new__(cls, *args, **kwargs):
         """
@@ -26,26 +24,8 @@ class Euler(sp.Function):
         -------
             Calculated value or symbolic expression
         """
-        obj = super(Euler, cls).__new__(cls, *args, **kwargs)
-        n, m = args
-        obj.n, obj.m = n, m
-        obj.t = sp.Symbol('t')
-        obj.dt = sp.Symbol('dt')
-        obj.a = sp.MatrixSymbol('a', n, 1)
-        obj.b = sp.MatrixSymbol('b', n, m)
-        obj.yp = sp.MatrixSymbol('yp', n, 1)
-        obj.ksi = sp.MatrixSymbol('ksi', 1, m)
-        return obj
-
-    def doit(self, **hints):
-        """
-        Function evaluation method
-        This formula works as it is with symbols such it
-        has no limits for it`s components
-        Returns
-        -------
-            Calculated value or symbolic expression
-        """
+        i, yp, a, b, dt, ksi = sp.sympify(args)
+        m = b.shape[1]
         i1 = sp.symbols('i1')
-        return self.yp[self.i, 0] + self.a[self.i, 0] * self.dt + \
-               sp.Sum(self.b[self.i, i1] * Io(i1, self.dt, self.ksi), (i1, 0, self.m - 1)).doit()
+        return yp[i, 0] + a[i, 0] * dt + \
+               sp.Sum(b[i, i1] * Io(i1, dt, ksi), (i1, 0, m - 1)).doit()

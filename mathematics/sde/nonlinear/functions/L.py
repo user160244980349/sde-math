@@ -13,10 +13,19 @@ class L(Operator):
     is_Operator = True
 
     def __new__(cls, *args, **kwargs):
-        obj = super(L, cls).__new__(cls, *args, **kwargs)
-        return obj
+        a, b, f, dxs = sp.sympify(args)
+        if (isinstance(f, sp.Number) or f.has(*dxs)) and not isinstance(f, Operator):
+            from sympy.abc import t
+            return (sp.Derivative(f, t) +
+                    Unwrap(sp.Transpose(sp.Matrix([sp.Derivative(f, dxi)
+                                                   for dxi in dxs])) * a) +
+                    sp.Rational(1, 2) * sp.Trace(sp.Transpose(b) * sp.Matrix([[sp.Derivative(f, dxi, dxj)
+                                                                               for dxi in dxs]
+                                                                              for dxj in dxs]) * b)).doit()
+        else:
+            return super(L, cls).__new__(cls, *args, **kwargs)
 
-    def doit(self):
+    def doit(self, **hints):
         """
         Applies G operator on function
         TIPS:
@@ -33,17 +42,4 @@ class L(Operator):
         -------
             Scalar result of G operator
         """
-        from sympy.abc import t
-        a, b, f, dxs = self.args
-        a = a.doit()
-        b = b.doit()
-        f = f.doit()
-        if (f.is_Number or f.has(*dxs)) and not isinstance(f, Operator):
-            return (sp.Derivative(f, t) +
-                    Unwrap(sp.Transpose(sp.Matrix([sp.Derivative(f, dxi)
-                                                   for dxi in dxs])) * a) +
-                    sp.Rational(1, 2) * sp.Trace(sp.Transpose(b) * sp.Matrix([[sp.Derivative(f, dxi, dxj)
-                                                                               for dxi in dxs]
-                                                                              for dxj in dxs]) * b)).doit()
-        else:
-            return L(a, b, f, dxs)
+        return L(*self.args, **hints)

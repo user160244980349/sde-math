@@ -9,8 +9,20 @@ class Ioo(sp.Function):
     """
     nargs = 5
 
-    @classmethod
-    def eval(cls, i1, i2, q, dt, ksi):
+    def __new__(cls, *args, **kwargs):
+        i1, i2, q, dt, ksi = sp.sympify(args)
+        if isinstance(i1, sp.Number) and isinstance(i2, sp.Number) \
+                and isinstance(q, sp.Number):
+            from sympy.abc import i
+            return dt / 2 * (ksi[0, i1] * ksi[0, i2] +
+                             sp.Sum(sp.S.One / sp.sqrt(i ** 2 * 4 - 1) *
+                                    (ksi[i - 1, i1] * ksi[i, i2] -
+                                     ksi[i, i1] * ksi[i - 1, i2]),
+                                    (i, 1, q)).doit() - Ind(i1, i2))
+        else:
+            return super(Ioo, cls).__new__(cls, *args, **kwargs)
+
+    def doit(self, **hints):
         """
         Function evaluation method
         If i1, i2, q are numbers then evaluation performs
@@ -24,9 +36,4 @@ class Ioo(sp.Function):
         -------
             Calculated value or symbolic expression
         """
-        if i1.is_Number and i2.is_Number and q.is_Number:
-            from sympy.abc import i
-            return dt / 2 * (ksi[0, i1] * ksi[0, i2] +
-                             sp.Sum(sp.S.One / sp.sqrt(i ** 2 * 4 - 1) * (ksi[i - 1, i1] * ksi[i, i2] -
-                                                                          ksi[i, i1] * ksi[i - 1, i2]),
-                                    (i, 1, q)).doit() - Ind(i1, i2))
+        return Ioo(*self.args, **hints)

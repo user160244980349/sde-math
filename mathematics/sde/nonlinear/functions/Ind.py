@@ -7,8 +7,17 @@ class Ind(sp.Function):
     """
     nargs = 2
 
-    @classmethod
-    def eval(cls, i1, i2):
+    def __new__(cls, *args, **kwargs):
+        i1, i2 = sp.sympify(args)
+        if isinstance(i1, sp.Number) and isinstance(i2, sp.Number):
+            if i1 == i2:
+                return sp.S.One
+            else:
+                return sp.S.Zero
+        else:
+            return super(Ind, cls).__new__(cls, *args, **kwargs)
+
+    def doit(self, **hints):
         """
         Function evaluation method
         If i1 and i2 are numbers then evaluation performs
@@ -21,8 +30,4 @@ class Ind(sp.Function):
         -------
             Zero or One depending on i1 and i2
         """
-        if i1.is_Number and i2.is_Number:
-            if i1 == i2:
-                return sp.S.One
-            else:
-                return sp.S.Zero
+        return Ind(*self.args, **hints)

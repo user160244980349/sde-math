@@ -11,16 +11,14 @@ class G(Operator):
     nargs = 3
 
     def __new__(cls, *args, **kwargs):
-        obj = super(G, cls).__new__(cls, *args, **kwargs)
-        return obj
+        c, f, dxs = sp.sympify(args)
+        if (isinstance(f, sp.Number) or f.has(*dxs)) and not isinstance(f, Operator):
+            return (Unwrap(sp.MatMul(sp.Transpose(c), sp.Matrix([sp.Derivative(f, dxi)
+                                                                for dxi in dxs])))).doit()
+        else:
+            return super(G, cls).__new__(cls, *args, **kwargs)
 
-    def diff(self, *symbols, **assumptions):
-        c, f, dxs = self.args
-        c = c.doit()
-        f = f.doit()
-        return G(c, f, dxs).doit()
-
-    def doit(self):
+    def doit(self, **hints):
         """
         Applies G operator on function
         TIPS:
@@ -37,11 +35,4 @@ class G(Operator):
         -------
             Scalar result of G operator
         """
-        c, f, dxs = self.args
-        c = c.doit()
-        f = f.doit()
-        if (isinstance(f, sp.Number) or f.has(*dxs)) and not isinstance(f, Operator):
-            return (Unwrap(sp.MatMul(sp.Transpose(c.doit()), sp.Matrix([sp.Derivative(f, dxi)
-                                                                        for dxi in dxs])))).doit()
-        else:
-            return G(c, f, dxs)
+        return G(*self.args, **hints)

@@ -30,43 +30,26 @@ class Taylor1p5(sp.Function):
         -------
             Calculated value or symbolic expression
         """
-        obj = super(Taylor1p5, cls).__new__(cls, *args, **kwargs)
-        obj.n, obj.m, obj.q, obj.q1, obj.dxs = args
-        obj.t = sp.Symbol('t')
-        obj.dt = sp.Symbol('dt')
-        obj.a = sp.MatrixSymbol('a', obj.n, 1)
-        obj.b = sp.MatrixSymbol('b', obj.n, obj.m)
-        obj.yp = sp.MatrixSymbol('yp', obj.n, 1)
-        obj.ksi = sp.MatrixSymbol('ksi', obj.q + 1, obj.m)
-        return obj
-
-    def doit(self, **hints):
-        """
-        Function evaluation method
-        This formula works as it is with symbols such it
-        has no limits for it`s components
-        Returns
-        -------
-            Calculated value or symbolic expression
-        """
+        i, yp, a, b, q, q1, dt, ksi, dxs = sp.sympify(args)
+        m = b.shape[1]
         i1, i2, i3 = sp.symbols('i1 i2 i3')
         return \
-            self.yp[self.i, 0] + self.a[self.i, 0] * self.dt + \
-            sp.Sum(self.b[self.i, i1] * Io(i1, self.dt, self.ksi),
-                   (i1, 0, self.m - 1)).doit() + \
+            yp[i, 0] + a[i, 0] * dt + \
+            sp.Sum(b[i, i1] * Io(i1, dt, ksi),
+                   (i1, 0, m - 1)).doit() + \
             sp.Sum(
-                sp.Sum(G(self.b[:, i1], self.b[self.i, i2], self.dxs) *
-                       Ioo(i1, i2, self.q, self.dt, self.ksi), (i2, 0, self.m - 1)).doit(),
-                (i1, 0, self.m - 1)).doit() + \
-            sp.Sum(G(self.b[:, i1], self.a[self.i, 0], self.dxs) *
-                   (self.dt * Io(i1, self.dt, self.ksi) + Ii(i1, self.dt, self.ksi)) -
-                   L(self.a, self.b, self.b[self.i, i1], self.dxs) *
-                   Ii(i1, self.dt, self.ksi), (i1, 1, self.m - 1)).doit() + \
+                sp.Sum(G(b[:, i1], b[i, i2], dxs) *
+                       Ioo(i1, i2, q, dt, ksi), (i2, 0, m - 1)).doit(),
+                (i1, 0, m - 1)).doit() + \
+            sp.Sum(G(b[:, i1], a[i, 0], dxs) *
+                   (dt * Io(i1, dt, ksi) + Ii(i1, dt, ksi)) -
+                   L(a, b, b[i, i1], dxs) *
+                   Ii(i1, dt, ksi), (i1, 1, m - 1)).doit() + \
             sp.Sum(
                 sp.Sum(
-                    sp.Sum(G(self.b[:, i1], G(self.b[:, i2], self.b[self.i, i3], self.dxs), self.dxs) *
-                           Iooo(i1, i2, i3, self.q1, self.dt, self.ksi),
-                           (i3, 1, self.m - 1)),
-                    (i2, 1, self.m - 1)).doit(),
-                (i1, 1, self.m - 1)).doit() + \
-            self.dt ** 2 / 2 * L(self.a, self.b, self.a[self.i, 0], self.dxs)
+                    sp.Sum(G(b[:, i1], G(b[:, i2], b[i, i3], dxs), dxs) *
+                           Iooo(i1, i2, i3, q1, dt, ksi),
+                           (i3, 1, m - 1)),
+                    (i2, 1, m - 1)).doit(),
+                (i1, 1, m - 1)).doit() + \
+            dt ** 2 / 2 * L(a, b, a[i, 0], dxs)

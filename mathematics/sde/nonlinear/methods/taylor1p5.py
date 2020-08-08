@@ -6,7 +6,7 @@ import sympy as sp
 import mathematics.sde.nonlinear.functions as f
 
 
-def taylor1p5(y0: np.array, mat_a: sp.Matrix, mat_b: sp.Matrix, q: int, q1: int, times: tuple):
+def taylor1p5(y0: np.array, a: sp.Matrix, b: sp.Matrix, q: int, q1: int, times: tuple):
     """
     Performs modeling with Milstein method with scalar substitutions in cycle
     Parameters
@@ -23,8 +23,8 @@ def taylor1p5(y0: np.array, mat_a: sp.Matrix, mat_b: sp.Matrix, q: int, q1: int,
         t - list of time moments
     """
     # Ranges
-    n = mat_b.shape[0]
-    m = mat_b.shape[1]
+    n = b.shape[0]
+    m = b.shape[1]
     t1 = times[0]
     dt = times[1]
     t2 = times[2]
@@ -34,31 +34,34 @@ def taylor1p5(y0: np.array, mat_a: sp.Matrix, mat_b: sp.Matrix, q: int, q1: int,
     ticks = int((t2 - t1) / dt)
 
     # Symbols
-    y = f.Taylor1p5(n, m, q, q1, args)
+    sym_i = sp.Symbol('i')
+    sym_yp = sp.MatrixSymbol('yp', n, 1)
+    sym_a = sp.MatrixSymbol('a', n, 1)
+    sym_b = sp.MatrixSymbol('b', n, m)
+    sym_q = q
+    sym_q1 = q1
+    sym_t = sp.Symbol('t')
+    sym_dt = sp.Symbol('dt')
+    sym_ksi = sp.MatrixSymbol('ksi', q + 1, m)
+    y = f.Taylor1p5(sym_i, sym_yp, sym_a, sym_b, sym_q, sym_q1, sym_dt, sym_ksi, args)
+
     args_extended = list()
     args_extended.extend(args)
-    args_extended.extend([y.t, y.ksi])
-
-    # pprint(y.subs([
-    #     (y.yp, Matrix(args)),
-    #     (y.b, mat_b),
-    #     (y.a, mat_a),
-    #     (y.dt, dt)
-    # ]))
+    args_extended.extend([sym_t, sym_ksi])
 
     # Static substitutions
     tt1 = int(round(time() * 1000))
-    y = y.doit().subs([(y.yp, sp.Matrix(args)),
-                       (y.b, mat_b),
-                       (y.a, mat_a),
-                       (y.dt, dt)]).doit()
+    y = y.subs([(sym_yp, sp.Matrix(args)),
+                (sym_b, b),
+                (sym_a, a),
+                (sym_dt, dt)])
     tt2 = int(round(time() * 1000))
     print("Sub time: %d" % (tt2 - tt1))
 
     # Compilation of formulas
     y_compiled = list()
     for tr in range(n):
-        y_compiled.append(sp.utilities.lambdify(args_extended, y.subs(f.Taylor1p5.i, tr).doit(), 'numpy'))
+        y_compiled.append(sp.utilities.lambdify(args_extended, y.subs(sym_i, tr), 'numpy'))
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]
