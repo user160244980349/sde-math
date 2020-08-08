@@ -36,25 +36,39 @@
 - [x] C operator
     - [x] C operator with loading C coefficient
     - [x] Uploading coefficients that not produces in database
-- [x] Strong Taylor 1.5 method
+- [x] Strong Taylor-Ito 1.5 method
     - [x] L operator
     - [x] Recursive G
     - [x] Ii(i1) {5.7}
     - [x] Iooo(i1, i2, i3) {5.16} without limit
     - [x] Iooo(i, i, i) after {5.16}
     - [x] {5.17} {5.18} in Iooo
-- [x] (impossible, needs to be vectorized) Trajectory as substitution arg
+- [x] (thrown away) Trajectory as substitution argument
 - [x] Beautify G2 output
-- [x] is_symbol check is not working
+- [x] (thrown away) is_symbol check is not working
 - [x] Clean up
 - [ ] Comments actualization
-- [ ] Context for formulas to beat redundancy
-- [ ] Precision calculation with q
-- [ ] Strong Taylor 2.0 method
+- [x] (thrown away) Context for formulas to beat redundancy
+- [x] Strong Taylor-Ito 2.0 method
     - [x] Recursive L
+    - [x] Referenced integrals
+- [ ] Strong Taylor-Ito 2.5 method
     - [ ] Referenced integrals
-- [ ] Stratanovich equasions
-    - [ ] Subformulas
+- [ ] Strong Taylor-Ito 3.0 method
+    - [ ] Referenced integrals
+- [ ] Stratanovich As and Ls, Integrals "J"
+- [ ] Strong Taylor-Stratonovich 1.0 method
+    - [ ] Referenced integrals
+- [ ] Strong Taylor-Stratonovich 1.5 method
+    - [ ] Referenced integrals
+- [ ] Strong Taylor-Stratonovich 2.0 method
+    - [ ] Referenced integrals
+- [ ] Strong Taylor-Stratonovich 2.5 method
+    - [ ] Referenced integrals
+- [ ] Strong Taylor-Stratonovich 3.0 method
+    - [ ] Referenced integrals
+- [ ] Precision calculation with q
+- [ ] Statistical tests
 - [ ] GUI
     - [ ] Greek alphabet
     - [ ] Latex output
