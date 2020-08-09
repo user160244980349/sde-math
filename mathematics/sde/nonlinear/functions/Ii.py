@@ -6,11 +6,12 @@ class Ii(sp.Function):
     Stochastic Ito integral
     """
     nargs = 3
-    
+
     def __new__(cls, *args, **kwargs):
         i1, dt, ksi = sp.sympify(args)
         if isinstance(i1, sp.Number):
-            return -dt**sp.Rational(3, 2) / 2 * (ksi[0, i1] + ksi[1, i1] / sp.sqrt(3))
+            return -dt ** sp.Rational(3, 2) / 2 * \
+                   (ksi[0, i1] + ksi[1, i1] / sp.sqrt(3))
         else:
             return super(Ii, cls).__new__(cls, *args, **kwargs)
 

@@ -23,12 +23,17 @@ def taylor1p5(y0: np.array, a: sp.Matrix, b: sp.Matrix,
         y - solutions matrix
         t - list of time moments
     """
+    start_time = time()
+    print("--------------------------")
+    print("[%.3f seconds] Start Taylor 1.5" % (time() - start_time))
+
     # Ranges
     n = b.shape[0]
     m = b.shape[1]
     t1 = times[0]
     dt = times[1]
     t2 = times[2]
+    f.C.preload(q)
 
     # Defining context
     args = sp.symbols("x1:%d" % (n + 1))
@@ -40,28 +45,26 @@ def taylor1p5(y0: np.array, a: sp.Matrix, b: sp.Matrix,
     sym_a = sp.MatrixSymbol('a', n, 1)
     sym_b = sp.MatrixSymbol('b', n, m)
     sym_t = sp.Symbol('t')
-    sym_dt = sp.Symbol('dt')
     sym_ksi = sp.MatrixSymbol('ksi', q + 1, m)
     y = f.Taylor1p5(sym_i, sym_yp, sym_a, sym_b,
-                    q, q1, sym_dt, sym_ksi, args)
+                    q, q1, dt, sym_ksi, args)
 
     args_extended = list()
     args_extended.extend(args)
     args_extended.extend([sym_t, sym_ksi])
 
     # Static substitutions
-    tt1 = int(round(time() * 1000))
+    start_time = time()
     y = y.subs([(sym_yp, sp.Matrix(args)),
                 (sym_b, b),
-                (sym_a, a),
-                (sym_dt, dt)])
-    tt2 = int(round(time() * 1000))
-    print("Sub time: %d" % (tt2 - tt1))
+                (sym_a, a)]).doit()
 
     # Compilation of formulas
     y_compiled = list()
     for tr in range(n):
         y_compiled.append(sp.utilities.lambdify(args_extended, y.subs(sym_i, tr), 'numpy'))
+
+    print("[%.3f seconds] Subs are finished" % (time() - start_time))
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]
@@ -75,5 +78,7 @@ def taylor1p5(y0: np.array, a: sp.Matrix, b: sp.Matrix,
         values.extend([t[p], ksi])
         for tr in range(n):
             y[tr, p + 1] = y_compiled[tr](*values)
+
+    print("[%.3f seconds] Calculations are finished" % (time() - start_time))
 
     return y, t

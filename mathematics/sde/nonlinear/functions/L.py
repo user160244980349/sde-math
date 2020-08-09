@@ -21,7 +21,7 @@ class L(Operator):
                                                    for dxi in dxs])) * a) +
                     sp.Rational(1, 2) * sp.Trace(sp.Transpose(b) * sp.Matrix([[sp.Derivative(f, dxi, dxj)
                                                                                for dxi in dxs]
-                                                                              for dxj in dxs]) * b)).doit()
+                                                                              for dxj in dxs]) * b))
         else:
             return super(L, cls).__new__(cls, *args, **kwargs)
 

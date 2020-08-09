@@ -21,6 +21,10 @@ def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
         y - solutions matrix
         t - list of time moments
     """
+    start_time = time()
+    print("--------------------------")
+    print("[%.3f seconds] Start Euler" % (time() - start_time))
+
     # Ranges
     n = b.shape[0]
     m = b.shape[1]
@@ -34,12 +38,7 @@ def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
     # Symbols
     sym_i = sp.Symbol('i')
     sym_t = sp.Symbol('t')
-    sym_yp = sp.MatrixSymbol('yp', n, 1)
-    sym_a = sp.MatrixSymbol('a', n, 1)
-    sym_b = sp.MatrixSymbol('b', n, m)
-    sym_dt = sp.Symbol('dt')
     sym_ksi = sp.MatrixSymbol('ksi', 1, m)
-    y = f.Euler(sym_i, sym_yp, sym_a, sym_b, sym_dt, sym_ksi)
 
     args = sp.symbols("x1:%d" % (n + 1))
     args_extended = list()
@@ -47,18 +46,14 @@ def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
     args_extended.extend([sym_t, sym_ksi])
 
     # Static substitutions
-    tt1 = int(round(time() * 1000))
-    y = y.subs([(sym_yp, sp.Matrix(args)),
-                (sym_dt, dt),
-                (sym_b, b),
-                (sym_a, a)])
-    tt2 = int(round(time() * 1000))
-    print("Sub time: %d" % (tt2 - tt1))
+    y = f.Euler(sym_i, sp.Matrix(args), a, b, dt, sym_ksi).doit()
 
     # Compilation of formulas
     y_compiled = list()
     for tr in range(n):
         y_compiled.append(sp.utilities.lambdify(args_extended, y.subs(sym_i, tr), 'numpy'))
+
+    print("[%.3f seconds] Subs are finished" % (time() - start_time))
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]
@@ -72,5 +67,7 @@ def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
         values.extend([t[p], ksi])
         for tr in range(n):
             y[tr, p + 1] = y_compiled[tr](*values)
+
+    print("[%.3f seconds] Calculations are finished" % (time() - start_time))
 
     return y, t

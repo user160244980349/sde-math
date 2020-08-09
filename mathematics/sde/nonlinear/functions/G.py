@@ -14,7 +14,7 @@ class G(Operator):
         c, f, dxs = sp.sympify(args)
         if (isinstance(f, sp.Number) or f.has(*dxs)) and not isinstance(f, Operator):
             return (Unwrap(sp.MatMul(sp.Transpose(c), sp.Matrix([sp.Derivative(f, dxi)
-                                                                for dxi in dxs])))).doit()
+                                                                 for dxi in dxs]))))
         else:
             return super(G, cls).__new__(cls, *args, **kwargs)
 

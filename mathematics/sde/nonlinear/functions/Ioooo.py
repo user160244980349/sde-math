@@ -1,7 +1,7 @@
 import sympy as sp
 
-from .Ind import Ind
 from .Coooo import Coooo
+from .Ind import Ind
 
 
 class Ioooo(sp.Function):
@@ -31,10 +31,10 @@ class Ioooo(sp.Function):
                                  Ind(i1, i2) * Ind(j1, j2) * Ind(i3, i4) * Ind(j3, j4) +
                                  Ind(i1, i3) * Ind(j1, j3) * Ind(i2, i4) * Ind(j2, j4) +
                                  Ind(i1, i4) * Ind(j1, j4) * Ind(i2, i3) * Ind(j2, j3)),
-                                (j4, 0, q3)).doit(),
-                            (j3, 0, q3)).doit(),
-                        (j2, 0, q3)).doit(),
-                    (j1, 0, q3)).doit()
+                                (j4, 0, q3)),
+                            (j3, 0, q3)),
+                        (j2, 0, q3)),
+                    (j1, 0, q3))
         else:
             return super(Ioooo, cls).__new__(cls, *args, **kwargs)
 

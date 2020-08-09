@@ -32,7 +32,7 @@
 - [x] Database routines
     - [x] Database initialization
     - [x] Database for C coefficients
-    - [ ] C coefficients preload
+    - [x] C coefficients preload
 - [x] C operator
     - [x] C operator with loading C coefficient
     - [x] Uploading coefficients that not produces in database

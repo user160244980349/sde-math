@@ -15,12 +15,13 @@ class Ioi(sp.Function):
                 and isinstance(q2, sp.Number):
             from sympy.abc import i
             return -dt / 2 * Ioo(i1, i2, q2, dt, ksi) - \
-                   dt**2 / 4 * (ksi[0, i1] * ksi[1, i2] / sp.sqrt(3) +
-                   sp.Sum(
-                       ((i + 1) * ksi[i, i1] * ksi[i + 2, i2] - (i + 1) * ksi[i + 2, i1] * ksi[i, i2]) /
-                       sp.sqrt((2 * i + 1) * (2 * i + 5)) / (2 * i + 3) -
-                       ksi[i, i1] * ksi[i, i2] / (2 * i - 1) / (2 * i + 3),
-                       (i, 0, q2)).doit())
+                   dt ** 2 / 4 * (ksi[0, i1] * ksi[1, i2] / sp.sqrt(3) +
+                                  sp.Sum(
+                                      ((i + 1) * ksi[i, i1] * ksi[i + 2, i2] -
+                                       (i + 1) * ksi[i + 2, i1] * ksi[i, i2]) /
+                                      sp.sqrt((2 * i + 1) * (2 * i + 5)) / (2 * i + 3) -
+                                      ksi[i, i1] * ksi[i, i2] / (2 * i - 1) / (2 * i + 3),
+                                      (i, 0, q2)))
         else:
             return super(Ioi, cls).__new__(cls, *args, **kwargs)
 
