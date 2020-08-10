@@ -13,7 +13,7 @@
 
 - - - -
 ## Run ##
-* `main.py``` -- GUI application
+* `main.py` -- GUI application
 * `main_linear.py` -- console linear modeling
 * `main_nonlinear.py` -- console nonlinear modeling
 * `main_txt_store_c.py` -- console store C coefficients in txt
