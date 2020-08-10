@@ -2,5 +2,7 @@ from init import database
 
 
 def init():
-    print('Initialization process has been ran!')
+    """
+    Initializes various components of application
+    """
     database.init()

@@ -3,7 +3,9 @@ from PyQt5.QtWidgets import QDesktopWidget
 
 
 class Window(QtWidgets.QMainWindow):
-
+    """
+    Application main window
+    """
     def __init__(self):
         super(Window, self).__init__()
 
@@ -18,6 +20,9 @@ class Window(QtWidgets.QMainWindow):
         self.center()
 
     def center(self):
+        """
+        Centers the window
+        """
         qt_rectangle = self.frameGeometry()
         center_point = QDesktopWidget().availableGeometry().center()
         qt_rectangle.moveCenter(center_point)

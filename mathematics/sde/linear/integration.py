@@ -4,6 +4,9 @@ from .matrix import diagonal_to_column
 
 
 class Integral:
+    """
+    Provides numerical integration
+    """
     def __init__(self, n: int):
         self.n, self.t0, self.tk, self.dt, self.integration_step = \
             n, 0, 0, 0, 0
@@ -16,6 +19,9 @@ class Integral:
         # self.vec_ry = []
 
     def integrate(self):
+        """
+        Performs numerical integration
+        """
         higher_limit = self.integration_step + int((self.tk - self.t0) / self.dt + 1)
         lower_limit = self.integration_step
 

@@ -8,6 +8,10 @@ import mathematics.sde.nonlinear.c as ct
 
 
 def main():
+    """
+    Not actual currently
+    Saves some of coefficients in text files
+    """
     x = sp.Symbol('x')
 
     w = {'001': [1, 1, x + 1],

@@ -1,32 +1,30 @@
 import sympy as sp
 
 from .G import G
-from .Ii import Ii
-from .Io import Io
-from .Ioo import Ioo
-from .Iooo import Iooo
+from .I1 import I1
+from .I0 import I0
+from .I00 import I00
+from .I000 import I000
 from .L import L
 
 
 class Taylor1p5(sp.Function):
     """
-    Milstein method with focus on columns
+    Strong Taylor 1.5 method
     """
     nargs = 9
 
     def __new__(cls, *args, **kwargs):
         """
-        Creating method context with sizes of it`s components and symbols
+        Creates new Taylor1p5 object with given args
         Parameters
         ----------
-            n - a column size
-            m - b matrix width
-            q - independent random variables dimension size
-            dxs - tuple of variables to perform differentiation
-
+        args : tuple
+            bunch of necessary arguments
         Returns
         -------
-            Calculated value or symbolic expression
+        sympy.Expr
+            formula to simplify and substitutions
         """
         i, yp, a, b, q, q1, dt, ksi, dxs = sp.sympify(args)
         m = b.shape[1]
@@ -34,24 +32,24 @@ class Taylor1p5(sp.Function):
         return \
             yp[i, 0] + a[i, 0] * dt + \
             sp.Sum(
-                b[i, i1] * Io(i1, dt, ksi),
+                b[i, i1] * I0(i1, dt, ksi),
                 (i1, 0, m - 1)) + \
             sp.Sum(
                 sp.Sum(
                     G(b[:, i1], b[i, i2], dxs) *
-                    Ioo(i1, i2, q, dt, ksi),
+                    I00(i1, i2, q, dt, ksi),
                     (i2, 0, m - 1)),
                 (i1, 0, m - 1)) + \
             sp.Sum(
                 G(b[:, i1], a[i, 0], dxs) *
-                (dt * Io(i1, dt, ksi) + Ii(i1, dt, ksi)) -
+                (dt * I0(i1, dt, ksi) + I1(i1, dt, ksi)) -
                 L(a, b, b[i, i1], dxs) *
-                Ii(i1, dt, ksi), (i1, 1, m - 1)) + \
+                I1(i1, dt, ksi), (i1, 1, m - 1)) + \
             sp.Sum(
                 sp.Sum(
                     sp.Sum(
                         G(b[:, i1], G(b[:, i2], b[i, i3], dxs), dxs) *
-                        Iooo(i1, i2, i3, q1, dt, ksi),
+                        I000(i1, i2, i3, q1, dt, ksi),
                         (i3, 1, m - 1)),
                     (i2, 1, m - 1)),
                 (i1, 1, m - 1)) + \

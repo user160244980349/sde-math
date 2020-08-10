@@ -4,6 +4,19 @@ from .legendre_polynomial import polynomial
 
 
 def getc(indices: tuple, weights: tuple):
+    """
+    Calculates C coefficient depending on indices and weights
+
+    Parameters
+    ----------
+    indices : tuple
+        indices of coefficient
+    weights : tuple
+        weights of coefficient
+    Returns
+    -------
+    sympy.Rational
+    """
     x, y = sp.symbols('x y')
     n = len(indices)
     w = list(reversed(weights))

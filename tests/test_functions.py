@@ -152,8 +152,8 @@ class MyTestCase(unittest.TestCase):
             print(e)
 
         print()
-        f.Io.dt = sp.Symbol('dt')
-        f.Io.ksi = sp.MatrixSymbol('ksi', 2, 2)
+        f.I0.dt = sp.Symbol('dt')
+        f.I0.ksi = sp.MatrixSymbol('ksi', 2, 2)
         exp = f.Io(i).doit()
         sp.pprint(exp)
 

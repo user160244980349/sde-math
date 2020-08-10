@@ -6,30 +6,30 @@ import tools.database as db
 
 class C(sp.Function):
     """
-    Function to perform G operation with function
+    Gives coefficient with requested indices and weights
     """
-    preloaded = dict()
+    _preloaded = dict()
 
     def __new__(cls, indices: tuple, weights: tuple, **kwargs):
         """
-        Creating method context with sizes of it`s components and symbols
+        Creates C coefficient object with needed indices and weights
 
         Parameters
         ----------
-            n - a column size
-            m - b matrix width
-            q - independent random variables dimension size
-            dxs - tuple of variables to perform differentiation
-
+        indices: tuple
+            requested indices
+        weights: tuple
+            requested weights
         Returns
         -------
-            Calculated value or symbolic expression
+        sympy.Rational or C
+            calculated value or symbolic expression
         """
         if all([isinstance(sp.sympify(arg), sp.Number) for arg in indices]):
             index = "%s_%s" % (':'.join([str(i) for i in indices]),
                                ':'.join([str(i) for i in weights]))
             try:
-                return sp.Rational(cls.preloaded[index])
+                return sp.Rational(cls._preloaded[index])
             except KeyError:
                 print("MISSING PRELOADED VERSION OF C_%s" % index)
                 respond = db.execute("SELECT `value` FROM `C`"
@@ -46,11 +46,17 @@ class C(sp.Function):
             return super(C, cls).__new__(cls, indices, weights, **kwargs)
 
     @classmethod
-    def search_regex(cls):
-        pass
-
-    @classmethod
     def preload(cls, *args):
+        """
+        Updates dictionary of preloaded coefficients
+        Note: weights are not accepted, such coefficients are loaded
+        with all available weights
+
+        Parameters
+        ----------
+        args : tuple
+            Indices for coefficients to download them from database
+        """
         query = []
         for q in range(len(args)):
             numbers = [int(char) for char in str(args[q] + 1)]
@@ -75,20 +81,14 @@ class C(sp.Function):
             query.append('SELECT `index`, `value` FROM `C`'
                          'WHERE REGEXP(`index`, "%s")' % regex)
 
-        cls.preloaded.update(db.execute('\nUNION\n'.join(query)))
+        cls._preloaded.update(db.execute('\nUNION\n'.join(query)))
 
     def doit(self, **hints):
         """
-        Applies G operator on function
-
-        Parameters
-        ----------
-            c - b matrix column to apply G operator
-            f - function to apply operator
-            dxs - arguments to apply Grad
-
+        Tries to expand or calculate function
+        
         Returns
         -------
-            Scalar result of G operator
+        C
         """
         return C(*self.args, **hints)

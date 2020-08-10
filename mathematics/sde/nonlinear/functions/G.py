@@ -6,11 +6,22 @@ from .Unwrap import Unwrap
 
 class G(Operator):
     """
-    Function to perform G operation with function
+    Performs G operation on function
     """
     nargs = 3
 
     def __new__(cls, *args, **kwargs):
+        """
+        Creates new G object with given args
+        Parameters
+        ----------
+        args
+            bunch of necessary arguments
+        Returns
+        -------
+        sympy.Expr
+            formula to simplify and substitutions
+        """
         c, f, dxs = sp.sympify(args)
         if (isinstance(f, sp.Number) or f.has(*dxs)) and not isinstance(f, Operator):
             return (Unwrap(sp.MatMul(sp.Transpose(c), sp.Matrix([sp.Derivative(f, dxi)
@@ -20,19 +31,10 @@ class G(Operator):
 
     def doit(self, **hints):
         """
-        Applies G operator on function
-        TIPS:
-            Always use doit on args,
-            Check for instance type,
-            Use is_symbol to filter dummies
-        Parameters
-        ----------
-            c - b matrix column to apply G operator
-            f - function to apply operator
-            dxs - arguments to apply Grad
+        Tries to expand or calculate function
 
         Returns
         -------
-            Scalar result of G operator
+        G
         """
         return G(*self.args, **hints)

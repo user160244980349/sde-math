@@ -1,19 +1,43 @@
 from .dindet import *
 from .matrix import *
 
-"""
-Algorithms in this module are implementation
-from the book named "xxx" in chapter nnn
-"""
-
 
 def stoch(n: int, mat_a: np.ndarray, mat_f: np.ndarray, dt: float):
+    """
+    Root function for set of algorithms implemented below
+    
+    Parameters
+    ----------
+    n : int
+    mat_a : numpy.ndarray
+    mat_f : numpy.ndarray
+    dt : float
+    Returns
+    -------
+    numpy.ndarray
+    """
     vec_l2, mat_s, mat_d1 = algorithm_11_2(n, mat_a, mat_f, dt)
     mat_l = vec_to_eye(np.sqrt(vec_l2))
     return mat_s.dot(mat_l)
 
 
 def algorithm_11_2(n: int, mat_a: np.ndarray, mat_f: np.ndarray, dt: float):
+    """ Algorithm 11.2
+    Algorithm in this module is implementation
+    from the book named "xxx" in chapter nnn
+    
+    Parameters
+    ----------
+    n : int
+    mat_a : numpy.ndarray
+    mat_f : numpy.ndarray
+    dt : float
+    Returns
+    -------
+    eigenvalues : numpy.ndarray
+    eigenvectors : numpy.ndarray
+    mat_d1 : numpy.ndarray
+    """
     mat_ac = algorithm_11_5(n, mat_a)
     mat_g = mat_f.dot(np.transpose(mat_f))
     mat_gv = algorithm_11_3(n, mat_g)
@@ -24,6 +48,19 @@ def algorithm_11_2(n: int, mat_a: np.ndarray, mat_f: np.ndarray, dt: float):
 
 
 def algorithm_11_3(n: int, mat_g: np.ndarray):
+    """ Algorithm 11.3
+    Algorithm in this module is implementation
+    from the book named "xxx" in chapter nnn
+    
+    Parameters
+    ----------
+    n : int
+    mat_g : numpy.ndarray
+    Returns
+    -------
+    mat_vec : numpy.ndarray
+        column vector
+    """
     # calculating dimensions sizes
     # these are complicated thoughts
     # about indices just leave as they are
@@ -50,6 +87,18 @@ def algorithm_11_3(n: int, mat_g: np.ndarray):
 
 
 def algorithm_11_4(n: int, mat_dv: np.ndarray):
+    """ Algorithm 11.4
+    Algorithm in this module is implementation
+    from the book named "xxx" in chapter nnn
+    
+    Parameters
+    ----------
+    n : int
+    mat_dv : numpy.ndarray
+    Returns
+    -------
+    mat_d1 : numpy.ndarray
+    """
     # calculating dimensions sizes
     # these are complicated thoughts
     # about indices just leave as they are
@@ -77,6 +126,18 @@ def algorithm_11_4(n: int, mat_dv: np.ndarray):
 
 
 def algorithm_11_5(n: int, mat_a: np.ndarray):
+    """ Algorithm 11.5
+    Algorithm in this module is implementation
+    from the book named "xxx" in chapter nnn
+    
+    Parameters
+    ----------
+    n : int
+    mat_a : numpy.ndarray
+    Returns
+    -------
+    mat_ac : numpy.ndarray
+    """
     # calculating dimensions sizes
     # these are complicated thoughts
     # about indices just leave as they are

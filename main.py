@@ -8,6 +8,10 @@ from ui.Window import Window
 
 
 def main():
+    """
+    Runs initialization of components if it is necessary and
+    runs gui application
+    """
     i.init()
     db.connect(database)
 
@@ -18,6 +22,10 @@ def main():
 
 
 def app_exit(app):
+    """
+    Provides correct database disconnect
+    while application is closing
+    """
     app.exec()
     db.disconnect()
 

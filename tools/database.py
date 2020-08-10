@@ -6,6 +6,13 @@ cursor: sqlite3.Cursor
 
 
 def is_connected():
+    """
+    Checks if application is connected to database
+    
+    Returns
+    -------
+    True or False
+    """
     global connection
     if connection is None:
         return False
@@ -13,7 +20,15 @@ def is_connected():
         return True
 
 
-def connect(db):
+def connect(db: str):
+    """
+    Connects application to database
+
+    Parameters
+    ----------
+    db : str
+        path to database file
+    """
     try:
         global connection
         global cursor
@@ -37,6 +52,9 @@ def connect(db):
 
 
 def disconnect():
+    """
+    Disconnects application from database
+    """
     try:
         global connection
         global cursor
@@ -48,7 +66,18 @@ def disconnect():
         print("Error while connecting to sqlite:", error)
 
 
-def execute(query):
+def execute(query: str):
+    """
+    Sends query to database and receives data
+    
+    Parameters
+    ----------
+    query : str
+        query to database
+    Returns
+    -------
+        list of tuples (rows)
+    """
     try:
         global connection
         global cursor
@@ -63,5 +92,18 @@ def execute(query):
 
 
 def regex(value, pattern):
+    """
+    Regular expression for search in database
+    
+    Parameters
+    ----------
+    value 
+        column to apply
+    pattern
+        regular expression
+    Returns
+    -------
+    Search results
+    """
     c_pattern = re.compile(r"\b" + pattern.lower() + r"\b")
     return c_pattern.search(value) is not None

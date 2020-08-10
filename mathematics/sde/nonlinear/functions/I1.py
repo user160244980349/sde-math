@@ -1,15 +1,15 @@
 import sympy as sp
 
 
-class Ind(sp.Function):
+class I1(sp.Function):
     """
     Stochastic Ito integral
     """
-    nargs = 2
+    nargs = 3
 
     def __new__(cls, *args, **kwargs):
         """
-        Creates new Ind object with given args
+        Creates new I1 object with given args
         Parameters
         ----------
         args
@@ -19,14 +19,12 @@ class Ind(sp.Function):
         sympy.Expr
             formula to simplify and substitutions
         """
-        i1, i2 = sp.sympify(args)
-        if isinstance(i1, sp.Number) and isinstance(i2, sp.Number):
-            if i1 == i2:
-                return sp.S.One
-            else:
-                return sp.S.Zero
+        i1, dt, ksi = sp.sympify(args)
+        if isinstance(i1, sp.Number):
+            return -dt ** sp.Rational(3, 2) / 2 * \
+                   (ksi[0, i1] + ksi[1, i1] / sp.sqrt(3))
         else:
-            return super(Ind, cls).__new__(cls, *args, **kwargs)
+            return super(I1, cls).__new__(cls, *args, **kwargs)
 
     def doit(self, **hints):
         """
@@ -34,6 +32,6 @@ class Ind(sp.Function):
 
         Returns
         -------
-        Ind
+        I1
         """
-        return Ind(*self.args, **hints)
+        return I1(*self.args, **hints)

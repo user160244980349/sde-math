@@ -1,16 +1,27 @@
 import sympy as sp
 
-from .Cooo import Cooo
+from .C000 import C000
 from .Ind import Ind
 
 
-class Iooo(sp.Function):
+class I000(sp.Function):
     """
     Iterated stochastic Ito integral
     """
     nargs = 6
 
     def __new__(cls, *args, **kwargs):
+        """
+        Creates new I000 object with given args
+        Parameters
+        ----------
+        args
+            bunch of necessary arguments
+        Returns
+        -------
+        sympy.Expr
+            formula to simplify and substitutions
+        """
         i1, i2, i3, q1, dt, ksi = sp.sympify(args)
         if isinstance(i1, sp.Number) and isinstance(i2, sp.Number) \
                 and isinstance(i3, sp.Number) and isinstance(q1, sp.Number):
@@ -19,7 +30,7 @@ class Iooo(sp.Function):
                 sp.Sum(
                     sp.Sum(
                         sp.Sum(
-                            Cooo(j3, j2, j1, dt) *
+                            C000(j3, j2, j1, dt) *
                             (ksi[j1, i1] * ksi[j2, i2] * ksi[j3, i3] -
                              Ind(i1, i2) * Ind(j1, j2) * ksi[j3, i3] -
                              Ind(i1, i3) * Ind(j1, j3) * ksi[j2, i2] -
@@ -28,20 +39,14 @@ class Iooo(sp.Function):
                         (j2, 0, q1)),
                     (j1, 0, q1))
         else:
-            return super(Iooo, cls).__new__(cls, *args, **kwargs)
+            return super(I000, cls).__new__(cls, *args, **kwargs)
 
     def doit(self, **hints):
         """
-        Function evaluation method
-        If i1, i2, q are numbers then evaluation performs
-        Parameters
-        ----------
-            i1 - index
-            dt - delta time
-            ksi - matrix of independent random variables
+        Tries to expand or calculate function
 
         Returns
         -------
-            Calculated value or symbolic expression
+        I000
         """
-        return Iooo(*self.args, **hints)
+        return I000(*self.args, **hints)

@@ -8,18 +8,24 @@ import mathematics.sde.nonlinear.functions as f
 
 def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
     """
-    Performs modeling with Euler method with matrix substitutions in cycle
+    Performs modeling with Euler method with matrix substitutions in a loop
+    
     Parameters
     ----------
-        y0 - initial conditions
-        mat_a - matrix a
-        mat_b - matrix b
-        times - modeling interval
-
+    y0 : numpy.ndarray
+        initial conditions
+    a : numpy.ndarray
+        matrix a
+    b : numpy.ndarray
+        matrix b
+    times : tuple
+        integration limits and step
     Returns
     -------
-        y - solutions matrix
-        t - list of time moments
+    y : numpy.ndarray
+        solutions matrix
+    t : list
+        list of time moments
     """
     start_time = time()
     print("--------------------------")

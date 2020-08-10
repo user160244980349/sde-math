@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+"""
+Configuration file example, change this paths to your`s
+"""
 
 # Paths to resources
 resources = "/home/user/resources"

@@ -5,6 +5,11 @@ import tools.database as db
 
 
 def main():
+    """
+    Not actual currently
+    Runs database initialization if it is necessary and
+    prints all of it contents
+    """
     idb.init()
     db.connect(c.database)
     print(db.execute("SELECT * FROM C"))

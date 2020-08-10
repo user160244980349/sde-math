@@ -9,19 +9,32 @@ import mathematics.sde.nonlinear.functions as f
 def taylor2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
               q: int, q1: int, q2: int, q3: int, times: tuple):
     """
-    Performs modeling with Milstein method with scalar substitutions in cycle
+    Performs modeling with Taylor 1.5 method with matrix substitutions in a loop
+
     Parameters
     ----------
-        y0 - initial conditions
-        mat_a - matrix a
-        mat_b - matrix b
-        q - amount of independent random variables
-        times - modeling interval
-
+    y0 : numpy.ndarray
+        initial conditions
+    a : numpy.ndarray
+        matrix a
+    b : numpy.ndarray
+        matrix b
+    q : int
+        amount of independent random variables
+    q1 : int
+        amount of independent random variables
+    q2 : int
+        amount of independent random variables
+    q3 : int
+        amount of independent random variables
+    times : tuple
+        integration limits and step
     Returns
     -------
-        y - solutions matrix
-        t - list of time moments
+    y : numpy.ndarray
+        solutions matrix
+    t : list
+        list of time moments
     """
     start_time = time()
     print("--------------------------")

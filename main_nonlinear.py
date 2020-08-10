@@ -10,6 +10,9 @@ import tools.database as db
 
 
 def main():
+    """
+    Performs modeling of nonlinear stochastic systems
+    """
     init.init()
     db.connect(c.database)
 

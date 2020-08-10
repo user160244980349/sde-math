@@ -1,16 +1,27 @@
 import sympy as sp
 
-from .Coooo import Coooo
+from .C0000 import C0000
 from .Ind import Ind
 
 
-class Ioooo(sp.Function):
+class I0000(sp.Function):
     """
     Iterated stochastic Ito integral
     """
     nargs = 7
 
     def __new__(cls, *args, **kwargs):
+        """
+        Creates new I0000 object with given args
+        Parameters
+        ----------
+        args
+            bunch of necessary arguments
+        Returns
+        -------
+        sympy.Expr
+            formula to simplify and substitutions
+        """
         i1, i2, i3, i4, q3, dt, ksi = sp.sympify(args)
         if isinstance(i1, sp.Number) and isinstance(i2, sp.Number) \
                 and isinstance(i3, sp.Number) and isinstance(q3, sp.Number):
@@ -20,7 +31,7 @@ class Ioooo(sp.Function):
                     sp.Sum(
                         sp.Sum(
                             sp.Sum(
-                                Coooo(j4, j3, j2, j1, dt) *
+                                C0000(j4, j3, j2, j1, dt) *
                                 (ksi[j1, i1] * ksi[j2, i2] * ksi[j3, i3] * ksi[j4, i4] -
                                  Ind(i1, i2) * Ind(j1, j2) * ksi[j3, i3] * ksi[j4, i4] -
                                  Ind(i1, i3) * Ind(j1, j3) * ksi[j2, i2] * ksi[j4, i4] -
@@ -36,20 +47,14 @@ class Ioooo(sp.Function):
                         (j2, 0, q3)),
                     (j1, 0, q3))
         else:
-            return super(Ioooo, cls).__new__(cls, *args, **kwargs)
+            return super(I0000, cls).__new__(cls, *args, **kwargs)
 
     def doit(self, **hints):
         """
-        Function evaluation method
-        If i1, i2, q are numbers then evaluation performs
-        Parameters
-        ----------
-            i1 - index
-            dt - delta time
-            ksi - matrix of independent random variables
+        Tries to expand or calculate function
 
         Returns
         -------
-            Calculated value or symbolic expression
+        I0000
         """
-        return Ioooo(*self.args, **hints)
+        return I0000(*self.args, **hints)

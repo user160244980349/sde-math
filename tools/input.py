@@ -6,6 +6,21 @@ class BoundExceedError(Exception):
 
 
 def input_matrix(n, m, s):
+    """
+    Input of matrix
+    
+    Parameters
+    ----------
+    n : int
+        0 dimension volume of matrix
+    m : int
+        1 dimension volume of matrix
+    s : str
+        split character
+    Returns
+    -------
+    numpy.ndarray
+    """
     mat = []
 
     for i in range(n):
@@ -20,6 +35,19 @@ def input_matrix(n, m, s):
 
 
 def input_vector(n, s):
+    """
+    Input of vector
+    
+    Parameters
+    ----------
+    n : int
+        volume of vector
+    s : str
+        split character
+    Returns
+    -------
+    numpy.ndarray
+    """
     row = input().strip().split(s)
 
     if len(row) != n:

@@ -8,6 +8,9 @@ import mathematics.sde.linear as lin
 
 
 def main():
+    """
+    Performs modeling of linear stochastic systems
+    """
     print('''
     NUMERICAL SOLUTION OF LINEAR
     STATIONARY SYSTEM OF STOCHASTIC

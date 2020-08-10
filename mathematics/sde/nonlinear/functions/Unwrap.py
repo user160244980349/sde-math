@@ -8,6 +8,17 @@ class Unwrap(sp.Function):
     nargs = 1
 
     def __new__(cls, *args, **kwargs):
+        """
+        Creates new Unwrap object with given args
+        Parameters
+        ----------
+        args
+            contains 1 argument - matrix 1x1 to unwrap
+        Returns
+        -------
+        sympy.Expr
+            formula to simplify and substitutions
+        """
         m = sp.sympify(args[0])
         if isinstance(m, sp.MatrixExpr):
             return m[0, 0]
@@ -16,13 +27,10 @@ class Unwrap(sp.Function):
 
     def doit(self, **hints):
         """
-        Performs modeling with Milstein method with scalar substitutions in cycle
-        Parameters
-        ----------
-            m - matrix to unwrap
+        Tries to expand or calculate function
 
         Returns
         -------
-            Unwraped matrix
+        Unwrap
         """
         return Unwrap(*self.args, **hints)
