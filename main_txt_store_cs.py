@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os.path as p
 
 import sympy as sp

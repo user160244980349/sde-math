@@ -15,7 +15,7 @@ class Coooo(sp.Function):
                 isinstance(j3, sp.Number) and isinstance(j4, sp.Number) and \
                 isinstance(dt, sp.Number):
             return sp.sqrt((j1 * 2 + 1) * (j2 * 2 + 1) * (j3 * 2 + 1) * (j4 * 2 + 1)) * \
-                   dt ** 2 * C(j4, j3, j2, j1) / 16
+                   dt ** 2 * C((j4, j3, j2, j1), (0, 0, 0, 0)) / 16
         else:
             return super(Coooo, cls).__new__(cls, *args, **kwargs)
 

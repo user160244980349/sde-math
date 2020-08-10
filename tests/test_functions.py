@@ -9,6 +9,15 @@ from tools import database as db
 
 class MyTestCase(unittest.TestCase):
     @unittest.skip('Success')
+    def test_preload(self):
+
+        db.connect(c.database)
+        f.C.preload(3, 2)
+        db.disconnect()
+
+        self.assertEqual(True, True)
+        
+    @unittest.skip('Success')
     def test_Iooo(self):
         q, m = 3, 2
 
@@ -48,7 +57,7 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    # @unittest.skip('Success')
+    @unittest.skip('Success')
     def test_G(self):
         a = sp.Matrix(['-5 * x1',
                        '-5 * x2'])
@@ -97,7 +106,7 @@ class MyTestCase(unittest.TestCase):
 
         i1, i2, i3 = sp.symbols('i1 i2 i3')
 
-        exp = i1 + f.Cd(i1, i2, i3)
+        exp = i1 + f.C(i1, i2, i3)
         sp.pprint(exp)
 
         exp = i1 + f.C(sp.S(8), sp.S(9), sp.S(9), sp.S(0.001)).doit()

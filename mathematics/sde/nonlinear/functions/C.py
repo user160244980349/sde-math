@@ -10,7 +10,7 @@ class C(sp.Function):
     """
     preloaded = dict()
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, indices: tuple, weights: tuple, **kwargs):
         """
         Creating method context with sizes of it`s components and symbols
 
@@ -25,8 +25,9 @@ class C(sp.Function):
         -------
             Calculated value or symbolic expression
         """
-        if all([isinstance(sp.sympify(arg), sp.Number) for arg in args]):
-            index = ':'.join([str(i) for i in args])
+        if all([isinstance(sp.sympify(arg), sp.Number) for arg in indices]):
+            index = "%s_%s" % (':'.join([str(i) for i in indices]),
+                               ':'.join([str(i) for i in weights]))
             try:
                 return sp.Rational(cls.preloaded[index])
             except KeyError:
@@ -34,32 +35,47 @@ class C(sp.Function):
                 respond = db.execute("SELECT `value` FROM `C`"
                                      "WHERE REGEXP(`index`, '^%s$')" % index)
                 if len(respond) == 0:
-                    new_c = cs.getc(list(args))
+                    new_c = cs.getc(indices, weights)
                     print("ADDING NEW C_%s = %s" % (index, new_c))
-                    db.execute("INSERT INTO `C` (`dimensions`, `index`, `value`) VALUES {}"
-                               .format("(%d, '%s', '%s')" % (len(args), index, new_c)))
+                    db.execute("INSERT INTO `C` (`index`, `value`) VALUES {}"
+                               .format("('%s', '%s')" % (index, new_c)))
                     return sp.Rational(new_c)
                 else:
                     return sp.Rational(respond[0][0])
         else:
-            return super(C, cls).__new__(cls, *args, **kwargs)
+            return super(C, cls).__new__(cls, indices, weights, **kwargs)
+
+    @classmethod
+    def search_regex(cls):
+        pass
 
     @classmethod
     def preload(cls, *args):
-        i = 0
-        query = ''
-        while i < len(args) - 1:
-            query = '%sSELECT * FROM\n' \
-                    '(SELECT `index`, `value` FROM `C`\n' \
-                    'WHERE `dimensions` = %d\n' \
-                    'ORDER BY `index` ASC LIMIT %d)\n' \
-                    'UNION\n' % (query, (i + 3), args[i] ** (i + 3))
-            i += 1
-        query = '%sSELECT * FROM\n' \
-                '(SELECT `index`, `value` FROM `C`\n' \
-                'WHERE `dimensions` = %d\n' \
-                'ORDER BY `index` ASC LIMIT %d)\n' % (query, (i + 3), args[i] ** (i + 3))
-        cls.preloaded.update(db.execute(query))
+        query = []
+        for q in range(len(args)):
+            numbers = [int(char) for char in str(args[q] + 1)]
+            pattern = []
+
+            for i in range(1, len(numbers)):
+                pattern.append('[0-9]' * i)
+
+            for i in range(len(numbers)):
+                p = []
+                for j in range(len(numbers)):
+                    if j < i:
+                        p.append(str(numbers[j]))
+                    elif i == j:
+                        p.append('[0-%d]' % (numbers[j] - 1))
+                    elif j > i:
+                        p.append('[0-9]')
+                pattern.append(''.join(p))
+
+            regex = '|'.join(pattern)
+            regex = '^%s_' % ':'.join([regex for _ in range(q + 2)])
+            query.append('SELECT `index`, `value` FROM `C`'
+                         'WHERE REGEXP(`index`, "%s")' % regex)
+            
+        cls.preloaded.update(db.execute('\nUNION\n'.join(query)))
 
     def doit(self, **hints):
         """

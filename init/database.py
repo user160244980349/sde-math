@@ -17,30 +17,32 @@ def create_c_table(table):
     db.execute("DROP TABLE IF EXISTS `%s`" % table)
     db.execute('CREATE TABLE `%s` ('
                '    `id`    integer PRIMARY KEY AUTOINCREMENT,'
-               '    `dimensions` int,'
                '    `index` text,'
                '    `value` text'
                ')' % table)
 
     pairs = []
-    pairs.extend(["(%d, '%s', '%s')" % (3, ("%d:%d:%d" % (i, j, k)), cs.getc([i, j, k]))
+    pairs.extend(["('%s', '%s')" % ("%d:%d:%d_%d:%d:%d" %
+                                    (i, j, k, 0, 0, 0), cs.getc((i, j, k), (0, 0, 0)))
                   for i in range(7)
                   for j in range(7)
                   for k in range(7)])
 
-    pairs.extend(["(%d, '%s', '%s')" % (4, ("%d:%d:%d:%d" % (i, j, k, m)), cs.getc([i, j, k, m]))
+    pairs.extend(["('%s', '%s')" % ("%d:%d:%d:%d_%d:%d:%d:%d" %
+                                    (i, j, k, m, 0, 0, 0, 0), cs.getc((i, j, k, m), (0, 0, 0, 0)))
                   for i in range(3)
                   for j in range(3)
                   for k in range(3)
                   for m in range(3)])
 
-    pairs.extend(["(%d, '%s', '%s')" % (5, ("%d:%d:%d:%d:%d" % (i, j, k, m, n)), cs.getc([i, j, k, m, n]))
+    pairs.extend(["('%s', '%s')" % ("%d:%d:%d:%d:%d_%d:%d:%d:%d:%d" %
+                                    (i, j, k, m, n, 0, 0, 0, 0, 0), cs.getc((i, j, k, m, n), (0, 0, 0, 0, 0)))
                   for i in range(2)
                   for j in range(2)
                   for k in range(2)
                   for m in range(2)
                   for n in range(2)])
 
-    db.execute(("INSERT INTO `%s` (`dimensions`, `index`, `value`) VALUES {}" % table).format(','.join(pairs)))
+    db.execute(("INSERT INTO `%s` (`index`, `value`) VALUES {}" % table).format(','.join(pairs)))
 
     db.disconnect()

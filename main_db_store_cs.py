@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import config as c
 import init.database as idb
 import tools.database as db
