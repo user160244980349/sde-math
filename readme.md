@@ -59,7 +59,7 @@
     - [ ] Referenced integrals
 - [ ] Strong Taylor-Ito 3.0 method
     - [ ] Referenced integrals
-- [ ] Stratanovich A and L, Integrals "J"
+- [ ] Stratonovich A and L, Integrals "J"
 - [ ] Strong Taylor-Stratonovich 1.0 method
     - [ ] Referenced integrals
 - [ ] Strong Taylor-Stratonovich 1.5 method
