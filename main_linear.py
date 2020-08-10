@@ -71,10 +71,10 @@ def main():
     integral.k, integral.m, integral.dt, integral.t0, integral.tk = \
         3, 5, 0.001, 0, 10
 
-    integral.mat_a = np.array([[-1, 0, 0, 0],
-                               [0, -2, 0, 0],
-                               [0, 0, -1, 0],
-                               [0, 0, 0, -3]])
+    integral.m_a = np.array([[-1, 0, 0, 0],
+                             [0, -2, 0, 0],
+                             [0, 0, -1, 0],
+                             [0, 0, 0, -3]])
 
     integral.mat_b = np.array([[1, 1, 1],
                                [1, 1, 1],
@@ -86,19 +86,19 @@ def main():
                                [0.1, 0.1, 0.2, 0.1, 0.1],
                                [0.1, 0.1, 0.1, 0.2, 0.1]])
 
-    integral.mat_h = np.array([[0, 0, 1, 0]])
+    integral.m_h = np.array([[0, 0, 1, 0]])
 
-    integral.mat_x0 = np.array([[2],
-                                [2],
-                                [2],
-                                [2]])
+    integral.m_x0 = np.array([[2],
+                              [2],
+                              [2],
+                              [2]])
 
-    integral.mat_mx0 = np.array([[2],
-                                 [2],
-                                 [2],
-                                 [2]])
+    integral.m_mx0 = np.array([[2],
+                               [2],
+                               [2],
+                               [2]])
 
-    integral.mat_dx0 = np.zeros((integral.n, integral.n))
+    integral.m_dx0 = np.zeros((integral.n, integral.n))
 
     print('''
     CALCULATION OF MATRICES OF DYNAMICAL 
@@ -106,22 +106,22 @@ def main():
     PART OF SOLUTION - Bd (ALGORITHM 11.2)
     ''')
 
-    integral.mat_ad, integral.mat_bd = lin.dindet(integral.n, integral.k, integral.mat_a, integral.mat_b, integral.dt)
+    integral.m_ad, integral.m_bd = lin.dindet(integral.n, integral.k, integral.m_a, integral.mat_b, integral.dt)
 
     print('Ab =')
-    print(integral.mat_ad)
+    print(integral.m_ad)
     print('Bb =')
-    print(integral.mat_bd)
+    print(integral.m_bd)
 
     print('''
     CALCULATION OF MATRIX OF STOCHASTIC
     PART OF SOLUTION - Fd (ALGORITHM 11.6)	
     ''')
 
-    integral.mat_fd = lin.stoch(integral.n, integral.mat_a, integral.mat_f, integral.dt)
+    integral.m_fd = lin.stoch(integral.n, integral.m_a, integral.mat_f, integral.dt)
 
     print('Fd = ')
-    print(integral.mat_fd)
+    print(integral.m_fd)
 
     mat_u = np.array([[object]] * integral.k)
     for i in range(integral.k):
@@ -154,13 +154,13 @@ def main():
         fig1 = go.Figure()
         fig2 = go.Figure()
         for i in trajectories:
-            fig1.add_trace(go.Scatter(x=integral.vec_t, y=integral.mat_xt[i],
+            fig1.add_trace(go.Scatter(x=integral.v_t, y=integral.m_xt[i],
                                       mode='lines',
                                       name="component %d" % i))
-            fig1.add_trace(go.Scatter(x=integral.vec_t, y=integral.mat_mx[i],
+            fig1.add_trace(go.Scatter(x=integral.v_t, y=integral.m_mx[i],
                                       mode='lines',
                                       name="expectation of component %d" % i))
-            fig2.add_trace(go.Scatter(x=integral.vec_t, y=integral.mat_dx[i],
+            fig2.add_trace(go.Scatter(x=integral.v_t, y=integral.m_dx[i],
                                       mode='lines',
                                       name="dispersion of component %d" % 0))
         fig1.show()

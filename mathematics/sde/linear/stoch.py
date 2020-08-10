@@ -2,26 +2,26 @@ from .dindet import *
 from .matrix import *
 
 
-def stoch(n: int, mat_a: np.ndarray, mat_f: np.ndarray, dt: float):
+def stoch(n: int, m_a: np.ndarray, m_f: np.ndarray, dt: float):
     """
     Root function for set of algorithms implemented below
     
     Parameters
     ----------
     n : int
-    mat_a : numpy.ndarray
-    mat_f : numpy.ndarray
+    m_a : numpy.ndarray
+    m_f : numpy.ndarray
     dt : float
     Returns
     -------
     numpy.ndarray
     """
-    vec_l2, mat_s, mat_d1 = algorithm_11_2(n, mat_a, mat_f, dt)
-    mat_l = vec_to_eye(np.sqrt(vec_l2))
-    return mat_s.dot(mat_l)
+    v_l2, m_s, m_d1 = algorithm_11_2(n, m_a, m_f, dt)
+    mat_l = vec_to_eye(np.sqrt(v_l2))
+    return m_s.dot(mat_l)
 
 
-def algorithm_11_2(n: int, mat_a: np.ndarray, mat_f: np.ndarray, dt: float):
+def algorithm_11_2(n: int, m_a: np.ndarray, m_f: np.ndarray, dt: float):
     """ Algorithm 11.2
     Algorithm in this module is implementation
     from the book named "xxx" in chapter nnn
@@ -29,25 +29,25 @@ def algorithm_11_2(n: int, mat_a: np.ndarray, mat_f: np.ndarray, dt: float):
     Parameters
     ----------
     n : int
-    mat_a : numpy.ndarray
-    mat_f : numpy.ndarray
+    m_a : numpy.ndarray
+    m_f : numpy.ndarray
     dt : float
     Returns
     -------
     eigenvalues : numpy.ndarray
     eigenvectors : numpy.ndarray
-    mat_d1 : numpy.ndarray
+    m_d1 : numpy.ndarray
     """
-    mat_ac = algorithm_11_5(n, mat_a)
-    mat_g = mat_f.dot(np.transpose(mat_f))
-    mat_gv = algorithm_11_3(n, mat_g)
-    mat_dd, mat_dv = dindet(int(n * (n + 1) / 2), 1, mat_ac, mat_gv, dt)
-    mat_d1 = algorithm_11_4(n, mat_dv)
-    eigenvalues, eigenvectors = np.linalg.eig(mat_d1)
-    return eigenvalues, eigenvectors, mat_d1
+    m_ac = algorithm_11_5(n, m_a)
+    m_g = m_f.dot(np.transpose(m_f))
+    m_gv = algorithm_11_3(n, m_g)
+    m_dd, m_dv = dindet(int(n * (n + 1) / 2), 1, m_ac, m_gv, dt)
+    m_d1 = algorithm_11_4(n, m_dv)
+    eigenvalues, eigenvectors = np.linalg.eig(m_d1)
+    return eigenvalues, eigenvectors, m_d1
 
 
-def algorithm_11_3(n: int, mat_g: np.ndarray):
+def algorithm_11_3(n: int, m_g: np.ndarray):
     """ Algorithm 11.3
     Algorithm in this module is implementation
     from the book named "xxx" in chapter nnn
@@ -55,10 +55,10 @@ def algorithm_11_3(n: int, mat_g: np.ndarray):
     Parameters
     ----------
     n : int
-    mat_g : numpy.ndarray
+    m_g : numpy.ndarray
     Returns
     -------
-    mat_vec : numpy.ndarray
+    m_vec : numpy.ndarray
         column vector
     """
     # calculating dimensions sizes
@@ -73,20 +73,20 @@ def algorithm_11_3(n: int, mat_g: np.ndarray):
                 v_size = j + i2
         i2 = i2 + n - i
 
-    mat_vec = np.ndarray((v_size + 1, 1))
+    m_vec = np.ndarray((v_size + 1, 1))
 
     # actual algorithm
     i2 = 0
     for i in range(n):
         n2 = n - i
         for j in range(n2):
-            mat_vec[j + i2][0] = mat_g[j][j + i]
+            m_vec[j + i2][0] = m_g[j][j + i]
         i2 = i2 + n - i
 
-    return mat_vec
+    return m_vec
 
 
-def algorithm_11_4(n: int, mat_dv: np.ndarray):
+def algorithm_11_4(n: int, m_dv: np.ndarray):
     """ Algorithm 11.4
     Algorithm in this module is implementation
     from the book named "xxx" in chapter nnn
@@ -94,10 +94,10 @@ def algorithm_11_4(n: int, mat_dv: np.ndarray):
     Parameters
     ----------
     n : int
-    mat_dv : numpy.ndarray
+    m_dv : numpy.ndarray
     Returns
     -------
-    mat_d1 : numpy.ndarray
+    m_d1 : numpy.ndarray
     """
     # calculating dimensions sizes
     # these are complicated thoughts
@@ -111,21 +111,21 @@ def algorithm_11_4(n: int, mat_dv: np.ndarray):
                 size = j + i
         i2 = i2 + n - i
 
-    mat_d1 = np.ndarray((size + 1, size + 1))
+    m_d1 = np.ndarray((size + 1, size + 1))
 
     # actual algorithm
     i2 = 0
     for i in range(n):
         n2 = n - i
         for j in range(n2):
-            mat_d1[j][j + i] = mat_dv[j + i2][0]
-            mat_d1[j + i][j] = mat_dv[j + i2][0]
+            m_d1[j][j + i] = m_dv[j + i2][0]
+            m_d1[j + i][j] = m_dv[j + i2][0]
         i2 = i2 + n - i
 
-    return mat_d1
+    return m_d1
 
 
-def algorithm_11_5(n: int, mat_a: np.ndarray):
+def algorithm_11_5(n: int, m_a: np.ndarray):
     """ Algorithm 11.5
     Algorithm in this module is implementation
     from the book named "xxx" in chapter nnn
@@ -133,10 +133,10 @@ def algorithm_11_5(n: int, mat_a: np.ndarray):
     Parameters
     ----------
     n : int
-    mat_a : numpy.ndarray
+    m_a : numpy.ndarray
     Returns
     -------
-    mat_ac : numpy.ndarray
+    m_ac : numpy.ndarray
     """
     # calculating dimensions sizes
     # these are complicated thoughts
@@ -159,8 +159,8 @@ def algorithm_11_5(n: int, mat_a: np.ndarray):
                 o = o + n - k
             r = r + 1
 
-    mat_ones = np.zeros((n, n))
-    mat_ac = np.ndarray((v_size + 1, h_size + 1))
+    m_ones = np.zeros((n, n))
+    m_ac = np.ndarray((v_size + 1, h_size + 1))
 
     # actual algorithm
     r = 0
@@ -168,16 +168,16 @@ def algorithm_11_5(n: int, mat_a: np.ndarray):
         n2 = n - i
         for j in range(n2):
             i2 = j + i
-            mat_ones[j][i2] = 1
-            mat_ones[i2][j] = 1
-            mat_one_a = mat_ones.dot(np.transpose(mat_a)) + mat_a.dot(mat_ones)
+            m_ones[j][i2] = 1
+            m_ones[i2][j] = 1
+            m_one_a = m_ones.dot(np.transpose(m_a)) + m_a.dot(m_ones)
             o = 0
             for k in range(n):
                 n3 = n - k
                 for m in range(n3):
-                    mat_ac[m + o][r] = mat_one_a[m][m + k]
+                    m_ac[m + o][r] = m_one_a[m][m + k]
                 o = o + n - k
-            mat_ones = np.zeros((n, n))
+            m_ones = np.zeros((n, n))
             r = r + 1
 
-    return mat_ac
+    return m_ac

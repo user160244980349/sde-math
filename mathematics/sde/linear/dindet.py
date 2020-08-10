@@ -1,8 +1,8 @@
 import numpy as np
-import scipy as sci
+import scipy.linalg as la
 
 
-def dindet(n: int, k: int, mat_a: np.ndarray, mat_b: np.ndarray, dt: float):
+def dindet(n: int, k: int, m_a: np.ndarray, m_b: np.ndarray, dt: float):
     """ Algorithm 11.2
     Algorithm in this module is implementation
     from the book named "xxx" in chapter nnn
@@ -11,19 +11,20 @@ def dindet(n: int, k: int, mat_a: np.ndarray, mat_b: np.ndarray, dt: float):
     ----------
     n : int
     k : int
-    mat_a : numpy.array
-    mat_b : numpy.array
+    m_a : numpy.array
+    m_b : numpy.array
     dt : float
     Returns
     -------
-    mat_ad : numpy.array
-    mat_bd : numpy.array
+    m_ad : numpy.array
+    m_bd : numpy.array
     """
-    mat_okn = np.zeros((k, n))
-    mat_okk = np.zeros((k, k))
-    mat_idt = np.eye(n + k) * dt
-    mat_aa = np.vstack((np.hstack((mat_a, mat_b)), np.hstack((mat_okn, mat_okk))))
-    mat_ex_aah = sci.linalg.expm(mat_aa.dot(mat_idt))
-    mat_ad = mat_ex_aah[:n, :n]
-    mat_bd = mat_ex_aah[:n, n:(n + k)]
-    return mat_ad, mat_bd
+    m_okn = np.zeros((k, n))
+    m_okk = np.zeros((k, k))
+    m_idt = np.eye(n + k) * dt
+    m_aa = np.vstack((np.hstack((m_a, m_b)),
+                      np.hstack((m_okn, m_okk))))
+    m_ex_aah = la.expm(m_aa.dot(m_idt))
+    m_ad = m_ex_aah[:n, :n]
+    m_bd = m_ex_aah[:n, n:(n + k)]
+    return m_ad, m_bd
