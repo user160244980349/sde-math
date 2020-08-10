@@ -74,7 +74,7 @@ class C(sp.Function):
             regex = '^%s_' % ':'.join([regex for _ in range(q + 2)])
             query.append('SELECT `index`, `value` FROM `C`'
                          'WHERE REGEXP(`index`, "%s")' % regex)
-            
+
         cls.preloaded.update(db.execute('\nUNION\n'.join(query)))
 
     def doit(self, **hints):

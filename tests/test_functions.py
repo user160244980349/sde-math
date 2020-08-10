@@ -16,7 +16,7 @@ class MyTestCase(unittest.TestCase):
         db.disconnect()
 
         self.assertEqual(True, True)
-        
+
     @unittest.skip('Success')
     def test_Iooo(self):
         q, m = 3, 2
