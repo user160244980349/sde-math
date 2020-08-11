@@ -6,6 +6,7 @@ import sympy as sp
 from tools.input import input_matrix
 
 
+@unittest.skip('Input is necessary')
 class TestInput(unittest.TestCase):
     def test_formula_matrix(self):
         print()
@@ -34,7 +35,7 @@ class TestInput(unittest.TestCase):
 
     def test_input_matrix(self):
         print('\nA[4, 3] =')
-        mat_a1 = sp.array([[1, 2, 3],
+        mat_a1 = np.array([[1, 2, 3],
                            [4, 5, 6],
                            [7, 8, 9],
                            [10, 11, 12]])

@@ -13,6 +13,7 @@ class G(Operator):
     def __new__(cls, *args, **kwargs):
         """
         Creates new G object with given args
+
         Parameters
         ----------
         args
@@ -23,7 +24,7 @@ class G(Operator):
             formula to simplify and substitutions
         """
         c, f, dxs = sp.sympify(args)
-        if (isinstance(f, sp.Number) or f.has(*dxs)) and not isinstance(f, Operator):
+        if (isinstance(f, sp.Number) or f.has(*dxs)) and not f.has(Operator):
             return (Unwrap(sp.MatMul(sp.Transpose(c), sp.Matrix([sp.Derivative(f, dxi)
                                                                  for dxi in dxs]))))
         else:

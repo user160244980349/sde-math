@@ -10,6 +10,7 @@ class Ind(sp.Function):
     def __new__(cls, *args, **kwargs):
         """
         Creates new Ind object with given args
+
         Parameters
         ----------
         args

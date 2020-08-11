@@ -7,7 +7,7 @@ from mathematics.sde.nonlinear.legendre_polynomial import polynomial
 
 class TestLegendrePolynomial(unittest.TestCase):
     def test_polynomials(self):
-        x = sp.Symbol('x')
+        from sympy.abc import x
 
         polynomials = [1,
                        x,

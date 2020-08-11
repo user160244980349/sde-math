@@ -21,7 +21,7 @@ def create_c_table():
     db.connect(c.database)
 
     db.execute("DROP TABLE IF EXISTS `C`")
-    db.execute('CREATE TABLE `%s` ('
+    db.execute('CREATE TABLE `C` ('
                '    `id`    integer PRIMARY KEY AUTOINCREMENT,'
                '    `index` text,'
                '    `value` text'

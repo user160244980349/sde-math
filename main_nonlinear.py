@@ -4,8 +4,16 @@ import plotly.graph_objects as go
 import sympy as sp
 
 import config as c
-import init
-import mathematics.sde.nonlinear.methods as met
+from init import init
+from mathematics.sde.nonlinear.schemes.euler import euler
+from mathematics.sde.nonlinear.schemes.milstein import milstein
+from mathematics.sde.nonlinear.schemes.strong_taylor_ito_1p5 import strong_taylor_ito_1p5
+from mathematics.sde.nonlinear.schemes.strong_taylor_ito_2p0 import strong_taylor_ito_2p0
+from mathematics.sde.nonlinear.schemes.strong_taylor_ito_2p5 import strong_taylor_ito_2p5
+from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
+from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_1p5 import strong_taylor_stratonovich_1p5
+from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_2p0 import strong_taylor_stratonovich_2p0
+from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_2p5 import strong_taylor_stratonovich_2p5
 import tools.database as db
 
 
@@ -40,32 +48,37 @@ def main():
     # mat_b = sp.Matrix(['x1',
     #                    'x2'])
 
-    euler_args = [y0, mat_a, mat_b, (0, 0.1, 5)]
-    milstein_args = [y0, mat_a, mat_b, 40, (0, 0.1, 5)]
-    taylor1p5_args = [y0, mat_a, mat_b, 40, 5, (0, 0.1, 5)]
-    taylor2p0_args = [y0, mat_a, mat_b, 40, 5, 3, 3, (0, 0.1, 5)]
+    euler_args = [y0, mat_a, mat_b, (0, 0.2, 5)]
+    milstein_args = [y0, mat_a, mat_b, 40, (0, 0.2, 5)]
+    taylor1p5_args = [y0, mat_a, mat_b, 40, 5, (0, 0.2, 5)]
+    taylor2p0_args = [y0, mat_a, mat_b, 40, 5, 3, 3, (0, 0.2, 5)]
+    taylor2p5_args = [y0, mat_a, mat_b, 40, 5, 3, 3, 2, 2, (0, 0.2, 5)]
 
     # Euler
     np.random.seed(703)
-    y1, t = met.euler(*euler_args)
+    y1, t = euler(*euler_args)
 
     # Milstein
     np.random.seed(703)
-    y2, t = met.milstein(*milstein_args)
+    y2, t = milstein(*milstein_args)
 
     # Taylor 1.5
     np.random.seed(703)
-    y3, t = met.taylor1p5(*taylor1p5_args)
+    y3, t = strong_taylor_ito_1p5(*taylor1p5_args)
 
     # Taylor 2.0
     np.random.seed(703)
-    y4, t = met.taylor2p0(*taylor2p0_args)
+    y4, t = strong_taylor_ito_2p0(*taylor2p0_args)
+
+    # Taylor 2.0
+    np.random.seed(703)
+    y5, t = strong_taylor_ito_2p5(*taylor2p5_args)
 
     fig1 = go.Figure()
-    fig1.add_trace(go.Scatter(x=t, y=np.array(list(y1[0, :])).astype(float),
+    fig1.add_trace(go.Scatter(x=t, y=np.array(y1[0, :]).astype(float),
                               mode='lines',
                               name="Euler"))
-    fig1.add_trace(go.Scatter(x=t, y=np.array(list(y2[0, :])).astype(float),
+    fig1.add_trace(go.Scatter(x=t, y=np.array(y2[0, :]).astype(float),
                               mode='lines',
                               name="Milstein"))
     fig1.add_trace(go.Scatter(x=t, y=np.array(y3[0, :]).astype(float),
@@ -74,6 +87,9 @@ def main():
     fig1.add_trace(go.Scatter(x=t, y=np.array(y4[0, :]).astype(float),
                               mode='lines',
                               name="Taylor2.0"))
+    fig1.add_trace(go.Scatter(x=t, y=np.array(y5[0, :]).astype(float),
+                              mode='lines',
+                              name="Taylor2.5"))
     fig1.show()
 
     db.disconnect()

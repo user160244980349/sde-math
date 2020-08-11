@@ -13,6 +13,7 @@ class L(Operator):
     def __new__(cls, *args, **kwargs):
         """
         Creates new L object with given args
+
         Parameters
         ----------
         args
@@ -23,7 +24,7 @@ class L(Operator):
             formula to simplify and substitutions
         """
         a, b, f, dxs = sp.sympify(args)
-        if (isinstance(f, sp.Number) or f.has(*dxs)) and not isinstance(f, Operator):
+        if (isinstance(f, sp.Number) or f.has(*dxs)) and not f.has(Operator):
             from sympy.abc import t
             return (sp.Derivative(f, t) +
                     Unwrap(sp.Transpose(sp.Matrix([sp.Derivative(f, dxi)

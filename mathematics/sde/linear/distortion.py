@@ -122,5 +122,5 @@ class Distortion:
             column of distortions values
         """
         for i in range(self._size):
-            self._mat_ut[i, 0] = self._mat_u[i, 0].t(t)
+            self._mat_ut[i, 0] = self._mat_u[i, 0].inp(t)
         return self._mat_ut

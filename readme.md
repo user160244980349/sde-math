@@ -49,29 +49,33 @@
 - [x] `is_symbol` check is not working (thrown away) 
 - [x] Clean up
 - [x] Comments actualization
-- [ ] Update tests
+- [x] Update tests
+- [ ] Rewrite some of tests
 - [x] Context for formulas to beat redundancy (thrown away) 
 - [x] Strong Taylor-Ito 2.0 method
     - [x] Recursive L
     - [x] Referenced integrals
-- [ ] Strong Taylor-Ito 2.5 method
+- [x] Strong Taylor-Ito 2.5 method
     - [x] C coeficients with weights
-    - [ ] Referenced integrals
+    - [x] Referenced integrals
+    - [ ] Review
 - [ ] Strong Taylor-Ito 3.0 method
     - [ ] Referenced integrals
-- [ ] Stratonovich A and L, Integrals "J"
-- [ ] Strong Taylor-Stratonovich 1.0 method
-    - [ ] Referenced integrals
-- [ ] Strong Taylor-Stratonovich 1.5 method
-    - [ ] Referenced integrals
-- [ ] Strong Taylor-Stratonovich 2.0 method
-    - [ ] Referenced integrals
-- [ ] Strong Taylor-Stratonovich 2.5 method
-    - [ ] Referenced integrals
+- [x] Stratonovich Aj and Lj, Integrals "J"
+- [x] Strong Taylor-Stratonovich 1.0 method
+    - [x] Referenced integrals
+- [x] Strong Taylor-Stratonovich 1.5 method
+    - [x] Referenced integrals
+- [x] Strong Taylor-Stratonovich 2.0 method
+    - [x] Referenced integrals
+- [x] Strong Taylor-Stratonovich 2.5 method
+    - [x] Referenced integrals
+    - [ ] Review
 - [ ] Strong Taylor-Stratonovich 3.0 method
     - [ ] Referenced integrals
 - [ ] Precision calculation with q
 - [ ] Statistical tests
+- [ ] L and G expansion when subbing matrice and their symbols this understood but not tested in terms of performance
 - [ ] GUI
     - [ ] Greek alphabet (optional)
     - [ ] Latex output (optional)

@@ -17,13 +17,17 @@ def getc(indices: tuple, weights: tuple):
     -------
     sympy.Rational
     """
-    x, y = sp.symbols('x y')
+    from sympy.abc import x, y
     n = len(indices)
     w = list(reversed(weights))
     c = sp.S.One
 
     for i in reversed(range(1, n)):
-        c = sp.integrate(polynomial(indices[i]) * (x + 1) ** w[i] * c, (x, -1, y)).subs(y, x)
-    c = sp.integrate(polynomial(indices[0]) * (x + 1) ** w[0] * c, (x, -1, 1))
+        c = sp.integrate(polynomial(indices[i]) * (x + 1)**w[i] * c, (x, -1, y)).subs(y, x)
+    c = sp.integrate(polynomial(indices[0]) * (x + 1)**w[0] * c, (x, -1, 1))
 
-    return -c
+    w = [False if weight != 0 else True for weight in weights]
+    if all(w):
+        return c
+    else:
+        return -c
