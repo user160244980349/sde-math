@@ -30,5 +30,5 @@ def lock(filename):
     filename : str
         name of lock file
     """
-    f = open(join(c.resources, filename), 'w')
+    f = open(join(c.resources, filename), "w")
     f.close()

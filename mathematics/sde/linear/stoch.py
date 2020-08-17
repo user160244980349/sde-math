@@ -1,5 +1,7 @@
-from .dindet import *
-from .matrix import *
+import numpy as np
+
+from mathematics.sde.linear.dindet import dindet
+from mathematics.sde.linear.matrix import vec_to_eye
 
 
 def stoch(n: int, m_a: np.ndarray, m_f: np.ndarray, dt: float):

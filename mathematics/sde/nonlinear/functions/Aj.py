@@ -1,7 +1,7 @@
 import sympy as sp
 
-from .G import G
-from .Operator import Operator
+from mathematics.sde.nonlinear.functions.G import G
+from mathematics.sde.nonlinear.functions.Operator import Operator
 
 
 class Aj(Operator):

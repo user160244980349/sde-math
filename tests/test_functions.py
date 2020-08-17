@@ -3,38 +3,42 @@ import unittest
 import sympy as sp
 
 import config as c
-from tools import database as db
-from mathematics.sde.nonlinear.functions.G import G
-from mathematics.sde.nonlinear.functions.L import L
+import tools.database as db
 from mathematics.sde.nonlinear.functions.Aj import Aj
+from mathematics.sde.nonlinear.functions.G import G
 from mathematics.sde.nonlinear.functions.Ind import Ind
+from mathematics.sde.nonlinear.functions.L import L
+from mathematics.sde.nonlinear.functions.coefficients.C import C
 from mathematics.sde.nonlinear.functions.ito.I0 import I0
 from mathematics.sde.nonlinear.functions.ito.I00 import I00
 from mathematics.sde.nonlinear.functions.ito.I000 import I000
-from mathematics.sde.nonlinear.functions.coefficients.C import C
 
 
 class MyTestCase(unittest.TestCase):
-    @unittest.skip('Success')
+    @unittest.skip("Success")
     def test_Aj(self):
-        a = sp.Matrix([['x1**2 * x2**2 * t'],
-                       ['x2 * x1**2 * 5 * t**3']])
+        a = sp.Matrix([
+            ["x1**2 * x2**2 * t"],
+            ["x2 * x1**2 * 5 * t**3"]
+        ])
 
-        b = sp.Matrix([['sin(x1)', 'cos(x2)', 'cos(2 * x1)'],
-                       ['x2**2', 't * x1**2', 't * x2**3']])
+        b = sp.Matrix([
+            ["sin(x1)", "cos(x2)", "cos(2 * x1)"],
+            ["x2**2", "t * x1**2", "t * x2**3"]
+        ])
 
-        diff_args = sp.symbols('x1 x2')
-        i = sp.Symbol('i')
+        diff_args = sp.symbols("x1 x2")
+        i = sp.Symbol("i")
 
-        sym_b = sp.MatrixSymbol('b', 2, 2)
-        sp.pprint(sp.Sum(b.as_mutable()[:, i], (i, 0, 2)))
-        
+        sym_b = sp.MatrixSymbol("b", 2, 2)
+        sp.pprint(sp.Sum(b[:, i], (i, 0, 2)))
+
         print()
         sp.pprint(Aj(i, a, b, diff_args))
 
         self.assertEqual(True, True)
 
-    @unittest.skip('Success')
+    @unittest.skip("Success")
     def test_preload(self):
         print()
         db.connect(c.database)
@@ -44,32 +48,36 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    @unittest.skip('Success')
+    @unittest.skip("Success")
     def test_I000(self):
         q, m = 3, 2
 
         db.connect(c.database)
 
-        dt = sp.symbols('dt')
-        ksi = sp.MatrixSymbol('ksi', q + 1, m)
+        dt = sp.symbols("dt")
+        ksi = sp.MatrixSymbol("ksi", q + 1, m)
         sp.pprint(I000(1, 1, 1, q, dt, ksi))
 
         db.disconnect()
 
         self.assertEqual(True, True)
 
-    @unittest.skip('Success')
+    @unittest.skip("Success")
     def test_L(self):
-        x1, x2, x3, x4, t = sp.symbols('x1 x2 x3 x4, t')
+        x1, x2, x3, x4, t = sp.symbols("x1 x2 x3 x4 t")
         exp = x1 ** 2 * x2 ** 2 * t ** 3
 
-        a = [['x1**2 * x2**2 * t'],
-             ['x2 * x1**2 * 5 * t**3']]
+        a = sp.Matrix([
+            ["x1**2 * x2**2 * t"],
+            ["x2 * x1**2 * 5 * t**3"]
+        ])
 
-        b = [['sin(x1)', 'cos(x2)', 'cos(2 * x1)'],
-             ['x2**2', 't * x1**2', 't * x2**3']]
+        b = sp.Matrix([
+            ["sin(x1)", "cos(x2)", "cos(2 * x1)"],
+            ["x2**2", "t * x1**2", "t * x2**3"]
+        ])
 
-        diff_args = sp.symbols('x1 x2')
+        diff_args = sp.symbols("x1 x2")
 
         print()
         # sp.pprint(L(a, b, L(a, b, exp, diff_args) +
@@ -81,17 +89,21 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    @unittest.skip('Success')
+    @unittest.skip("Success")
     def test_G(self):
-        a = sp.Matrix(['-5 * x1',
-                       '-5 * x2'])
-        sym_a = sp.MatrixSymbol('a', 2, 1)
+        a = sp.Matrix(
+            ["-5 * x1",
+             "-5 * x2"]
+        )
+        sym_a = sp.MatrixSymbol("a", 2, 1)
 
-        b = sp.Matrix([['0.5 * sin(x1) - 0.5 * cos(x2)', '0.75 * sin(x1) - 0.75 * cos(x2)'],
-                       ['-0.5 * sin(x1) + 0.5 * cos(x2)', '-0.75 * sin(x1) + 0.75 * cos(x2)']])
-        sym_b = sp.MatrixSymbol('b', 2, 2)
+        b = sp.Matrix([
+            ["0.5 * sin(x1) - 0.5 * cos(x2)", "0.75 * sin(x1) - 0.75 * cos(x2)"],
+            ["-0.5 * sin(x1) + 0.5 * cos(x2)", "-0.75 * sin(x1) + 0.75 * cos(x2)"]
+        ])
+        sym_b = sp.MatrixSymbol("b", 2, 2)
 
-        diff_args = sp.symbols('x1 x2')
+        diff_args = sp.symbols("x1 x2")
 
         print()
         sp.pprint(G(b[:, 1], b[1, 0], diff_args))
@@ -111,12 +123,12 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    @unittest.skip('Success')
+    @unittest.skip("Success")
     def test_C(self):
         print()
         db.connect(c.database)
 
-        i1, i2, i3 = sp.symbols('i1 i2 i3')
+        i1, i2, i3 = sp.symbols("i1 i2 i3")
 
         exp = i1 + C((i1, i2, i3), (0, 0, 0))
         sp.pprint(exp)
@@ -128,9 +140,9 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    @unittest.skip('Success')
+    @unittest.skip("Success")
     def test_Ind(self):
-        i1, i2 = sp.symbols('i1 i2')
+        i1, i2 = sp.symbols("i1 i2")
 
         print()
         exp = Ind(i1, i2)
@@ -141,11 +153,11 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    @unittest.skip('Success')
+    @unittest.skip("Success")
     def test_I0(self):
-        i = sp.symbols('i')
-        ksi = sp.MatrixSymbol('ksi', 100, 100)
-        dt = sp.Symbol('dt')
+        i = sp.symbols("i")
+        ksi = sp.MatrixSymbol("ksi", 100, 100)
+        dt = sp.Symbol("dt")
 
         print()
         exp = I0(i, dt, ksi)
@@ -156,11 +168,11 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    @unittest.skip('Success')
+    @unittest.skip("Success")
     def test_I00(self):
-        i1, i2, q = sp.symbols('i1 i2 q')
-        ksi = sp.MatrixSymbol('ksi', 100, 100)
-        dt = sp.Symbol('dt')
+        i1, i2, q = sp.symbols("i1 i2 q")
+        ksi = sp.MatrixSymbol("ksi", 100, 100)
+        dt = sp.Symbol("dt")
 
         exp = I00(i1, i2, q, dt, ksi)
         sp.pprint(exp)
@@ -171,5 +183,5 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(True, True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

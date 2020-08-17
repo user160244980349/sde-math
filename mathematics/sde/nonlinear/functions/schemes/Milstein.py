@@ -1,8 +1,8 @@
 import sympy as sp
 
-from ..G import G
-from ..ito.I0 import I0
-from ..ito.I00 import I00
+from mathematics.sde.nonlinear.functions.G import G
+from mathematics.sde.nonlinear.functions.ito.I0 import I0
+from mathematics.sde.nonlinear.functions.ito.I00 import I00
 
 
 class Milstein(sp.Function):
@@ -26,7 +26,7 @@ class Milstein(sp.Function):
         """
         i, yp, a, b, q, dt, ksi, dxs = sp.sympify(args)
         m = b.shape[1]
-        i1, i2 = sp.symbols('i1 i2')
+        i1, i2 = sp.symbols("i1 i2")
         return \
             yp[i, 0] + a[i, 0] * dt + \
             sp.Sum(

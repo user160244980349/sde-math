@@ -1,6 +1,6 @@
 import sympy as sp
 
-from ..coefficients.C000 import C000
+from mathematics.sde.nonlinear.functions.coefficients.C000 import C000
 
 
 class J000(sp.Function):
@@ -25,7 +25,7 @@ class J000(sp.Function):
         i1, i2, i3, q, dt, ksi = sp.sympify(args)
         if isinstance(i1, sp.Number) and isinstance(i2, sp.Number) \
                 and isinstance(i3, sp.Number) and isinstance(q, sp.Number):
-            j1, j2, j3 = sp.symbols('j1 j2 j3')
+            j1, j2, j3 = sp.symbols("j1 j2 j3")
             return \
                 sp.Sum(
                     sp.Sum(

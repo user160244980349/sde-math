@@ -6,6 +6,7 @@ class Window(QtWidgets.QMainWindow):
     """
     Application main window
     """
+
     def __init__(self):
         super(Window, self).__init__()
 

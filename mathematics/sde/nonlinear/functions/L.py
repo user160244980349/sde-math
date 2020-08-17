@@ -1,7 +1,7 @@
 import sympy as sp
 
-from .Operator import Operator
-from .Unwrap import Unwrap
+from mathematics.sde.nonlinear.functions.Operator import Operator
+from mathematics.sde.nonlinear.functions.Unwrap import Unwrap
 
 
 class L(Operator):
@@ -27,11 +27,10 @@ class L(Operator):
         if (isinstance(f, sp.Number) or f.has(*dxs)) and not f.has(Operator):
             from sympy.abc import t
             return (sp.Derivative(f, t) +
-                    Unwrap(sp.Transpose(sp.Matrix([sp.Derivative(f, dxi)
-                                                   for dxi in dxs])) * a) +
-                    sp.Rational(1, 2) * sp.Trace(sp.Transpose(b) * sp.Matrix([[sp.Derivative(f, dxi, dxj)
-                                                                               for dxi in dxs]
-                                                                              for dxj in dxs]) * b))
+                    Unwrap(sp.Transpose(sp.Matrix([sp.Derivative(f, dxi) for dxi in dxs])) * a) +
+                    sp.Rational(1, 2) * sp.Trace(
+                        sp.Transpose(b) *
+                        sp.Matrix([[sp.Derivative(f, dxi, dxj) for dxi in dxs] for dxj in dxs]) * b))
         else:
             return super(L, cls).__new__(cls, *args, **kwargs)
 

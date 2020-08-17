@@ -1,12 +1,14 @@
 import sympy as sp
 
-from ..Aj import Aj
-from ..G import G
-from ..stratonovich.J1 import J1
-from ..stratonovich.J0 import J0
-from ..stratonovich.J00 import J00
-from ..stratonovich.J000 import J000
-from ..Lj import Lj
+from mathematics.sde.nonlinear.functions.aics.sde.nonlinear.functions.G import G
+
+from mathematics.sde.nonlinear.functions.Aj import Aj
+from mathematics.sde.nonlinear.functions.Lj import Lj
+from mathematics.sde.nonlinear.functions.coefficients.C import C
+from mathematics.sde.nonlinear.functions.stratonovich.J0 import J0
+from mathematics.sde.nonlinear.functions.stratonovich.J00 import J00
+from mathematics.sde.nonlinear.functions.stratonovich.J000 import J000
+from mathematics.sde.nonlinear.functions.stratonovich.J1 import J1
 
 
 class StrongTaylorStratonovich1p5(sp.Function):
@@ -30,9 +32,14 @@ class StrongTaylorStratonovich1p5(sp.Function):
         """
         i, yp, a, b, q, q1, dt, ksi, dxs = sp.sympify(args)
         m = b.shape[1]
-        i1, i2, i3 = sp.symbols('i1 i2 i3')
+
+        if isinstance(q1, sp.Number):
+            C.preload(int(q1))
+
+        i1, i2, i3 = sp.symbols("i1 i2 i3")
+        aj = Aj(i, a, b, dxs)
         return \
-            yp[i, 0] + Aj(i, a, b, dxs) * dt + \
+            yp[i, 0] + aj * dt + \
             sp.Sum(
                 b[i, i1] * J0(i1, dt, ksi),
                 (i1, 0, m - 1)) + \
@@ -43,7 +50,7 @@ class StrongTaylorStratonovich1p5(sp.Function):
                     (i2, 0, m - 1)),
                 (i1, 0, m - 1)) + \
             sp.Sum(
-                G(b[:, i1], Aj(i, a, b, dxs), dxs) *
+                G(b[:, i1], aj, dxs) *
                 (dt * J0(i1, dt, ksi) + J1(i1, dt, ksi)) -
                 Lj(a, b, b[i, i1], dxs) *
                 J1(i1, dt, ksi), (i1, 1, m - 1)) + \
@@ -55,4 +62,4 @@ class StrongTaylorStratonovich1p5(sp.Function):
                         (i3, 1, m - 1)),
                     (i2, 1, m - 1)),
                 (i1, 1, m - 1)) + \
-            dt ** 2 / 2 * Lj(a, b, Aj(i, a, b, dxs), dxs)
+            dt ** 2 / 2 * Lj(a, b, a, dxs)

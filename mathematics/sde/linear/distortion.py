@@ -1,5 +1,3 @@
-import math as m
-
 import numpy as np
 
 
@@ -29,6 +27,7 @@ class Const:
     """
     Provides const distortion
     """
+
     def __init__(self, u: float):
         self._ut = u
 
@@ -52,6 +51,7 @@ class Polynomial:
     """
     Provides polynomial distortion
     """
+
     def __init__(self, u: np.array):
         self._u = u
         self._p = len(u)
@@ -80,6 +80,7 @@ class Harmonic:
     """
     Provides harmonic distortion
     """
+
     def __init__(self, u: np.array):
         self._u = u
 
@@ -96,13 +97,14 @@ class Harmonic:
         float
             value of distortion
         """
-        return self._u[0] * m.sin(self._u[1] * t + self._u[2])
+        return self._u[0] * np.sin(self._u[1] * t + self._u[2])
 
 
 class Distortion:
     """
     Container for various distortions
     """
+
     def __init__(self, n: int, mat_u: np.ndarray):
         self._size = n
         self._mat_u = mat_u
@@ -122,5 +124,5 @@ class Distortion:
             column of distortions values
         """
         for i in range(self._size):
-            self._mat_ut[i, 0] = self._mat_u[i, 0].inp(t)
+            self._mat_ut[i, 0] = self._mat_u[i, 0].t(t)
         return self._mat_ut

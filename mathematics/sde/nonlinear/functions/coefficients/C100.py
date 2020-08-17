@@ -1,6 +1,6 @@
 import sympy as sp
 
-from .C import C
+from mathematics.sde.nonlinear.functions.coefficients.C import C
 
 
 class C100(sp.Function):

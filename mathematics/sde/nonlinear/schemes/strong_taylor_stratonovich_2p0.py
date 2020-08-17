@@ -3,8 +3,7 @@ from time import time
 import numpy as np
 import sympy as sp
 
-from ..functions.coefficients.C import C
-from ..functions.schemes.StrongTaylorStratonovich2p0 import StrongTaylorStratonovich2p0
+from mathematics.sde.nonlinear.functions.schemes.StrongTaylorStratonovich2p0 import StrongTaylorStratonovich2p0
 
 
 def strong_taylor_stratonovich_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
@@ -39,7 +38,7 @@ def strong_taylor_stratonovich_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
     """
     start_time = time()
     print("--------------------------")
-    print("[%.3f seconds] Start Strong Taylor-Stratonovich 2.0" % (time() - start_time))
+    print(f"[{(time() - start_time):.3f} seconds] Start Strong Taylor-Stratonovich 2.0")
 
     # Ranges
     n = b.shape[0]
@@ -47,19 +46,18 @@ def strong_taylor_stratonovich_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
     t1 = times[0]
     dt = times[1]
     t2 = times[2]
-    C.preload(q1, q3)
 
     # Defining context
     args = sp.symbols("x1:%d" % (n + 1))
     ticks = int((t2 - t1) / dt)
 
     # Symbols
-    sym_i = sp.Symbol('i')
-    sym_yp = sp.MatrixSymbol('yp', n, 1)
-    sym_a = sp.MatrixSymbol('a', n, 1)
-    sym_b = sp.MatrixSymbol('b', n, m)
-    sym_t = sp.Symbol('t')
-    sym_ksi = sp.MatrixSymbol('ksi', q + 1, m)
+    sym_i = sp.Symbol("i")
+    sym_yp = sp.MatrixSymbol("yp", n, 1)
+    sym_a = sp.MatrixSymbol("a", n, 1)
+    sym_b = sp.MatrixSymbol("b", n, m)
+    sym_t = sp.Symbol("t")
+    sym_ksi = sp.MatrixSymbol("ksi", q + 1, m)
     y = StrongTaylorStratonovich2p0(sym_i, sym_yp, sym_a, sym_b,
                                     q, q1, q2, q3, dt, sym_ksi, args)
 
@@ -76,9 +74,9 @@ def strong_taylor_stratonovich_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
     # Compilation of formulas
     y_compiled = list()
     for tr in range(n):
-        y_compiled.append(sp.utilities.lambdify(args_extended, y.subs(sym_i, tr), 'numpy'))
+        y_compiled.append(sp.utilities.lambdify(args_extended, y.subs(sym_i, tr), "numpy"))
 
-    print("[%.3f seconds] Subs are finished" % (time() - start_time))
+    print(f"[{(time() - start_time):.3f} seconds] Subs are finished")
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]
@@ -93,6 +91,6 @@ def strong_taylor_stratonovich_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
         for tr in range(n):
             y[tr, p + 1] = y_compiled[tr](*values)
 
-    print("[%.3f seconds] Calculations are finished" % (time() - start_time))
+    print(f"[{(time() - start_time):.3f} seconds] Calculations are finished")
 
     return y, t

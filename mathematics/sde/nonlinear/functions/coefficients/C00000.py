@@ -1,6 +1,6 @@
 import sympy as sp
 
-from .C import C
+from mathematics.sde.nonlinear.functions.coefficients.C import C
 
 
 class C00000(sp.Function):
@@ -31,7 +31,7 @@ class C00000(sp.Function):
                 and isinstance(j3, sp.Number) and isinstance(j4, sp.Number) \
                 and isinstance(j5, sp.Number) and isinstance(dt, sp.Number):
             return sp.sqrt((j1 * 2 + 1) * (j2 * 2 + 1) * (j3 * 2 + 1) * (j4 * 2 + 1) * (j5 * 2 + 1)) * \
-                   dt**sp.Rational(5, 2) * C((j5, j4, j3, j2, j1), (0, 0, 0, 0, 0)) / 32
+                   dt ** sp.Rational(5, 2) * C((j5, j4, j3, j2, j1), (0, 0, 0, 0, 0)) / 32
         else:
             return super(C00000, cls).__new__(cls, *args, **kwargs)
 

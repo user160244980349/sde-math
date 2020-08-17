@@ -1,7 +1,7 @@
 import sympy as sp
 
-from .Operator import Operator
-from .Unwrap import Unwrap
+from mathematics.sde.nonlinear.functions.Operator import Operator
+from mathematics.sde.nonlinear.functions.Unwrap import Unwrap
 
 
 class G(Operator):
@@ -25,8 +25,7 @@ class G(Operator):
         """
         c, f, dxs = sp.sympify(args)
         if (isinstance(f, sp.Number) or f.has(*dxs)) and not f.has(Operator):
-            return (Unwrap(sp.MatMul(sp.Transpose(c), sp.Matrix([sp.Derivative(f, dxi)
-                                                                 for dxi in dxs]))))
+            return Unwrap(sp.MatMul(sp.Transpose(c), sp.Matrix([sp.Derivative(f, dxi) for dxi in dxs])))
         else:
             return super(G, cls).__new__(cls, *args, **kwargs)
 

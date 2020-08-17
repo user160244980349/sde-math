@@ -1,8 +1,8 @@
 import sympy as sp
 
-from .G import G
-from .L import L
-from .Operator import Operator
+from mathematics.sde.nonlinear.functions.G import G
+from mathematics.sde.nonlinear.functions.L import L
+from mathematics.sde.nonlinear.functions.Operator import Operator
 
 
 class Lj(Operator):
@@ -30,10 +30,12 @@ class Lj(Operator):
         from sympy.abc import j
         if (isinstance(f, sp.Number) or f.has(*dxs)) and not f.has(Operator) \
                 and a.is_Matrix and b.is_Matrix:
-            sym_b, sym_a = sp.MatrixSymbol('a', n, 1), sp.MatrixSymbol('b', n, m)
-            return (L(a, b, f, dxs) - sp.Sum(
-                G(sym_b[:, j],
-                  G(sym_b[:, j], f, dxs), dxs), (j, 1, m - 1))).subs([(sym_a, a), (sym_b, b)])
+            sym_b, sym_a = sp.MatrixSymbol("a", n, 1), sp.MatrixSymbol("b", n, m)
+            return (L(a, b, f, dxs) -
+                    sp.Sum(
+                        G(sym_b[:, j], G(sym_b[:, j], f, dxs), dxs),
+                        (j, 1, m - 1))
+                    ).subs([(sym_a, a), (sym_b, b)])
         else:
             return super(Lj, cls).__new__(cls, *args, **kwargs)
 

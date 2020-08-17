@@ -1,6 +1,6 @@
 import sympy as sp
 
-from .I00 import I00
+from mathematics.sde.nonlinear.functions.ito.I00 import I00
 
 
 class I01(sp.Function):

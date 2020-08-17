@@ -1,6 +1,6 @@
 import sympy as sp
 
-from ..ito.I0 import I0
+from mathematics.sde.nonlinear.functions.ito.I0 import I0
 
 
 class Euler(sp.Function):
@@ -24,7 +24,7 @@ class Euler(sp.Function):
         """
         i, yp, a, b, dt, ksi = sp.sympify(args)
         m = b.shape[1]
-        i1 = sp.symbols('i1')
+        i1 = sp.symbols("i1")
         return \
             yp[i, 0] + a[i, 0] * dt + \
             sp.Sum(

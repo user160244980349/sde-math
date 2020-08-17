@@ -1,9 +1,9 @@
 import sympy as sp
 
-from ..Aj import Aj
-from ..G import G
-from ..stratonovich.J0 import J0
-from ..stratonovich.J00 import J00
+from mathematics.sde.nonlinear.functions.Aj import Aj
+from mathematics.sde.nonlinear.functions.G import G
+from mathematics.sde.nonlinear.functions.stratonovich.J0 import J0
+from mathematics.sde.nonlinear.functions.stratonovich.J00 import J00
 
 
 class StrongTaylorStratonovich1p0(sp.Function):
@@ -27,9 +27,10 @@ class StrongTaylorStratonovich1p0(sp.Function):
         """
         i, yp, a, b, q, dt, ksi, dxs = sp.sympify(args)
         m = b.shape[1]
-        i1, i2 = sp.symbols('i1 i2')
+        i1, i2 = sp.symbols("i1 i2")
+        aj = Aj(i, a, b, dxs)
         return \
-            yp[i, 0] + Aj(i, a, b, dxs) * dt + \
+            yp[i, 0] + aj * dt + \
             sp.Sum(
                 b[i, i1] * J0(i1, dt, ksi),
                 (i1, 0, m - 1)) + \

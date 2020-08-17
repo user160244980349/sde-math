@@ -1,11 +1,12 @@
 import sympy as sp
 
-from ..G import G
-from ..ito.I1 import I1
-from ..ito.I0 import I0
-from ..ito.I00 import I00
-from ..ito.I000 import I000
-from ..L import L
+from mathematics.sde.nonlinear.functions.G import G
+from mathematics.sde.nonlinear.functions.L import L
+from mathematics.sde.nonlinear.functions.coefficients.C import C
+from mathematics.sde.nonlinear.functions.ito.I0 import I0
+from mathematics.sde.nonlinear.functions.ito.I00 import I00
+from mathematics.sde.nonlinear.functions.ito.I000 import I000
+from mathematics.sde.nonlinear.functions.ito.I1 import I1
 
 
 class StrongTaylorIto1p5(sp.Function):
@@ -29,7 +30,11 @@ class StrongTaylorIto1p5(sp.Function):
         """
         i, yp, a, b, q, q1, dt, ksi, dxs = sp.sympify(args)
         m = b.shape[1]
-        i1, i2, i3 = sp.symbols('i1 i2 i3')
+
+        if isinstance(q1, sp.Number):
+            C.preload(int(q1))
+
+        i1, i2, i3 = sp.symbols("i1 i2 i3")
         return \
             yp[i, 0] + a[i, 0] * dt + \
             sp.Sum(

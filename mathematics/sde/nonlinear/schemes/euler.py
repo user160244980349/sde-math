@@ -3,7 +3,7 @@ from time import time
 import numpy as np
 import sympy as sp
 
-from ..functions.schemes.Euler import Euler
+from mathematics.sde.nonlinear.functions.schemes.Euler import Euler
 
 
 def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
@@ -29,7 +29,7 @@ def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
     """
     start_time = time()
     print("--------------------------")
-    print("[%.3f seconds] Start Euler" % (time() - start_time))
+    print(f"[{(time() - start_time):.3f} seconds] Start Euler")
 
     # Ranges
     n = b.shape[0]
@@ -42,9 +42,9 @@ def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
     ticks = int((t2 - t1) / dt)
 
     # Symbols
-    sym_i = sp.Symbol('i')
-    sym_t = sp.Symbol('t')
-    sym_ksi = sp.MatrixSymbol('ksi', 1, m)
+    sym_i = sp.Symbol("i")
+    sym_t = sp.Symbol("t")
+    sym_ksi = sp.MatrixSymbol("ksi", 1, m)
 
     args = sp.symbols("x1:%d" % (n + 1))
     args_extended = list()
@@ -57,9 +57,9 @@ def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
     # Compilation of formulas
     y_compiled = list()
     for tr in range(n):
-        y_compiled.append(sp.utilities.lambdify(args_extended, y.subs(sym_i, tr), 'numpy'))
+        y_compiled.append(sp.utilities.lambdify(args_extended, y.subs(sym_i, tr), "numpy"))
 
-    print("[%.3f seconds] Subs are finished" % (time() - start_time))
+    print(f"[{(time() - start_time):.3f} seconds] Subs are finished")
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]
@@ -74,6 +74,6 @@ def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
         for tr in range(n):
             y[tr, p + 1] = y_compiled[tr](*values)
 
-    print("[%.3f seconds] Calculations are finished" % (time() - start_time))
+    print(f"[{(time() - start_time):.3f} seconds] Calculations are finished")
 
     return y, t

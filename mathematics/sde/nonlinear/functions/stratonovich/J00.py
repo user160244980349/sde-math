@@ -1,7 +1,5 @@
 import sympy as sp
 
-from ..Ind import Ind
-
 
 class J00(sp.Function):
     """

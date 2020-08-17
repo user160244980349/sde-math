@@ -1,6 +1,6 @@
 import sympy as sp
 
-from .J00 import J00
+from mathematics.sde.nonlinear.functions.stratonovich.J00 import J00
 
 
 class J01(sp.Function):
