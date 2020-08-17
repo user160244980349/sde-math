@@ -1,18 +1,18 @@
-# README #
+### README ###
 
-## DEPENDENCIES ##
+##### DEPENDENCIES #####
 - [SymPy](https://docs.sympy.org/latest/index.html)
 - [numpy](https://numpy.org/)
 - [plotly](https://plotly.com/python/)
 - [PyQt5](https://pypi.org/project/PyQt5/)
 
-## AFTER CLONE ##
+##### AFTER CLONE #####
 1. `pip install -r requirements.txt`
 1. install sqlite3 and add it to PATH variable
 1. copy `config.example.py` to `config.py` and edit paths
 1. ready to run
 
-## RUN ##
+##### RUN #####
 Entry                   | Description
 ------------------------|------------------------------------
 `main_gui.py`           | GUI application
@@ -21,7 +21,7 @@ Entry                   | Description
 `main_txt_store_c.py`   | console store C coefficients in txt
 `main_db_store_c.py`    | console store C coefficients in db
 
-## TODO ##
+##### TODO #####
 - [x] Generation of C coefficients
 - [x] Bunch of linear stuff
 - [x] Euler method

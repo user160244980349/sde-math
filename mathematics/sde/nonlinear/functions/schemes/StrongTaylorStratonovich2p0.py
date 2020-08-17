@@ -1,8 +1,8 @@
 import sympy as sp
 
-from mathematics.sde.nonlinear.functions.ajics.sde.nonlinear.functions.G import G
 
 from mathematics.sde.nonlinear.functions.Aj import Aj
+from mathematics.sde.nonlinear.functions.G import G
 from mathematics.sde.nonlinear.functions.Lj import Lj
 from mathematics.sde.nonlinear.functions.coefficients.C import C
 from mathematics.sde.nonlinear.functions.stratonovich.J0 import J0
