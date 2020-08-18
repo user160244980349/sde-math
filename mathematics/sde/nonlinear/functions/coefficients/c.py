@@ -25,12 +25,14 @@ class C(sp.Function):
         sympy.Rational or C
             calculated value or symbolic expression
         """
-        if all([isinstance(sp.sympify(arg), sp.Number) for arg in indices]):
+        if all([isinstance(sp.sympify(arg), sp.Number) for arg in indices]) and \
+                all([isinstance(sp.sympify(arg), sp.Number) for arg in weights]) and \
+                len(indices) == len(weights):
             index = f"{':'.join([str(i) for i in indices])}_{':'.join([str(i) for i in weights])}"
             try:
                 return sp.Rational(cls._preloaded[index])
             except KeyError:
-                print("MISSING PRELOADED VERSION OF C_%s" % index)
+                print(f"MISSING PRELOADED VERSION OF C_{index}")
                 respond = db.execute(
                     f"SELECT `value` FROM `C`"
                     f"WHERE REGEXP(`index`, '^{index}$')"
@@ -76,8 +78,7 @@ class C(sp.Function):
                         p.append("[0-9]")
                 pattern.append("".join(p))
 
-            regex = "|".join(pattern)
-            regex = f"^{':'.join([regex for _ in range(q + 3)])}_.*$"
+            regex = f"^{':'.join(['|'.join(pattern) for _ in range(q + 3)])}_.*$"
             query.append(
                 f"SELECT `index`, `value` FROM `C`"
                 f"WHERE REGEXP(`index`, '{regex}')"

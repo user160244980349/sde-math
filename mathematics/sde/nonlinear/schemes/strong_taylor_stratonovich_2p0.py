@@ -48,14 +48,14 @@ def strong_taylor_stratonovich_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
     t2 = times[2]
 
     # Defining context
-    args = sp.symbols("x1:%d" % (n + 1))
+    args = sp.symbols(f"x1:{n + 1}")
     ticks = int((t2 - t1) / dt)
 
     # Symbols
     sym_i, sym_t = sp.Symbol("i"), sp.Symbol("t")
     sym_ksi = sp.MatrixSymbol("ksi", q + 1, m)
-    y = StrongTaylorStratonovich2p0(sym_i, sp.Matrix(args), a, b,
-                                    q, q1, q2, q3, dt, sym_ksi, args).doit()
+    sym_y = StrongTaylorStratonovich2p0(sym_i, sp.Matrix(args), a, b,
+                                        q, q1, q2, q3, dt, sym_ksi, args).doit()
 
     args_extended = list()
     args_extended.extend(args)
@@ -64,7 +64,7 @@ def strong_taylor_stratonovich_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
     # Compilation of formulas
     y_compiled = list()
     for tr in range(n):
-        y_compiled.append(sp.utilities.lambdify(args_extended, y.subs(sym_i, tr), "numpy"))
+        y_compiled.append(sp.utilities.lambdify(args_extended, sym_y.subs(sym_i, tr), "numpy"))
 
     print(f"[{(time() - start_time):.3f} seconds] Subs are finished")
 
@@ -75,9 +75,7 @@ def strong_taylor_stratonovich_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
 
     # Dynamic substitutions with integration
     for p in range(ticks - 1):
-        ksi = np.random.randn(q + 1, m)
-        values = list(y[:, p])
-        values.extend([t[p], ksi])
+        values = [*y[:, p], t[p], np.random.randn(q + 1, m)]
         for tr in range(n):
             y[tr, p + 1] = y_compiled[tr](*values)
 

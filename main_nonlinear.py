@@ -7,14 +7,14 @@ import config as c
 import tools.database as db
 from init import init
 from mathematics.sde.nonlinear.schemes.euler import euler
-# from mathematics.sde.nonlinear.schemes.milstein import milstein
-# from mathematics.sde.nonlinear.schemes.strong_taylor_ito_1p5 import strong_taylor_ito_1p5
-# from mathematics.sde.nonlinear.schemes.strong_taylor_ito_2p0 import strong_taylor_ito_2p0
-# from mathematics.sde.nonlinear.schemes.strong_taylor_ito_2p5 import strong_taylor_ito_2p5
-from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
-from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_1p5 import strong_taylor_stratonovich_1p5
-from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_2p0 import strong_taylor_stratonovich_2p0
-from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_2p5 import strong_taylor_stratonovich_2p5
+from mathematics.sde.nonlinear.schemes.milstein import milstein
+from mathematics.sde.nonlinear.schemes.strong_taylor_ito_1p5 import strong_taylor_ito_1p5
+from mathematics.sde.nonlinear.schemes.strong_taylor_ito_2p0 import strong_taylor_ito_2p0
+from mathematics.sde.nonlinear.schemes.strong_taylor_ito_2p5 import strong_taylor_ito_2p5
+# from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
+# from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_1p5 import strong_taylor_stratonovich_1p5
+# from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_2p0 import strong_taylor_stratonovich_2p0
+# from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_2p5 import strong_taylor_stratonovich_2p5
 
 
 def main():
@@ -76,19 +76,19 @@ def main():
 
     # Milstein
     np.random.seed(703)
-    y2, t = strong_taylor_stratonovich_1p0(*milstein_args)
+    y2, t = milstein(*milstein_args)
 
     # Taylor 1.5
     np.random.seed(703)
-    y3, t = strong_taylor_stratonovich_1p5(*taylor1p5_args)
+    y3, t = strong_taylor_ito_1p5(*taylor1p5_args)
 
     # Taylor 2.0
     np.random.seed(703)
-    y4, t = strong_taylor_stratonovich_2p0(*taylor2p0_args)
+    y4, t = strong_taylor_ito_2p0(*taylor2p0_args)
 
     # Taylor 2.0
     np.random.seed(703)
-    y5, t = strong_taylor_stratonovich_2p5(*taylor2p5_args)
+    y5, t = strong_taylor_ito_2p5(*taylor2p5_args)
 
     fig1 = go.Figure()
     fig1.add_trace(
@@ -109,21 +109,21 @@ def main():
         go.Scatter(
             x=t, y=np.array(y3[0, :]).astype(float),
             mode="lines",
-            name="Taylor1.5"
+            name="Taylor 1.5"
         )
     )
     fig1.add_trace(
         go.Scatter(
             x=t, y=np.array(y4[0, :]).astype(float),
             mode="lines",
-            name="Taylor2.0"
+            name="Taylor 2.0"
         )
     )
     fig1.add_trace(
         go.Scatter(
             x=t, y=np.array(y5[0, :]).astype(float),
             mode="lines",
-            name="Taylor2.5"
+            name="Taylor 2.5"
         )
     )
     fig1.show()
