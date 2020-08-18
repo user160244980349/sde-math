@@ -1,5 +1,5 @@
-SymPy==1.6.1
-numpy==1.19.0
-scipy==1.5.1
+SymPy==1.6.2
+numpy==1.19.1
+scipy==1.5.2
 PyQt5==5.15.0
-plotly==4.8.2
+plotly==4.9.0

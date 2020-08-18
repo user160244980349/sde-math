@@ -3,7 +3,7 @@ from time import time
 import numpy as np
 import sympy as sp
 
-from mathematics.sde.nonlinear.functions.schemes.Milstein import Milstein
+from mathematics.sde.nonlinear.functions.schemes.milstein import Milstein
 
 
 def milstein(y0: np.array, a: sp.Matrix, b: sp.Matrix, q: int, times: tuple):
@@ -45,22 +45,13 @@ def milstein(y0: np.array, a: sp.Matrix, b: sp.Matrix, q: int, times: tuple):
     ticks = int((t2 - t1) / dt)
 
     # Symbols
-    sym_i = sp.Symbol("i")
-    sym_yp = sp.MatrixSymbol("yp", n, 1)
-    sym_a = sp.MatrixSymbol("a", n, 1)
-    sym_b = sp.MatrixSymbol("b", n, m)
-    sym_t = sp.Symbol("t")
+    sym_i, sym_t = sp.Symbol("i"), sp.Symbol("t")
     sym_ksi = sp.MatrixSymbol("ksi", q + 1, m)
-    y = Milstein(sym_i, sym_yp, sym_a, sym_b, q, dt, sym_ksi, args)
+    y = Milstein(sym_i, sp.Matrix(args), a, b, q, dt, sym_ksi, args).doit()
 
     args_extended = list()
     args_extended.extend(args)
     args_extended.extend([sym_t, sym_ksi])
-
-    # Static substitutions
-    y = y.subs([(sym_yp, sp.Matrix(args)),
-                (sym_b, b),
-                (sym_a, a)]).doit()
 
     # Compilation of formulas
     y_compiled = list()

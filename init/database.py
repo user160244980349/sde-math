@@ -30,7 +30,7 @@ def create_c_table():
     )
 
     pairs = []
-    pairs.extend([f"({i}:{j}:{k}_0:0:0', '{get_c((i, j, k), (0, 0, 0))}')"
+    pairs.extend([f"('{i}:{j}:{k}_0:0:0', '{get_c((i, j, k), (0, 0, 0))}')"
                   for i in range(7)
                   for j in range(7)
                   for k in range(7)])

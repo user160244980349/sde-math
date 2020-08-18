@@ -3,7 +3,7 @@ from time import time
 import numpy as np
 import sympy as sp
 
-from mathematics.sde.nonlinear.functions.schemes.Euler import Euler
+from mathematics.sde.nonlinear.functions.schemes.euler import Euler
 
 
 def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
@@ -39,20 +39,17 @@ def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
     t2 = times[2]
 
     # Defining context
+    args = sp.symbols("x1:%d" % (n + 1))
     ticks = int((t2 - t1) / dt)
 
     # Symbols
-    sym_i = sp.Symbol("i")
-    sym_t = sp.Symbol("t")
+    sym_i, sym_t = sp.Symbol("i"), sp.Symbol("t")
     sym_ksi = sp.MatrixSymbol("ksi", 1, m)
+    y = Euler(sym_i, sp.Matrix(args), a, b, dt, sym_ksi).doit()
 
-    args = sp.symbols("x1:%d" % (n + 1))
     args_extended = list()
     args_extended.extend(args)
     args_extended.extend([sym_t, sym_ksi])
-
-    # Static substitutions
-    y = Euler(sym_i, sp.Matrix(args), a, b, dt, sym_ksi).doit()
 
     # Compilation of formulas
     y_compiled = list()

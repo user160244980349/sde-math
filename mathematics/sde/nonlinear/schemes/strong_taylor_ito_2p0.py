@@ -3,7 +3,7 @@ from time import time
 import numpy as np
 import sympy as sp
 
-from mathematics.sde.nonlinear.functions.schemes.StrongTaylorIto2p0 import StrongTaylorIto2p0
+from mathematics.sde.nonlinear.functions.schemes.strong_taylor_ito_2p0 import StrongTaylorIto2p0
 
 
 def strong_taylor_ito_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
@@ -52,24 +52,14 @@ def strong_taylor_ito_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
     ticks = int((t2 - t1) / dt)
 
     # Symbols
-    sym_i = sp.Symbol("i")
-    sym_yp = sp.MatrixSymbol("yp", n, 1)
-    sym_a = sp.MatrixSymbol("a", n, 1)
-    sym_b = sp.MatrixSymbol("b", n, m)
-    sym_t = sp.Symbol("t")
+    sym_i, sym_t = sp.Symbol("i"), sp.Symbol("t")
     sym_ksi = sp.MatrixSymbol("ksi", q + 1, m)
-    y = StrongTaylorIto2p0(sym_i, sym_yp, sym_a, sym_b,
-                           q, q1, q2, q3, dt, sym_ksi, args)
+    y = StrongTaylorIto2p0(sym_i, sp.Matrix(args), a, b,
+                           q, q1, q2, q3, dt, sym_ksi, args).doit()
 
     args_extended = list()
     args_extended.extend(args)
     args_extended.extend([sym_t, sym_ksi])
-
-    # Static substitutions
-    start_time = time()
-    y = y.subs([(sym_yp, sp.Matrix(args)),
-                (sym_b, b),
-                (sym_a, a)]).doit()
 
     # Compilation of formulas
     y_compiled = list()

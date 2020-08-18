@@ -77,13 +77,13 @@ Entry                   | Description
 - [x] Replace ' with "
 - [x] Replace formats with f-strings
 - [x] Move preload in schemes classes
+- [x] New Lj and Aj (review G and L)
+- [x] L and G expansion when subbing matrices and their symbols this understood but not tested in terms of performance
 - [ ] Optimize schemes where functions repeats
 - [ ] Rewrite some of tests
-- [ ] New Lj and Aj
 - [ ] Precision calculation with q
 - [ ] Replace prints with logs
 - [ ] Statistical tests
-- [ ] L and G expansion when subbing matrices and their symbols this understood but not tested in terms of performance
 - [ ] GUI
     - [ ] Greek alphabet (optional)
     - [ ] Latex output (optional)

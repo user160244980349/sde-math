@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os.path as p
+import os
 
 import config as conf
 from mathematics.sde.nonlinear.c import get_c
@@ -21,7 +21,7 @@ def main():
                 for k in range(0, 3):
                     content += f"C_{i}{j}{k}({c}) = {get_c((i, j, k), v)}\n"
 
-    file = open(p.join(conf.resources, "c_xxx(xxx).txt"), "w")
+    file = open(os.path.join(conf.resources, "c_xxx(xxx).txt"), "w")
     file.write(content)
     file.close()
 
@@ -31,7 +31,7 @@ def main():
             for k in range(0, 7):
                 content += f"C_{i}{j}{k} = {get_c((i, j, k), (0, 0, 0))}\n"
 
-    file = open(p.join(conf.resources, "c_xxx.txt"), "w")
+    file = open(os.path.join(conf.resources, "c_xxx.txt"), "w")
     file.write(content)
     file.close()
 
@@ -42,7 +42,7 @@ def main():
                 for m in range(0, 3):
                     content += f"C_{i}{j}{k}{m} = {get_c((i, j, k, m), (0, 0, 0, 0))}\n"
 
-    file = open(p.join(conf.resources, "c_xxxx.txt"), "w")
+    file = open(os.path.join(conf.resources, "c_xxxx.txt"), "w")
     file.write(content)
     file.close()
 
@@ -54,7 +54,7 @@ def main():
                     for n in range(0, 2):
                         content += f"C_{i}{j}{k}{m}{n} = {get_c((i, j, k, m, n), (0, 0, 0, 0, 0))}\n"
 
-    file = open(p.join(conf.resources, "c_xxxxx.txt"), "w")
+    file = open(os.path.join(conf.resources, "c_xxxxx.txt"), "w")
     file.write(content)
     file.close()
 

@@ -5,8 +5,8 @@ import numpy as np
 import plotly.graph_objects as go
 
 from mathematics.sde.linear.dindet import dindet
-from mathematics.sde.linear.distortion import Distortion
-from mathematics.sde.linear.distortion_input import const, polynomial, harmonic, zero
+from mathematics.sde.linear.distortions import ComplexDistortion
+from mathematics.sde.linear.distortions_input import const, polynomial, harmonic, zero
 from mathematics.sde.linear.integration import Integral
 from mathematics.sde.linear.stoch import stoch
 
@@ -154,7 +154,7 @@ def main():
         elif keysym == "o":
             mat_u[i][0] = zero()
 
-    integral.distortion = Distortion(integral.k, mat_u)
+    integral.distortion = ComplexDistortion(integral.k, mat_u)
 
     print("\nwhich trajectories do you want to be shown?")
     trajectories = np.array(input().strip().split(" ")).astype(int)

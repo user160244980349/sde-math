@@ -4,17 +4,42 @@ import sympy as sp
 
 import config as c
 import tools.database as db
-from mathematics.sde.nonlinear.functions.Aj import Aj
-from mathematics.sde.nonlinear.functions.G import G
-from mathematics.sde.nonlinear.functions.Ind import Ind
-from mathematics.sde.nonlinear.functions.L import L
-from mathematics.sde.nonlinear.functions.coefficients.C import C
-from mathematics.sde.nonlinear.functions.ito.I0 import I0
-from mathematics.sde.nonlinear.functions.ito.I00 import I00
-from mathematics.sde.nonlinear.functions.ito.I000 import I000
+from mathematics.sde.nonlinear.functions.aj import Aj
+from mathematics.sde.nonlinear.functions.coefficients.c import C
+from mathematics.sde.nonlinear.functions.g import G
+from mathematics.sde.nonlinear.functions.ind import Ind
+from mathematics.sde.nonlinear.functions.ito.i0 import I0
+from mathematics.sde.nonlinear.functions.ito.i00 import I00
+from mathematics.sde.nonlinear.functions.ito.i000 import I000
+from mathematics.sde.nonlinear.functions.l import L
+from mathematics.sde.nonlinear.functions.lj import Lj
 
 
 class MyTestCase(unittest.TestCase):
+    @unittest.skip("Success")
+    def test_Lj(self):
+        a = sp.Matrix([
+            "x1**2 * x2**2 * t",
+            "x2 * x1**2 * 5 * t**3"
+        ])
+
+        ad = Aj(a)
+
+        b = sp.Matrix([
+            ["sin(x1)", "cos(x2)", "cos(2 * x1)"],
+            ["x2**2", "t * x1**2", "t * x2**3"]
+        ])
+
+        diff_args = sp.symbols("x1 x2")
+        i = sp.Symbol("i")
+
+        sym_b = sp.MatrixSymbol("b", 2, 2)
+
+        print()
+        sp.pprint(Lj(a, b, a[0, 0], diff_args))
+
+        self.assertEqual(True, True)
+
     @unittest.skip("Success")
     def test_Aj(self):
         a = sp.Matrix([
@@ -31,7 +56,6 @@ class MyTestCase(unittest.TestCase):
         i = sp.Symbol("i")
 
         sym_b = sp.MatrixSymbol("b", 2, 2)
-        sp.pprint(sp.Sum(b[:, i], (i, 0, 2)))
 
         print()
         sp.pprint(Aj(i, a, b, diff_args))
@@ -80,21 +104,20 @@ class MyTestCase(unittest.TestCase):
         diff_args = sp.symbols("x1 x2")
 
         print()
-        # sp.pprint(L(a, b, L(a, b, exp, diff_args) +
-        #             L(a, b, exp, diff_args), diff_args))
-        # sp.pprint(L(a, b, sp.S.One + L(a, b, exp, diff_args), diff_args))
+        sp.pprint(L(a, b, L(a, b, exp, diff_args) + L(a, b, exp, diff_args), diff_args))
+        sp.pprint(L(a, b, sp.S.One + L(a, b, exp, diff_args), diff_args))
         sp.pprint(L(a, b, diff_args[0], diff_args))
-        sp.pprint(L(a, b, b[0][0], diff_args))
+        sp.pprint(L(a, b, b[0, 0], diff_args))
         sp.pprint(L(a, b, L(a, b, sp.S.One, diff_args), diff_args))
 
         self.assertEqual(True, True)
 
     @unittest.skip("Success")
     def test_G(self):
-        a = sp.Matrix(
-            ["-5 * x1",
-             "-5 * x2"]
-        )
+        a = sp.Matrix([
+            "-5 * x1",
+            "-5 * x2"
+        ])
         sym_a = sp.MatrixSymbol("a", 2, 1)
 
         b = sp.Matrix([
@@ -106,12 +129,12 @@ class MyTestCase(unittest.TestCase):
         diff_args = sp.symbols("x1 x2")
 
         print()
+        sp.pprint(G(b[:, 1], b[0, 0], diff_args))
         sp.pprint(G(b[:, 1], b[1, 0], diff_args))
         sp.pprint(G(b[:, 1], b[1, 1], diff_args))
         sp.pprint(G(b[:, 0], G(b[:, 0], b[0, 0], diff_args), diff_args))
         sp.pprint(G(sym_b[:, 0], sym_a[0, 0], diff_args))
-        # sp.pprint(G(sym_b[:, 0], G(b[:, 0], sym_b[0, 0], diff_args) +
-        #           G(b[:, 0], b[0, 0], diff_args), diff_args))
+        sp.pprint(G(sym_b[:, 0], G(b[:, 0], sym_b[0, 0], diff_args) + G(b[:, 0], b[0, 0], diff_args), diff_args))
         sp.pprint(G(b[:, 0], G(b[:, 0], b[0, 0], diff_args), diff_args))
         sp.pprint(G(b[:, 0], G(b[:, 0], diff_args[0], diff_args), diff_args))
         sp.pprint(G(b[:, 0], G(b[:, 0], sp.S.One, diff_args), diff_args))
@@ -119,7 +142,7 @@ class MyTestCase(unittest.TestCase):
         sp.pprint(G(b[:, 0], G(b[:, 1], b[0, 0], diff_args), diff_args))
         sp.pprint(G(b[:, 1], G(b[:, 0], b[0, 0], diff_args), diff_args))
         sp.pprint(G(b[:, 1], G(b[:, 1], b[0, 0], diff_args), diff_args))
-        # sp.pprint(G(b[:, 1], sp.S.One + G(b[:, 1], b[0, 0], diff_args), diff_args))
+        sp.pprint(G(b[:, 1], sp.S.One + G(b[:, 1], b[0, 0], diff_args), diff_args))
 
         self.assertEqual(True, True)
 

@@ -3,7 +3,7 @@ import warnings
 
 import plotly.graph_objects as go
 
-from mathematics.sde.linear.distortion import Zero, Const, Polynomial, Harmonic
+from mathematics.sde.linear.distortions import Zero, Const, Polynomial, Harmonic
 
 
 class MyTestCase(unittest.TestCase):

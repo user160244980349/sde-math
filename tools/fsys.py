@@ -1,4 +1,4 @@
-from os.path import isfile, join
+import os
 
 import config as c
 
@@ -15,7 +15,7 @@ def is_locked(filename: str):
     -------
     True of False
     """
-    if isfile(join(c.resources, filename)):
+    if os.path.isfile(os.path.join(c.resources, filename)):
         return True
     else:
         return False
@@ -30,5 +30,5 @@ def lock(filename):
     filename : str
         name of lock file
     """
-    f = open(join(c.resources, filename), "w")
+    f = open(os.path.join(c.resources, filename), "w")
     f.close()

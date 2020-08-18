@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QApplication
 import tools.database as db
 from config import database
 from init.init import init
-from ui.Window import Window
+from ui.window import Window
 
 
 def main():
