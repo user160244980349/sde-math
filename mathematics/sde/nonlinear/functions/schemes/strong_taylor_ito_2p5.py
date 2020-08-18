@@ -37,8 +37,7 @@ class StrongTaylorIto2p5(sp.Function):
             formula to simplify and substitutions
         """
         i, yp, m_a, m_b, q, q1, q2, q3, q4, q5, dt, ksi, dxs = sp.sympify(args)
-        n = m_b.shape[0]
-        m = m_b.shape[1]
+        n, m = m_b.shape[0], m_b.shape[1]
         a = sp.MatrixSymbol("a", n, 1)
         b = sp.MatrixSymbol("b", n, m)
 

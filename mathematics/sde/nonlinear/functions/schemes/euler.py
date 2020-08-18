@@ -23,8 +23,7 @@ class Euler(sp.Function):
             formula to simplify and substitutions
         """
         i, yp, m_a, m_b, dt, ksi = sp.sympify(args)
-        n = m_b.shape[0]
-        m = m_b.shape[1]
+        n, m = m_b.shape[0], m_b.shape[1]
         a = sp.MatrixSymbol("a", n, 1)
         b = sp.MatrixSymbol("b", n, m)
         i1 = sp.symbols("i1")

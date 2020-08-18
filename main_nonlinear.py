@@ -29,46 +29,46 @@ def main():
         [0]
     ])
 
-    mat_a = sp.Matrix([
+    m_a = sp.Matrix([
         "-5 * x1",
         "-5 * x2"
     ])
 
-    mat_b = sp.Matrix([
+    m_b = sp.Matrix([
         ["sin(x1)", "x2"],
         ["x2", "cos(x1)"]
     ])
 
-    # mat_b = sp.Matrix([
+    # m_b = sp.Matrix([
     #     ["1 / (1 + x1**2 * x2 ** 2)", "1 / (1 + x1**2)"],
     #     ["1 / (1 + x2**2)", "1 / (1 + cos(x1)**2)"]
     # ])
     #
-    # mat_b = sp.Matrix([
+    # m_b = sp.Matrix([
     #     ["0.5 * x1 - 0.5 * x2", "0.5 * x2 - 0.5 * x1"],
     #     ["-0.5 * sin(x1) + 0.5 * cos(x2)", "-0.5 * sin(x1) + 0.5 * cos(x2)"]
     # ])
     #
-    # mat_b = sp.Matrix([
+    # m_b = sp.Matrix([
     #     ["sin(2 * x1)", "x2"],
     #     ["x2", "cos(3 * x1)"]
     # ])
     #
-    # mat_a = sp.Matrix([
+    # m_a = sp.Matrix([
     #     "5 * x2 - 5 * x1",
     #     "5 * x1 - 5 * x2"
     # ])
     #
-    # mat_b = sp.Matrix([
+    # m_b = sp.Matrix([
     #     "x1",
     #     "x2"
     # ])
 
-    euler_args = [y0, mat_a, mat_b, (0, 0.2, 5)]
-    milstein_args = [y0, mat_a, mat_b, 40, (0, 0.2, 5)]
-    taylor1p5_args = [y0, mat_a, mat_b, 40, 5, (0, 0.2, 5)]
-    taylor2p0_args = [y0, mat_a, mat_b, 40, 5, 3, 3, (0, 0.2, 5)]
-    taylor2p5_args = [y0, mat_a, mat_b, 40, 5, 3, 3, 2, 2, (0, 0.2, 5)]
+    euler_args = [y0, m_a, m_b, (0, 0.2, 5)]
+    milstein_args = [y0, m_a, m_b, 40, (0, 0.2, 5)]
+    taylor1p5_args = [y0, m_a, m_b, 40, 5, (0, 0.2, 5)]
+    taylor2p0_args = [y0, m_a, m_b, 40, 5, 3, 3, (0, 0.2, 5)]
+    taylor2p5_args = [y0, m_a, m_b, 40, 5, 3, 3, 2, 2, (0, 0.2, 5)]
 
     # Euler
     np.random.seed(703)
