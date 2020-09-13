@@ -1,16 +1,17 @@
 ### README ###
 
 ##### DEPENDENCIES #####
-- [SymPy](https://docs.sympy.org/latest/index.html)
-- [numpy](https://numpy.org/)
-- [plotly](https://plotly.com/python/)
-- [PyQt5](https://pypi.org/project/PyQt5/)
+1. [SymPy](https://docs.sympy.org/latest/index.html)
+1. [numpy](https://numpy.org/)
+1. [scipy](https://www.scipy.org/)
+1. [plotly](https://plotly.com/python/)
+1. [PyQt5](https://pypi.org/project/PyQt5/)
 
 ##### AFTER CLONE #####
-1. `pip install -r requirements.txt`
-1. install sqlite3 and add it to PATH variable
-1. copy `config.example.py` to `config.py` and edit paths
-1. ready to run
+1. Do `pip install -r requirements.txt`
+1. Install sqlite3 and add it to the PATH variable
+1. Copy `config.example.py` to `config.py` and edit paths
+1. Ready to run
 
 ##### RUN #####
 Entry                   | Description
@@ -55,11 +56,10 @@ Entry                   | Description
 - [x] Strong Taylor-Ito 2.0 method
     - [x] Recursive L
     - [x] Referenced integrals
-- [ ] Strong Taylor-Ito 2.5 method
+- [x] Strong Taylor-Ito 2.5 method
     - [x] C coefficients with weights
     - [x] Referenced integrals
-    - [ ] Review
-- [ ] Strong Taylor-Ito 3.0 method
+- [ ] Strong Taylor-Ito 3.0 method p. 22 53-55 Ito strong order 3.0
     - [ ] Referenced integrals
 - [x] Stratonovich Aj and Lj, Integrals "J"
 - [x] Strong Taylor-Stratonovich 1.0 method
@@ -68,22 +68,23 @@ Entry                   | Description
     - [x] Referenced integrals
 - [x] Strong Taylor-Stratonovich 2.0 method
     - [x] Referenced integrals
-- [ ] Strong Taylor-Stratonovich 2.5 method
+- [x] Strong Taylor-Stratonovich 2.5 method
     - [x] Referenced integrals
-    - [ ] Review
-- [ ] Strong Taylor-Stratonovich 3.0 method
+- [ ] Strong Taylor-Stratonovich 3.0 method p. 31 lines 4 5 6 Stratonovich strong order 3.0
     - [ ] Referenced integrals
 - [x] Optimize imports
 - [x] Replace ' with "
 - [x] Replace formats with f-strings
 - [x] Move preload in schemes classes
 - [x] New Lj and Aj (review G and L)
-- [x] L and G expansion when subbing matrices and their symbols this understood but not tested in terms of performance
+- [x] L and G expansion when subbing matrices and their symbols these are 
+      understood but are not tested in terms of performance
+- [x] I10 and I01 with C from database
+- [x] Precision calculation with q
 - [ ] Optimize schemes where functions repeats
+- [ ] Review all schemes and formulas
 - [ ] Rewrite some of tests
-- [ ] Precision calculation with q
 - [ ] Replace prints with logs
 - [ ] Statistical tests
 - [ ] GUI
-    - [ ] Greek alphabet (optional)
-    - [ ] Latex output (optional)
+    - [ ] Latex output

@@ -78,7 +78,7 @@ class C(sp.Function):
                         p.append("[0-9]")
                 pattern.append("".join(p))
 
-            regex = f"^{':'.join(['|'.join(pattern) for _ in range(q + 3)])}_.*$"
+            regex = f"^{':'.join(['|'.join(pattern) for _ in range(q + 2)])}_.*$"
             query.append(
                 f"SELECT `index`, `value` FROM `C`"
                 f"WHERE REGEXP(`index`, '{regex}')"

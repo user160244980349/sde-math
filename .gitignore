@@ -6,6 +6,7 @@
 
 # IDE configuration
 /.idea
+/.vscode
 
 # Local configuration
 config.py

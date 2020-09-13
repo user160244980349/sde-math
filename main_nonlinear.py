@@ -8,19 +8,27 @@ import tools.database as db
 from init import init
 from mathematics.sde.nonlinear.schemes.euler import euler
 from mathematics.sde.nonlinear.schemes.milstein import milstein
-from mathematics.sde.nonlinear.schemes.strong_taylor_ito_1p5 import strong_taylor_ito_1p5
-from mathematics.sde.nonlinear.schemes.strong_taylor_ito_2p0 import strong_taylor_ito_2p0
-from mathematics.sde.nonlinear.schemes.strong_taylor_ito_2p5 import strong_taylor_ito_2p5
-# from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
-# from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_1p5 import strong_taylor_stratonovich_1p5
-# from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_2p0 import strong_taylor_stratonovich_2p0
-# from mathematics.sde.nonlinear.schemes.strong_taylor_stratonovich_2p5 import strong_taylor_stratonovich_2p5
+from mathematics.sde.nonlinear.schemes.\
+   strong_taylor_ito_1p5 import strong_taylor_ito_1p5
+from mathematics.sde.nonlinear.schemes.\
+   strong_taylor_ito_2p0 import strong_taylor_ito_2p0
+from mathematics.sde.nonlinear.schemes.\
+   strong_taylor_ito_2p5 import strong_taylor_ito_2p5
+# from mathematics.sde.nonlinear.schemes.\
+#     strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
+# from mathematics.sde.nonlinear.schemes.\
+#     strong_taylor_stratonovich_1p5 import strong_taylor_stratonovich_1p5
+# from mathematics.sde.nonlinear.schemes.\
+#     strong_taylor_stratonovich_2p0 import strong_taylor_stratonovich_2p0
+# from mathematics.sde.nonlinear.schemes.\
+#     strong_taylor_stratonovich_2p5 import strong_taylor_stratonovich_2p5
 
 
 def main():
     """
     Performs modeling of nonlinear stochastic systems
     """
+
     init.init()
     db.connect(c.database)
 
@@ -86,7 +94,7 @@ def main():
     np.random.seed(703)
     y4, t = strong_taylor_ito_2p0(*taylor2p0_args)
 
-    # Taylor 2.0
+    # Taylor 2.5
     np.random.seed(703)
     y5, t = strong_taylor_ito_2p5(*taylor2p5_args)
 
@@ -95,35 +103,35 @@ def main():
         go.Scatter(
             x=t, y=np.array(y1[0, :]).astype(float),
             mode="lines",
-            name="Euler"
+            name="Order 0.5"
         )
     )
     fig1.add_trace(
         go.Scatter(
             x=t, y=np.array(y2[0, :]).astype(float),
             mode="lines",
-            name="Milstein"
+            name="Order 1.0"
         )
     )
     fig1.add_trace(
         go.Scatter(
             x=t, y=np.array(y3[0, :]).astype(float),
             mode="lines",
-            name="Taylor 1.5"
+            name="Order 1.5"
         )
     )
     fig1.add_trace(
         go.Scatter(
             x=t, y=np.array(y4[0, :]).astype(float),
             mode="lines",
-            name="Taylor 2.0"
+            name="Order 2.0"
         )
     )
     fig1.add_trace(
         go.Scatter(
             x=t, y=np.array(y5[0, :]).astype(float),
             mode="lines",
-            name="Taylor 2.5"
+            name="Order 2.5"
         )
     )
     fig1.show()

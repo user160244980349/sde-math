@@ -4,6 +4,7 @@ import sympy as sp
 
 import config as c
 import tools.database as db
+from mathematics.sde.nonlinear.q import get_q
 from mathematics.sde.nonlinear.functions.aj import Aj
 from mathematics.sde.nonlinear.functions.coefficients.c import C
 from mathematics.sde.nonlinear.functions.g import G
@@ -16,6 +17,19 @@ from mathematics.sde.nonlinear.functions.lj import Lj
 
 
 class MyTestCase(unittest.TestCase):
+    # @unittest.skip("Success")
+    def test_q(self):
+
+        print()
+        db.connect(c.database)
+
+        dt = 0.01
+        eps = 0.0000001
+
+        print(get_q((0, 1, 2), dt, eps))
+
+        self.assertEqual(True, True)
+
     @unittest.skip("Success")
     def test_Lj(self):
         a = sp.Matrix([

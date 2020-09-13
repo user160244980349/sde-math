@@ -34,8 +34,8 @@ class StrongTaylorStratonovich1p5(sp.Function):
         a = sp.MatrixSymbol("a", n, 1)
         b = sp.MatrixSymbol("b", n, m)
 
-        if isinstance(q1, sp.Number):
-            C.preload(int(q1))
+        if isinstance(q, sp.Number) and isinstance(q1, sp.Number):
+            C.preload(int(q), int(q1))
 
         i1, i2, i3 = sp.symbols("i1 i2 i3")
         aj = Aj(i, a, b, dxs)

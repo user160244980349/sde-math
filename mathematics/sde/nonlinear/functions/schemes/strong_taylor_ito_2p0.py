@@ -36,8 +36,10 @@ class StrongTaylorIto2p0(sp.Function):
         a = sp.MatrixSymbol("a", n, 1)
         b = sp.MatrixSymbol("b", n, m)
 
-        if isinstance(q1, sp.Number) and isinstance(q3, sp.Number):
-            C.preload(int(q1), int(q3))
+
+        if isinstance(q, sp.Number) and isinstance(q1, sp.Number) and \
+                isinstance(q3, sp.Number):
+            C.preload(int(q), int(q1), int(q3))
 
         i1, i2, i3, i4 = sp.symbols("i1 i2 i3 i4")
         formula = \
