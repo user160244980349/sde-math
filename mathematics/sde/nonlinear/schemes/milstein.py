@@ -1,12 +1,14 @@
+import logging
 from time import time
 
 import numpy as np
 import sympy as sp
 
 from mathematics.sde.nonlinear.functions.schemes.milstein import Milstein
+from mathematics.sde.nonlinear.q import get_q
 
 
-def milstein(y0: np.array, a: sp.Matrix, b: sp.Matrix, q: int, times: tuple):
+def milstein(y0: np.array, a: sp.Matrix, b: sp.Matrix, k: float, times: tuple):
     """
     Performs modeling with Milstein method with matrix substitutions in a loop
     
@@ -18,7 +20,7 @@ def milstein(y0: np.array, a: sp.Matrix, b: sp.Matrix, q: int, times: tuple):
         matrix a
     b : numpy.ndarray
         matrix b
-    q : int
+    q : tuple
         amount of independent random variables
     times : tuple
         integration limits and step
@@ -30,8 +32,7 @@ def milstein(y0: np.array, a: sp.Matrix, b: sp.Matrix, q: int, times: tuple):
         list of time moments
     """
     start_time = time()
-    print("--------------------------")
-    print(f"[{(time() - start_time):.3f} seconds] Start Milstein")
+    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Milstein start")
 
     # Ranges
     n = b.shape[0]
@@ -43,11 +44,12 @@ def milstein(y0: np.array, a: sp.Matrix, b: sp.Matrix, q: int, times: tuple):
     # Defining context
     args = sp.symbols(f"x1:{n + 1}")
     ticks = int((t2 - t1) / dt)
+    q = get_q(2, dt, k, 1)
 
     # Symbols
     sym_i, sym_t = sp.Symbol("i"), sp.Symbol("t")
-    sym_ksi = sp.MatrixSymbol("ksi", q + 1, m)
-    sym_y = Milstein(sym_i, sp.Matrix(args), a, b, q, dt, sym_ksi, args).doit()
+    sym_ksi = sp.MatrixSymbol("ksi", q[0] + 1, m)
+    sym_y = Milstein(sym_i, sp.Matrix(args), a, b, dt, sym_ksi, args, q).doit()
 
     args_extended = list()
     args_extended.extend(args)
@@ -58,7 +60,7 @@ def milstein(y0: np.array, a: sp.Matrix, b: sp.Matrix, q: int, times: tuple):
     for tr in range(n):
         y_compiled.append(sp.utilities.lambdify(args_extended, sym_y.subs(sym_i, tr), "numpy"))
 
-    print(f"[{(time() - start_time):.3f} seconds] Subs are finished")
+    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Milstein subs are finished")
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]
@@ -67,10 +69,10 @@ def milstein(y0: np.array, a: sp.Matrix, b: sp.Matrix, q: int, times: tuple):
 
     # Dynamic substitutions with integration
     for p in range(ticks - 1):
-        values = [*y[:, p], t[p], np.random.randn(q + 1, m)]
+        values = [*y[:, p], t[p], np.random.randn(q[0] + 1, m)]
         for tr in range(n):
             y[tr, p + 1] = y_compiled[tr](*values)
 
-    print(f"[{(time() - start_time):.3f} seconds] Calculations are finished")
+    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Milstein calculations are finished")
 
     return y, t

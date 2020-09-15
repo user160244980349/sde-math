@@ -24,7 +24,7 @@ def create_c_table():
     db.execute(
         "CREATE TABLE `C` ("
         "    `id`    integer PRIMARY KEY AUTOINCREMENT,"
-        "    `index` text,"
+        "    `index` text unique,"
         "    `value` text"
         ")"
     )

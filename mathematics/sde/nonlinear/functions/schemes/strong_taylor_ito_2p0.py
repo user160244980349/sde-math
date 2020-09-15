@@ -1,6 +1,5 @@
 import sympy as sp
 
-from mathematics.sde.nonlinear.functions.coefficients.c import C
 from mathematics.sde.nonlinear.functions.g import G
 from mathematics.sde.nonlinear.functions.ito.i0 import I0
 from mathematics.sde.nonlinear.functions.ito.i00 import I00
@@ -16,7 +15,7 @@ class StrongTaylorIto2p0(sp.Function):
     """
     Strong Taylor 2.0 method
     """
-    nargs = 11
+    nargs = 8
 
     def __new__(cls, *args, **kwargs):
         """
@@ -31,15 +30,11 @@ class StrongTaylorIto2p0(sp.Function):
         sympy.Expr
             formula to simplify and substitutions
         """
-        i, yp, m_a, m_b, q, q1, q2, q3, dt, ksi, dxs = sp.sympify(args)
+        i, yp, m_a, m_b, dt, ksi, dxs, q = sp.sympify(args)
+        q = args[7]
         n, m = m_b.shape[0], m_b.shape[1]
         a = sp.MatrixSymbol("a", n, 1)
         b = sp.MatrixSymbol("b", n, m)
-
-
-        if isinstance(q, sp.Number) and isinstance(q1, sp.Number) and \
-                isinstance(q3, sp.Number):
-            C.preload(int(q), int(q1), int(q3))
 
         i1, i2, i3, i4 = sp.symbols("i1 i2 i3 i4")
         formula = \
@@ -50,7 +45,7 @@ class StrongTaylorIto2p0(sp.Function):
             sp.Sum(
                 sp.Sum(
                     G(b[:, i1], b[i, i2], dxs) *
-                    I00(i1, i2, q, dt, ksi),
+                    I00(i1, i2, q[0], dt, ksi),
                     (i2, 0, m - 1)),
                 (i1, 0, m - 1)) + \
             sp.Sum(
@@ -63,7 +58,7 @@ class StrongTaylorIto2p0(sp.Function):
                 sp.Sum(
                     sp.Sum(
                         G(b[:, i1], G(b[:, i2], b[i, i3], dxs), dxs) *
-                        I000(i1, i2, i3, q1, dt, ksi),
+                        I000(i1, i2, i3, q[1], dt, ksi),
                         (i3, 1, m - 1)),
                     (i2, 1, m - 1)),
                 (i1, 1, m - 1)) + \
@@ -71,10 +66,10 @@ class StrongTaylorIto2p0(sp.Function):
             sp.Sum(
                 sp.Sum(
                     G(b[:, i1], L(a, b, b[i, i2], dxs), dxs) *
-                    (I10(i1, i2, q2, dt, ksi) - I01(i1, i2, q2, dt, ksi)) -
-                    L(a, b, G(b[:, i1], b[i, i1], dxs), dxs) * I10(i1, i2, q2, dt, ksi) +
+                    (I10(i1, i2, q[2], dt, ksi) - I01(i1, i2, q[2], dt, ksi)) -
+                    L(a, b, G(b[:, i1], b[i, i1], dxs), dxs) * I10(i1, i2, q[2], dt, ksi) +
                     G(b[:, i1], G(b[:, i2], a[i, 0], dxs), dxs) *
-                    (I10(i1, i2, q2, dt, ksi) + dt * I00(i1, i2, q, dt, ksi)),
+                    (I10(i1, i2, q[2], dt, ksi) + dt * I00(i1, i2, q[0], dt, ksi)),
                     (i2, 1, m - 1)),
                 (i1, 1, m - 1)) + \
             sp.Sum(
@@ -82,7 +77,7 @@ class StrongTaylorIto2p0(sp.Function):
                     sp.Sum(
                         sp.Sum(
                             G(b[:, i1], G(b[:, i2], G(b[:, i3], b[i, i4], dxs), dxs), dxs) *
-                            I0000(i1, i2, i3, i4, q3, dt, ksi),
+                            I0000(i1, i2, i3, i4, q[3], dt, ksi),
                             (i4, 1, m - 1)),
                         (i3, 1, m - 1)),
                     (i2, 1, m - 1)),

@@ -25,7 +25,8 @@ class StrongTaylorStratonovich1p0(sp.Function):
         sympy.Expr
             formula to simplify and substitutions
         """
-        i, yp, m_a, m_b, q, dt, ksi, dxs = sp.sympify(args)
+        i, yp, m_a, m_b, dt, ksi, dxs, q = sp.sympify(args)
+        q = args[7]
         n, m = m_b.shape[0], m_b.shape[1]
         a = sp.MatrixSymbol("a", n, 1)
         b = sp.MatrixSymbol("b", n, m)
@@ -40,7 +41,7 @@ class StrongTaylorStratonovich1p0(sp.Function):
             sp.Sum(
                 sp.Sum(
                     G(b[:, i1], b[i, i2], dxs) *
-                    J00(i1, i2, q, dt, ksi),
+                    J00(i1, i2, q[0], dt, ksi),
                     (i2, 0, m - 1)),
                 (i1, 0, m - 1))
 

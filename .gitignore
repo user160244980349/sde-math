@@ -1,6 +1,3 @@
-# Resources
-/resources
-
 # External libraries
 /venv
 
@@ -17,3 +14,4 @@ __pycache__/
 
 # DB files
 *.db
+*.db.lock

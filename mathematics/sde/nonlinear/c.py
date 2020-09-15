@@ -26,8 +26,7 @@ def get_c(indices: tuple, weights: tuple):
         c = sp.integrate(polynomial(indices[i]) * (x + 1) ** w[i] * c, (x, -1, y)).subs(y, x)
     c = sp.integrate(polynomial(indices[0]) * (x + 1) ** w[0] * c, (x, -1, 1))
 
-    w = [False if weight != 0 else True for weight in weights]
-    if all(w):
+    if sum(w) % 2 == 0:
         return c
     else:
         return -c

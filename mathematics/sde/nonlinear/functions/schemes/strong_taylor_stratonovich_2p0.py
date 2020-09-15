@@ -1,7 +1,6 @@
 import sympy as sp
 
 from mathematics.sde.nonlinear.functions.aj import Aj
-from mathematics.sde.nonlinear.functions.coefficients.c import C
 from mathematics.sde.nonlinear.functions.g import G
 from mathematics.sde.nonlinear.functions.lj import Lj
 from mathematics.sde.nonlinear.functions.stratonovich.j0 import J0
@@ -17,7 +16,7 @@ class StrongTaylorStratonovich2p0(sp.Function):
     """
     Strong Taylor 2.0 method
     """
-    nargs = 11
+    nargs = 8
 
     def __new__(cls, *args, **kwargs):
         """
@@ -32,14 +31,11 @@ class StrongTaylorStratonovich2p0(sp.Function):
         sympy.Expr
             formula to simplify and substitutions
         """
-        i, yp, m_a, m_b, q, q1, q2, q3, dt, ksi, dxs = sp.sympify(args)
+        i, yp, m_a, m_b, dt, ksi, dxs, q = sp.sympify(args)
+        q = args[7]
         n, m = m_b.shape[0], m_b.shape[1]
         a = sp.MatrixSymbol("a", n, 1)
         b = sp.MatrixSymbol("b", n, m)
-
-        if isinstance(q, sp.Number) and isinstance(q1, sp.Number) and \
-                isinstance(q3, sp.Number):
-            C.preload(int(q), int(q1), int(q3))
 
         i1, i2, i3, i4 = sp.symbols("i1 i2 i3 i4")
         aj = Aj(i, a, b, dxs)
@@ -51,7 +47,7 @@ class StrongTaylorStratonovich2p0(sp.Function):
             sp.Sum(
                 sp.Sum(
                     G(b[:, i1], b[i, i2], dxs) *
-                    J00(i1, i2, q, dt, ksi),
+                    J00(i1, i2, q[0], dt, ksi),
                     (i2, 0, m - 1)),
                 (i1, 0, m - 1)) + \
             sp.Sum(
@@ -64,7 +60,7 @@ class StrongTaylorStratonovich2p0(sp.Function):
                 sp.Sum(
                     sp.Sum(
                         G(b[:, i1], G(b[:, i2], b[i, i3], dxs), dxs) *
-                        J000(i1, i2, i3, q1, dt, ksi),
+                        J000(i1, i2, i3, q[1], dt, ksi),
                         (i3, 1, m - 1)),
                     (i2, 1, m - 1)),
                 (i1, 1, m - 1)) + \
@@ -72,10 +68,10 @@ class StrongTaylorStratonovich2p0(sp.Function):
             sp.Sum(
                 sp.Sum(
                     G(b[:, i1], Lj(a, b[i, i2], dxs), dxs) *
-                    (J10(i1, i2, q2, dt, ksi) - J01(i1, i2, q2, dt, ksi)) -
-                    Lj(a, G(b[:, i1], b[i, i1], dxs), dxs) * J10(i1, i2, q2, dt, ksi) +
+                    (J10(i1, i2, q[2], dt, ksi) - J01(i1, i2, q[2], dt, ksi)) -
+                    Lj(a, G(b[:, i1], b[i, i1], dxs), dxs) * J10(i1, i2, q[2], dt, ksi) +
                     G(b[:, i1], G(b[:, i2], aj[i, 0], dxs), dxs) *
-                    (J10(i1, i2, q2, dt, ksi) + dt * J00(i1, i2, q, dt, ksi)),
+                    (J10(i1, i2, q[2], dt, ksi) + dt * J00(i1, i2, q[0], dt, ksi)),
                     (i2, 1, m - 1)),
                 (i1, 1, m - 1)) + \
             sp.Sum(
@@ -83,7 +79,7 @@ class StrongTaylorStratonovich2p0(sp.Function):
                     sp.Sum(
                         sp.Sum(
                             G(b[:, i1], G(b[:, i2], G(b[:, i3], b[i, i4], dxs), dxs), dxs) *
-                            J0000(i1, i2, i3, i4, q3, dt, ksi),
+                            J0000(i1, i2, i3, i4, q[3], dt, ksi),
                             (i4, 1, m - 1)),
                         (i3, 1, m - 1)),
                     (i2, 1, m - 1)),

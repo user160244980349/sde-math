@@ -1,13 +1,14 @@
+import logging
 from time import time
 
 import numpy as np
 import sympy as sp
 
 from mathematics.sde.nonlinear.functions.schemes.strong_taylor_ito_2p0 import StrongTaylorIto2p0
+from mathematics.sde.nonlinear.q import get_q
 
 
-def strong_taylor_ito_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
-                          q: int, q1: int, q2: int, q3: int, times: tuple):
+def strong_taylor_ito_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix, k: float, times: tuple):
     """
     Performs modeling with Strong Taylor-Ito 2.0 method with matrix substitutions in a loop
 
@@ -37,8 +38,7 @@ def strong_taylor_ito_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
         list of time moments
     """
     start_time = time()
-    print("--------------------------")
-    print(f"[{(time() - start_time):.3f} seconds] Start Strong Taylor-Ito 2.0")
+    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong Taylor-Ito 2.0 start")
 
     # Ranges
     n = b.shape[0]
@@ -50,12 +50,12 @@ def strong_taylor_ito_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
     # Defining context
     args = sp.symbols(f"x1:{n + 1}")
     ticks = int((t2 - t1) / dt)
+    q = get_q(4, dt, k, 2)
 
     # Symbols
     sym_i, sym_t = sp.Symbol("i"), sp.Symbol("t")
-    sym_ksi = sp.MatrixSymbol("ksi", q + 1, m)
-    sym_y = StrongTaylorIto2p0(sym_i, sp.Matrix(args), a, b,
-                               q, q1, q2, q3, dt, sym_ksi, args).doit()
+    sym_ksi = sp.MatrixSymbol("ksi", q[0] + 1, m)
+    sym_y = StrongTaylorIto2p0(sym_i, sp.Matrix(args), a, b, dt, sym_ksi, args, q).doit()
 
     args_extended = list()
     args_extended.extend(args)
@@ -66,7 +66,7 @@ def strong_taylor_ito_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
     for tr in range(n):
         y_compiled.append(sp.utilities.lambdify(args_extended, sym_y.subs(sym_i, tr), "numpy"))
 
-    print(f"[{(time() - start_time):.3f} seconds] Subs are finished")
+    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong Taylor-Ito 2.0 subs are finished")
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]
@@ -75,10 +75,10 @@ def strong_taylor_ito_2p0(y0: np.array, a: sp.Matrix, b: sp.Matrix,
 
     # Dynamic substitutions with integration
     for p in range(ticks - 1):
-        values = [*y[:, p], t[p], np.random.randn(q + 1, m)]
+        values = [*y[:, p], t[p], np.random.randn(q[0] + 1, m)]
         for tr in range(n):
             y[tr, p + 1] = y_compiled[tr](*values)
 
-    print(f"[{(time() - start_time):.3f} seconds] Calculations are finished")
+    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong Taylor-Ito 2.0 calculations are finished")
 
     return y, t

@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QApplication
 import tools.database as db
 from config import database
 from init.init import init
-from ui.window import Window
+from ui.main_window import MainWindow
 
 
 def main():
@@ -16,8 +16,8 @@ def main():
     db.connect(database)
 
     app = QApplication([])
-    window = Window()
-    window.show()
+    main_window = MainWindow()
+    main_window.show()
     exit(app_exit(app))
 
 

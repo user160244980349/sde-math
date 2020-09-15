@@ -4,8 +4,8 @@
 1. [SymPy](https://docs.sympy.org/latest/index.html)
 1. [numpy](https://numpy.org/)
 1. [scipy](https://www.scipy.org/)
-1. [plotly](https://plotly.com/python/)
 1. [PyQt5](https://pypi.org/project/PyQt5/)
+1. [plotly](https://plotly.com/python/)
 
 ##### AFTER CLONE #####
 1. Do `pip install -r requirements.txt`
@@ -59,8 +59,8 @@ Entry                   | Description
 - [x] Strong Taylor-Ito 2.5 method
     - [x] C coefficients with weights
     - [x] Referenced integrals
-- [ ] Strong Taylor-Ito 3.0 method p. 22 53-55 Ito strong order 3.0
-    - [ ] Referenced integrals
+- [x] Strong Taylor-Ito 3.0 method
+    - [x] Referenced integrals
 - [x] Stratonovich Aj and Lj, Integrals "J"
 - [x] Strong Taylor-Stratonovich 1.0 method
     - [x] Referenced integrals
@@ -70,8 +70,8 @@ Entry                   | Description
     - [x] Referenced integrals
 - [x] Strong Taylor-Stratonovich 2.5 method
     - [x] Referenced integrals
-- [ ] Strong Taylor-Stratonovich 3.0 method p. 31 lines 4 5 6 Stratonovich strong order 3.0
-    - [ ] Referenced integrals
+- [x] Strong Taylor-Stratonovich 3.0 method
+    - [x] Referenced integrals
 - [x] Optimize imports
 - [x] Replace ' with "
 - [x] Replace formats with f-strings
@@ -80,11 +80,31 @@ Entry                   | Description
 - [x] L and G expansion when subbing matrices and their symbols these are 
       understood but are not tested in terms of performance
 - [x] I10 and I01 with C from database
-- [x] Precision calculation with q
+- [x] Q ordering
+- [x] Replace prints with logs
+- [ ] ? Precision calculation with q
+- [ ] GUI
+    - [ ] Latex
+    - [ ] Main menu
+    - [ ] Linear section
+        - [ ] Input fields
+        - [ ] Console with info
+        - [ ] Calculate button
+        - [ ] Add on plot window button
+    - [ ] Nonlinear section
+        - [ ] Input fields
+        - [ ] Console with info
+        - [ ] Calculate button
+        - [ ] Add on plot window button
+    - [ ] Plot window
+        - [ ] Remove chart
+- [ ] Store indices in file
 - [ ] Optimize schemes where functions repeats
 - [ ] Review all schemes and formulas
 - [ ] Rewrite some of tests
-- [ ] Replace prints with logs
 - [ ] Statistical tests
-- [ ] GUI
-    - [ ] Latex output
+
+##### NOTES #####
+The most common solution is to use QStackedWidget and put all possible 
+widgets into the stack. When selecting an item, just call setCurrentWidget 
+to display the one you want.

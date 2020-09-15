@@ -1,8 +1,8 @@
 import sympy as sp
 
+from mathematics.sde.nonlinear.functions.coefficients.c10 import C10
 from mathematics.sde.nonlinear.functions.ind import Ind
 from mathematics.sde.nonlinear.functions.ito.i00 import I00
-from mathematics.sde.nonlinear.functions.coefficients.c10 import C10
 
 
 class I10(sp.Function):
@@ -30,12 +30,12 @@ class I10(sp.Function):
             j1, j2 = sp.symbols("j1 j2")
             from sympy.abc import i
             return sp.Sum(
-                       sp.Sum(
-                           C10(j2, j1, dt) * 
-                           (ksi[j1, i1] * ksi [j2, i2] - 
-                            Ind(i1, i2) * Ind(j1, j2)),
-                       (j2, 0, q)),
-                   (j1, 0, q))
+                sp.Sum(
+                    C10(j2, j1, dt) *
+                    (ksi[j1, i1] * ksi[j2, i2] -
+                     Ind(i1, i2) * Ind(j1, j2)),
+                    (j2, 0, q)),
+                (j1, 0, q))
         else:
             return super(I10, cls).__new__(cls, *args, **kwargs)
 
@@ -81,7 +81,7 @@ class I10_old(sp.Function):
                                     (i + 2) * ksi[i, i2] * ksi[i + 2, i1]) /
                                    sp.sqrt((2 * i + 1) * (2 * i + 5)) / (2 * i + 3) +
                                    ksi[i, i1] * ksi[i, i2] / (2 * i - 1) / (2 * i + 3),
-                               (i, 0, q)))
+                                   (i, 0, q)))
         else:
             return super(I10_old, cls).__new__(cls, *args, **kwargs)
 

@@ -3,7 +3,7 @@ Configuration file example, change this paths to your`s
 """
 
 # Paths to resources
-resources = "/home/user/resources"
+resources = "./resources/"
 
 # Path to database
-database = "/home/user/resources/database.db"
+database = "./resources/database.db"
