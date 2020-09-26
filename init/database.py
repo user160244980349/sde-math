@@ -11,23 +11,23 @@ def init():
     """
     Initializes database with necessary table schemes
     """
+    db.connect(c.database)
+
     if not fsys.is_locked(".db.lock"):
         print("Initializing database...")
         create_files_table()
         create_c_table()
         fsys.lock(".db.lock")
     else:
-        db.connect(c.database)
         update_coefficients()
-        db.disconnect()
+
+    db.disconnect()
 
 
 def create_files_table():
     """
     Initializes coefficients table
     """
-    db.connect(c.database)
-
     db.execute("DROP TABLE IF EXISTS `files`")
     db.execute(
         "CREATE TABLE `files` ("
@@ -36,15 +36,11 @@ def create_files_table():
         ")"
     )
 
-    db.disconnect()
-
 
 def create_c_table():
     """
     Initializes coefficients table
     """
-    db.connect(c.database)
-
     db.execute("DROP TABLE IF EXISTS `C`")
     db.execute(
         "CREATE TABLE `C` ("
@@ -55,8 +51,6 @@ def create_c_table():
     )
 
     update_coefficients()
-
-    db.disconnect()
 
 
 def update_coefficients():
@@ -81,4 +75,5 @@ def update_coefficients():
 
         db.execute(f"INSERT INTO `files` (`name`) VALUES ('{file}')")
 
-    db.execute(f"INSERT INTO `C` (`index`, `value`) VALUES {','.join(pairs)}")
+    if len(pairs) > 0:
+        db.execute(f"INSERT INTO `C` (`index`, `value`) VALUES {','.join(pairs)}")
