@@ -15,12 +15,23 @@ class Euler(sp.Function):
 
         Parameters
         ----------
-        args
-            bunch of necessary arguments
+        i : int
+            component of stochastic process
+        yp : numpy.ndarray
+            initial conditions
+        m_a : numpy.ndarray
+            algebraic, given in the variables x and t
+        m_b : numpy.ndarray
+            algebraic, given in the variables x and t
+        dt : float
+            integration step
+        ksi : numpy.ndarray
+            matrix of Gaussian variables
+
         Returns
         -------
         sympy.Expr
-            formula to simplify and substitutions
+            formula to simplify and substitute
         """
         i, yp, m_a, m_b, dt, ksi = sp.sympify(args)
         n, m = m_b.shape[0], m_b.shape[1]

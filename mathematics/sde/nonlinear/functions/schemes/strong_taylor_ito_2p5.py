@@ -24,16 +24,31 @@ class StrongTaylorIto2p5(sp.Function):
 
     def __new__(cls, *args, **kwargs):
         """
-        Creates new Taylor2p5 object with given args
+        Creates new StrongTaylorIto2p5 object with given args
 
         Parameters
         ----------
-        args
-            bunch of necessary arguments
+        i : int
+            component of stochastic process
+        yp : numpy.ndarray
+            initial conditions
+        m_a : numpy.ndarray
+            algebraic, given in the variables x and t
+        m_b : numpy.ndarray
+            algebraic, given in the variables x and t
+        dt : float
+            integration step
+        ksi : numpy.ndarray
+            matrix of Gaussian variables
+        dxs : tuple
+            variables to differentiate
+        q : tuple
+            amounts of q for integrals approximations
+            
         Returns
         -------
         sympy.Expr
-            formula to simplify and substitutions
+            formula to simplify and substitute
         """
         i, yp, m_a, m_b, dt, ksi, dxs, q = sp.sympify(args)
         q = args[7]
@@ -58,15 +73,15 @@ class StrongTaylorIto2p5(sp.Function):
                 (dt * I0(i1, dt, ksi) + I1(i1, dt, ksi)) -
                 L(a, b, b[i, i1], dxs) *
                 I1(i1, dt, ksi),
-                (i1, 1, m - 1)) + \
+                (i1, 0, m - 1)) + \
             sp.Sum(
                 sp.Sum(
                     sp.Sum(
                         G(b[:, i1], G(b[:, i2], b[i, i3], dxs), dxs) *
                         I000(i1, i2, i3, q[1], dt, ksi),
-                        (i3, 1, m - 1)),
-                    (i2, 1, m - 1)),
-                (i1, 1, m - 1)) + \
+                        (i3, 0, m - 1)),
+                    (i2, 0, m - 1)),
+                (i1, 0, m - 1)) + \
             dt ** 2 / 2 * L(a, b, a[i, 0], dxs) + \
             sp.Sum(
                 sp.Sum(
@@ -75,23 +90,23 @@ class StrongTaylorIto2p5(sp.Function):
                     L(a, b, G(b[:, i1], b[i, i1], dxs), dxs) * I10(i1, i2, q[2], dt, ksi) +
                     G(b[:, i1], G(b[:, i2], a[i, 0], dxs), dxs) *
                     (I10(i1, i2, q[2], dt, ksi) + dt * I00(i1, i2, q[0], dt, ksi)),
-                    (i2, 1, m - 1)),
-                (i1, 1, m - 1)) + \
+                    (i2, 0, m - 1)),
+                (i1, 0, m - 1)) + \
             sp.Sum(
                 sp.Sum(
                     sp.Sum(
                         sp.Sum(
                             G(b[:, i1], G(b[:, i2], G(b[:, i3], b[i, i4], dxs), dxs), dxs) *
                             I0000(i1, i2, i3, i4, q[3], dt, ksi),
-                            (i4, 1, m - 1)),
-                        (i3, 1, m - 1)),
-                    (i2, 1, m - 1)),
-                (i1, 1, m - 1)) + \
+                            (i4, 0, m - 1)),
+                        (i3, 0, m - 1)),
+                    (i2, 0, m - 1)),
+                (i1, 0, m - 1)) + \
             sp.Sum(G(b[:, i1], L(a, b, a[i, 0], dxs), dxs) *
                    (I2(i1, dt, ksi) / 2 + dt * I1(i1, dt, ksi) + dt ** 2 / 2 * I0(i1, dt, ksi)) +
                    L(a, b, L(a, b, b[i, i1], dxs), dxs) * I2(i1, dt, ksi) / 2 -
                    L(a, b, G(b[:, i1], a[i, 0], dxs), dxs) * (I2(i1, dt, ksi) + dt * I1(i1, dt, ksi)),
-                   (i1, 1, m - 1)) + \
+                   (i1, 0, m - 1)) + \
             sp.Sum(
                 sp.Sum(
                     sp.Sum(
@@ -103,9 +118,9 @@ class StrongTaylorIto2p5(sp.Function):
                         (dt * I000(i1, i2, i3, q[1], dt, ksi) - I001(i1, i2, i3, q[4], dt, ksi)) -
                         L(a, b, G(b[:, i1], G(b[:, i2], b[i, i3], dxs), dxs), dxs) *
                         I100(i1, i2, i3, q[6], dt, ksi),
-                        (i3, 1, m - 1)),
-                    (i2, 1, m - 1)),
-                (i1, 1, m - 1)) + \
+                        (i3, 0, m - 1)),
+                    (i2, 0, m - 1)),
+                (i1, 0, m - 1)) + \
             sp.Sum(
                 sp.Sum(
                     sp.Sum(
@@ -113,11 +128,11 @@ class StrongTaylorIto2p5(sp.Function):
                             sp.Sum(
                                 G(b[:, i1], G(b[:, i2], G(b[:, i3], G(b[:, i4], b[i, i5], dxs), dxs), dxs), dxs) *
                                 I00000(i1, i2, i3, i4, i5, q[7], dt, ksi),
-                                (i5, 1, m - 1)),
-                            (i4, 1, m - 1)),
-                        (i3, 1, m - 1)),
-                    (i2, 1, m - 1)),
-                (i1, 1, m - 1)) + \
+                                (i5, 0, m - 1)),
+                            (i4, 0, m - 1)),
+                        (i3, 0, m - 1)),
+                    (i2, 0, m - 1)),
+                (i1, 0, m - 1)) + \
             dt ** 3 / 6 * L(a, b, L(a, b, a[i, 0], dxs), dxs)
 
         if m_a.is_Matrix and m_b.is_Matrix:

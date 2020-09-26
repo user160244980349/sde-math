@@ -1,3 +1,5 @@
+import logging
+
 import sympy as sp
 
 import tools.database as db
@@ -32,17 +34,19 @@ class C(sp.Function):
             try:
                 return sp.Rational(cls._preloaded[index])
             except KeyError:
-                print(f"MISSING PRELOADED VERSION OF C_{index}")
+                logging.info(f"C: MISSING PRELOADED VERSION OF C_{index}")
                 respond = db.execute(
                     f"SELECT `value` FROM `C`"
                     f"WHERE REGEXP(`index`, '^{index}$')"
                 )
                 if len(respond) == 0:
                     new_c = get_c(indices, weights)
-                    print(f"ADDING NEW C_{index} = {new_c}")
+                    logging.info(f"C: ADDING NEW C_{index} = {new_c}")
                     db.execute(f"INSERT INTO `C` (`index`, `value`) VALUES ('{index}', '{new_c}')")
+                    cls._preloaded.update([(index, new_c)])
                     return sp.sympify(new_c)
                 else:
+                    cls._preloaded.update([(index, respond[0][0])])
                     return sp.sympify(respond[0][0])
         else:
             return super(C, cls).__new__(cls, indices, weights, **kwargs)

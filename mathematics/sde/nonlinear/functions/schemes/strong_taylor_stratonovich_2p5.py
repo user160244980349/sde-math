@@ -26,16 +26,31 @@ class StrongTaylorStratonovich2p5(sp.Function):
 
     def __new__(cls, *args, **kwargs):
         """
-        Creates new Taylor2p5 object with given args
+        Creates new StrongTaylorStratonovich2p5 object with given args
 
         Parameters
         ----------
-        args
-            bunch of necessary arguments
+        i : int
+            component of stochastic process
+        yp : numpy.ndarray
+            initial conditions
+        m_a : numpy.ndarray
+            algebraic, given in the variables x and t
+        m_b : numpy.ndarray
+            algebraic, given in the variables x and t
+        dt : float
+            integration step
+        ksi : numpy.ndarray
+            matrix of Gaussian variables
+        dxs : tuple
+            variables to differentiate
+        q : tuple
+            amounts of q for integrals approximations
+
         Returns
         -------
         sympy.Expr
-            formula to simplify and substitutions
+            formula to simplify and substitute
         """
         i, yp, m_a, m_b, dt, ksi, dxs, q = sp.sympify(args)
         q = args[7]
@@ -61,15 +76,15 @@ class StrongTaylorStratonovich2p5(sp.Function):
                 (dt * J0(i1, dt, ksi) + J1(i1, dt, ksi)) -
                 Lj(a, b[i, i1], dxs) *
                 J1(i1, dt, ksi),
-                (i1, 1, m - 1)) + \
+                (i1, 0, m - 1)) + \
             sp.Sum(
                 sp.Sum(
                     sp.Sum(
                         G(b[:, i1], G(b[:, i2], b[i, i3], dxs), dxs) *
                         J000(i1, i2, i3, q[1], dt, ksi),
-                        (i3, 1, m - 1)),
-                    (i2, 1, m - 1)),
-                (i1, 1, m - 1)) + \
+                        (i3, 0, m - 1)),
+                    (i2, 0, m - 1)),
+                (i1, 0, m - 1)) + \
             dt ** 2 / 2 * Lj(a, aj[i, 0], dxs) + \
             sp.Sum(
                 sp.Sum(
@@ -78,23 +93,23 @@ class StrongTaylorStratonovich2p5(sp.Function):
                     Lj(a, G(b[:, i1], b[i, i1], dxs), dxs) * J10(i1, i2, q[2], dt, ksi) +
                     G(b[:, i1], G(b[:, i2], aj[i, 0], dxs), dxs) *
                     (J10(i1, i2, q[2], dt, ksi) + dt * J00(i1, i2, q[0], dt, ksi)),
-                    (i2, 1, m - 1)),
-                (i1, 1, m - 1)) + \
+                    (i2, 0, m - 1)),
+                (i1, 0, m - 1)) + \
             sp.Sum(
                 sp.Sum(
                     sp.Sum(
                         sp.Sum(
                             G(b[:, i1], G(b[:, i2], G(b[:, i3], b[i, i4], dxs), dxs), dxs) *
                             J0000(i1, i2, i3, i4, q[3], dt, ksi),
-                            (i4, 1, m - 1)),
-                        (i3, 1, m - 1)),
-                    (i2, 1, m - 1)),
-                (i1, 1, m - 1)) + \
+                            (i4, 0, m - 1)),
+                        (i3, 0, m - 1)),
+                    (i2, 0, m - 1)),
+                (i1, 0, m - 1)) + \
             sp.Sum(G(b[:, i1], Lj(a, aj[i, 0], dxs), dxs) *
                    (J2(i1, dt, ksi) / 2 + dt * J1(i1, dt, ksi) + dt ** 2 / 2 * J0(i1, dt, ksi)) +
                    Lj(a, Lj(a, b[i, i1], dxs), dxs) * J2(i1, dt, ksi) / 2 -
                    Lj(a, G(b[:, i1], aj[i, 0], dxs), dxs) * (J2(i1, dt, ksi) + dt * J1(i1, dt, ksi)),
-                   (i1, 1, m - 1)) + \
+                   (i1, 0, m - 1)) + \
             sp.Sum(
                 sp.Sum(
                     sp.Sum(
@@ -106,9 +121,9 @@ class StrongTaylorStratonovich2p5(sp.Function):
                         (dt * J000(i1, i2, i3, q[1], dt, ksi) - J001(i1, i2, i3, q[4], dt, ksi)) -
                         Lj(a, G(b[:, i1], G(b[:, i2], b[i, i3], dxs), dxs), dxs) *
                         J100(i1, i2, i3, q[6], dt, ksi),
-                        (i3, 1, m - 1)),
-                    (i2, 1, m - 1)),
-                (i1, 1, m - 1)) + \
+                        (i3, 0, m - 1)),
+                    (i2, 0, m - 1)),
+                (i1, 0, m - 1)) + \
             sp.Sum(
                 sp.Sum(
                     sp.Sum(
@@ -116,11 +131,11 @@ class StrongTaylorStratonovich2p5(sp.Function):
                             sp.Sum(
                                 G(b[:, i1], G(b[:, i2], G(b[:, i3], G(b[:, i4], b[i, i5], dxs), dxs), dxs), dxs) *
                                 J00000(i1, i2, i3, i4, i5, q[7], dt, ksi),
-                                (i5, 1, m - 1)),
-                            (i4, 1, m - 1)),
-                        (i3, 1, m - 1)),
-                    (i2, 1, m - 1)),
-                (i1, 1, m - 1)) + \
+                                (i5, 0, m - 1)),
+                            (i4, 0, m - 1)),
+                        (i3, 0, m - 1)),
+                    (i2, 0, m - 1)),
+                (i1, 0, m - 1)) + \
             dt ** 3 / 6 * L(a, b, L(a, b, a[i, 0], dxs), dxs)
 
         if m_a.is_Matrix and m_b.is_Matrix:

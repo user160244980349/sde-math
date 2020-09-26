@@ -29,7 +29,7 @@ class J00(sp.Function):
                           sp.Sum(
                               (ksi[i - 1, i1] * ksi[i, i2] -
                                ksi[i, i1] * ksi[i - 1, i2]) /
-                              sp.sqrt(i ** 2 * 4 - 1),
+                              sp.sqrt((i + 1) ** 2 * 4 - 1),
                               (i, 1, q)))
         else:
             return super(J00, cls).__new__(cls, *args, **kwargs)

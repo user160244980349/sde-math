@@ -1,6 +1,20 @@
 import os
+import re
 
 import config as c
+
+
+def get_files(path, pattern):
+    """
+    Gives list of files containing coefficients
+
+    Returns
+    -------
+    list
+        list of available files
+    """
+    return [os.path.join(path, f)
+            for f in os.listdir(c.resources) if re.match(pattern, f)]
 
 
 def is_locked(filename: str):

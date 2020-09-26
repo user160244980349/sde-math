@@ -1,3 +1,4 @@
+import logging
 import unittest
 
 import sympy as sp
@@ -15,6 +16,8 @@ from mathematics.sde.nonlinear.functions.l import L
 from mathematics.sde.nonlinear.functions.lj import Lj
 from mathematics.sde.nonlinear.q import get_q
 
+logging.basicConfig(level=logging.INFO)
+
 
 class MyTestCase(unittest.TestCase):
     # @unittest.skip("Success")
@@ -22,10 +25,12 @@ class MyTestCase(unittest.TestCase):
         print()
         db.connect(c.database)
 
-        dt = 0.01
-        eps = 0.0000001
-
-        print(get_q((0, 1, 2), dt, eps))
+        # get_q(dt: float, k: float, r: float)
+        # print(f"1.0 :{get_q(2 ** (-6), 1, 1.0)}")
+        # print(f"1.5 :{get_q(0.05, 1, 1.5)}")
+        print(f"2.0 :{get_q(0.1, 1, 2.0)}")
+        # print(f"2.5 :{get_q(0.11736, 1, 2.5)}")
+        # print(f"3.0 :{get_q(0.11736, 1, 3.0)}")
 
         self.assertEqual(True, True)
 

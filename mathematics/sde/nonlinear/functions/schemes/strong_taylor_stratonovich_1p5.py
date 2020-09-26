@@ -18,16 +18,31 @@ class StrongTaylorStratonovich1p5(sp.Function):
 
     def __new__(cls, *args, **kwargs):
         """
-        Creates new Taylor1p5 object with given args
+        Creates new StrongTaylorStratonovich1p5 object with given args
 
         Parameters
         ----------
-        args
-            bunch of necessary arguments
+        i : int
+            component of stochastic process
+        yp : numpy.ndarray
+            initial conditions
+        m_a : numpy.ndarray
+            algebraic, given in the variables x and t
+        m_b : numpy.ndarray
+            algebraic, given in the variables x and t
+        dt : float
+            integration step
+        ksi : numpy.ndarray
+            matrix of Gaussian variables
+        dxs : tuple
+            variables to differentiate
+        q : tuple
+            amounts of q for integrals approximations
+
         Returns
         -------
         sympy.Expr
-            formula to simplify and substitutions
+            formula to simplify and substitute
         """
         i, yp, m_a, m_b, dt, ksi, dxs, q = sp.sympify(args)
         q = args[7]
@@ -52,15 +67,15 @@ class StrongTaylorStratonovich1p5(sp.Function):
                 G(b[:, i1], aj[i, 0], dxs) *
                 (dt * J0(i1, dt, ksi) + J1(i1, dt, ksi)) -
                 Lj(a, b[i, i1], dxs) *
-                J1(i1, dt, ksi), (i1, 1, m - 1)) + \
+                J1(i1, dt, ksi), (i1, 0, m - 1)) + \
             sp.Sum(
                 sp.Sum(
                     sp.Sum(
                         G(b[:, i1], G(b[:, i2], b[i, i3], dxs), dxs) *
                         J000(i1, i2, i3, q[1], dt, ksi),
-                        (i3, 1, m - 1)),
-                    (i2, 1, m - 1)),
-                (i1, 1, m - 1)) + \
+                        (i3, 0, m - 1)),
+                    (i2, 0, m - 1)),
+                (i1, 0, m - 1)) + \
             dt ** 2 / 2 * L(a, b, a[i, 0], dxs)
 
         if m_a.is_Matrix and m_b.is_Matrix:

@@ -19,8 +19,7 @@ Entry                   | Description
 `main_gui.py`           | GUI application
 `main_linear.py`        | console linear modeling
 `main_nonlinear.py`     | console nonlinear modeling
-`main_txt_store_c.py`   | console store C coefficients in txt
-`main_db_store_c.py`    | console store C coefficients in db
+`main_new_c.py`         | console store C coefficients in txt
 
 ##### TODO #####
 - [x] Generation of C coefficients
@@ -82,7 +81,12 @@ Entry                   | Description
 - [x] I10 and I01 with C from database
 - [x] Q ordering
 - [x] Replace prints with logs
-- [ ] ? Precision calculation with q
+- [x] Precision calculation with q
+- [x] Big database of C
+- [x] Store indices in file
+- [x] Restore indices from file in a separate module
+- [x] Fix ksi index error
+- [ ] Fix stack error
 - [ ] GUI
     - [ ] Latex
     - [ ] Main menu
@@ -98,7 +102,6 @@ Entry                   | Description
         - [ ] Add on plot window button
     - [ ] Plot window
         - [ ] Remove chart
-- [ ] Store indices in file
 - [ ] Optimize schemes where functions repeats
 - [ ] Review all schemes and formulas
 - [ ] Rewrite some of tests

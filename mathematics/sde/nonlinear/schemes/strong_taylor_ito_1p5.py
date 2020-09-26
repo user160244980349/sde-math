@@ -46,7 +46,9 @@ def strong_taylor_ito_1p5(y0: np.array, a: sp.Matrix, b: sp.Matrix, k: float, ti
     # Defining context
     args = sp.symbols(f"x1:{n + 1}")
     ticks = int((t2 - t1) / dt)
-    q = get_q(3, dt, k, 1.5)
+    q = get_q(dt, k, 1.5)
+    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using C = {k}")
+    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using q = {q}")
 
     # Symbols
     sym_i, sym_t = sp.Symbol("i"), sp.Symbol("t")

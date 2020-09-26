@@ -1,7 +1,10 @@
+import csv
+import os
+
 import config as c
 import tools.database as db
-from mathematics.sde.nonlinear.c import get_c
 from tools import fsys
+from tools.fsys import get_files
 
 
 def init():
@@ -10,8 +13,30 @@ def init():
     """
     if not fsys.is_locked(".db.lock"):
         print("Initializing database...")
+        create_files_table()
         create_c_table()
         fsys.lock(".db.lock")
+    else:
+        db.connect(c.database)
+        update_coefficients()
+        db.disconnect()
+
+
+def create_files_table():
+    """
+    Initializes coefficients table
+    """
+    db.connect(c.database)
+
+    db.execute("DROP TABLE IF EXISTS `files`")
+    db.execute(
+        "CREATE TABLE `files` ("
+        "    `id`    integer PRIMARY KEY AUTOINCREMENT,"
+        "    `name` text unique"
+        ")"
+    )
+
+    db.disconnect()
 
 
 def create_c_table():
@@ -29,24 +54,31 @@ def create_c_table():
         ")"
     )
 
-    pairs = [f"('{i}:{j}:{k}_0:0:0', '{get_c((i, j, k), (0, 0, 0))}')"
-             for i in range(7)
-             for j in range(7)
-             for k in range(7)]
-
-    pairs.extend([f"('{i}:{j}:{k}:{m}_0:0:0:0', '{get_c((i, j, k, m), (0, 0, 0, 0))}')"
-                  for i in range(3)
-                  for j in range(3)
-                  for k in range(3)
-                  for m in range(3)])
-
-    pairs.extend([f"('{i}:{j}:{k}:{m}:{n}_0:0:0:0:0', '{get_c((i, j, k, m, n), (0, 0, 0, 0, 0))}')"
-                  for i in range(2)
-                  for j in range(2)
-                  for k in range(2)
-                  for m in range(2)
-                  for n in range(2)])
-
-    db.execute(f"INSERT INTO `C` (`index`, `value`) VALUES {','.join(pairs)}")
+    update_coefficients()
 
     db.disconnect()
+
+
+def update_coefficients():
+    """
+    Updates coefficients table
+    """
+    files = get_files(c.resources, r'c_.*\.csv')
+    loaded_files = [record[0] for record in db.execute("SELECT `name` FROM `files`")]
+    difference = [f for f in files if f not in loaded_files]
+
+    pairs = []
+    for file in difference:
+
+        with open(os.path.join(file)) as f:
+            reader = csv.reader(f, delimiter=';', quotechar='"')
+            for row in reader:
+                if len(pairs) > c.read_buffer_size:
+                    db.execute(f"INSERT INTO `C` (`index`, `value`) VALUES {','.join(pairs)}")
+                    pairs.clear()
+
+                pairs.append(f"('{row[0]}', '{row[1]}')")
+
+        db.execute(f"INSERT INTO `files` (`name`) VALUES ('{file}')")
+
+    db.execute(f"INSERT INTO `C` (`index`, `value`) VALUES {','.join(pairs)}")

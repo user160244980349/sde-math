@@ -54,11 +54,13 @@ def strong_taylor_stratonovich_2p5(y0: np.array, a: sp.Matrix, b: sp.Matrix, k: 
     # Defining context
     args = sp.symbols(f"x1:{n + 1}")
     ticks = int((t2 - t1) / dt)
-    q = get_q(8, dt, k, 2.5)
+    q = get_q(dt, k, 2.5)
+    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using C = {k}")
+    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using q = {q}")
 
     # Symbols
     sym_i, sym_t = sp.Symbol("i"), sp.Symbol("t")
-    sym_ksi = sp.MatrixSymbol("ksi", q[0] + 1, m)
+    sym_ksi = sp.MatrixSymbol("ksi", q[0] + 2, m)
     sym_y = StrongTaylorStratonovich2p5(sym_i, sp.Matrix(args), a, b, dt, sym_ksi, args, q).doit()
 
     args_extended = list()
@@ -80,7 +82,7 @@ def strong_taylor_stratonovich_2p5(y0: np.array, a: sp.Matrix, b: sp.Matrix, k: 
 
     # Dynamic substitutions with integration
     for p in range(ticks - 1):
-        values = [*y[:, p], t[p], np.random.randn(q[0] + 1, m)]
+        values = [*y[:, p], t[p], np.random.randn(q[0] + 2, m)]
         for tr in range(n):
             y[tr, p + 1] = y_compiled[tr](*values)
 

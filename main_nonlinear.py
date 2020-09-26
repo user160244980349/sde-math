@@ -9,6 +9,16 @@ import config as c
 import tools.database as db
 from init import init
 from mathematics.sde.nonlinear.schemes.euler import euler
+from mathematics.sde.nonlinear.schemes. \
+    strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
+from mathematics.sde.nonlinear.schemes. \
+    strong_taylor_stratonovich_1p5 import strong_taylor_stratonovich_1p5
+from mathematics.sde.nonlinear.schemes. \
+    strong_taylor_stratonovich_2p0 import strong_taylor_stratonovich_2p0
+from mathematics.sde.nonlinear.schemes. \
+    strong_taylor_stratonovich_2p5 import strong_taylor_stratonovich_2p5
+from mathematics.sde.nonlinear.schemes. \
+    strong_taylor_stratonovich_3p0 import strong_taylor_stratonovich_3p0
 # from mathematics.sde.nonlinear.schemes.milstein import milstein
 # from mathematics.sde.nonlinear.schemes. \
 #     strong_taylor_ito_1p5 import strong_taylor_ito_1p5
@@ -18,18 +28,6 @@ from mathematics.sde.nonlinear.schemes.euler import euler
 #     strong_taylor_ito_2p5 import strong_taylor_ito_2p5
 # from mathematics.sde.nonlinear.schemes. \
 #     strong_taylor_ito_3p0 import strong_taylor_ito_3p0
-
-
-from mathematics.sde.nonlinear.schemes.\
-    strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
-from mathematics.sde.nonlinear.schemes.\
-    strong_taylor_stratonovich_1p5 import strong_taylor_stratonovich_1p5
-from mathematics.sde.nonlinear.schemes.\
-    strong_taylor_stratonovich_2p0 import strong_taylor_stratonovich_2p0
-from mathematics.sde.nonlinear.schemes.\
-    strong_taylor_stratonovich_2p5 import strong_taylor_stratonovich_2p5
-from mathematics.sde.nonlinear.schemes.\
-    strong_taylor_stratonovich_3p0 import strong_taylor_stratonovich_3p0
 
 
 def main():
@@ -82,8 +80,8 @@ def main():
     #     "x2"
     # ])
 
-    taylor_low_order = (y0, m_a, m_b, (0, 0.1, 15))
-    taylor_higher_orders = (y0, m_a, m_b, 0.1, (0, 0.1, 15))
+    taylor_low_order = (y0, m_a, m_b, (0, 0.25, 10))
+    taylor_higher_orders = (y0, m_a, m_b, 5000, (0, 0.25, 10))
 
     # Euler
     np.random.seed(703)
