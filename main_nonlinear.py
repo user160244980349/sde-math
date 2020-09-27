@@ -42,7 +42,7 @@ def main():
 
     y0 = np.array([
         [1],
-        [0]
+        [1.5]
     ])
 
     m_a = sp.Matrix([
@@ -80,8 +80,8 @@ def main():
     #     "x2"
     # ])
 
-    taylor_low_order = (y0, m_a, m_b, (0, 0.25, 10))
-    taylor_higher_orders = (y0, m_a, m_b, 5000, (0, 0.25, 10))
+    taylor_low_order = (y0, m_a, m_b, (0, 0.1, 10))
+    taylor_higher_orders = (y0, m_a, m_b, 1000, (0, 0.1, 10))
 
     # Euler
     np.random.seed(703)
@@ -110,42 +110,42 @@ def main():
     fig1 = go.Figure()
     fig1.add_trace(
         go.Scatter(
-            x=t, y=np.array(y1[0, :]).astype(float),
+            x=t, y=np.array(y1[1, :]).astype(float),
             mode="lines",
             name="Order 0.5"
         )
     )
     fig1.add_trace(
         go.Scatter(
-            x=t, y=np.array(y2[0, :]).astype(float),
+            x=t, y=np.array(y2[1, :]).astype(float),
             mode="lines",
             name="Order 1.0"
         )
     )
     fig1.add_trace(
         go.Scatter(
-            x=t, y=np.array(y3[0, :]).astype(float),
+            x=t, y=np.array(y3[1, :]).astype(float),
             mode="lines",
             name="Order 1.5"
         )
     )
     fig1.add_trace(
         go.Scatter(
-            x=t, y=np.array(y4[0, :]).astype(float),
+            x=t, y=np.array(y4[1, :]).astype(float),
             mode="lines",
             name="Order 2.0"
         )
     )
     fig1.add_trace(
         go.Scatter(
-            x=t, y=np.array(y5[0, :]).astype(float),
+            x=t, y=np.array(y5[1, :]).astype(float),
             mode="lines",
             name="Order 2.5"
         )
     )
     fig1.add_trace(
         go.Scatter(
-            x=t, y=np.array(y6[0, :]).astype(float),
+            x=t, y=np.array(y6[1, :]).astype(float),
             mode="lines",
             name="Order 3.0"
         )

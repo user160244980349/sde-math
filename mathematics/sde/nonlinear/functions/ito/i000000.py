@@ -26,8 +26,8 @@ class I000000(sp.Function):
         i1, i2, i3, i4, i5, i6, q, dt, ksi = sp.sympify(args)
         if isinstance(i1, sp.Number) and isinstance(i2, sp.Number) \
                 and isinstance(i3, sp.Number) and isinstance(i4, sp.Number) \
-                and isinstance(i5, sp.Number) and isinstance(q, sp.Number) \
-                and isinstance(dt, sp.Number):
+                and isinstance(i5, sp.Number) and isinstance(i6, sp.Number) \
+                and isinstance(q, sp.Number) and isinstance(dt, sp.Number):
             j1, j2, j3, j4, j5, j6 = sp.symbols("j1 j2 j3 j4 j5 j6")
             return \
                 sp.Sum(
@@ -68,7 +68,7 @@ class I000000(sp.Function):
                                          Ind(j3, j5) * Ind(i3, i5) * ksi[j1, i1] * ksi[j2, i2] * ksi[j4, i4] * ksi[
                                              j6, i6] -
                                          Ind(j4, j5) * Ind(i4, i5) * ksi[j1, i1] * ksi[j2, i2] * ksi[j3, i3] * ksi[
-                                             j6, i6] -
+                                             j6, i6] +
                                          Ind(j1, j2) * Ind(i1, i2) * Ind(j3, j4) * Ind(i3, i4) * ksi[j5, i5] * ksi[
                                              j6, i6] +
                                          Ind(j1, j2) * Ind(i1, i2) * Ind(j3, j5) * Ind(i3, i5) * ksi[j4, i4] * ksi[
