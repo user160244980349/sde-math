@@ -86,7 +86,9 @@ Entry                   | Description
 - [x] Store indices in file
 - [x] Restore indices from file in a separate module
 - [x] Fix ksi index error
+- [x] Permanent DB connection
 - [ ] Fix stack error
+- [ ] More efficient C preload
 - [ ] GUI
     - [ ] Latex
     - [ ] Main menu

@@ -1,4 +1,5 @@
 import csv
+import logging
 import os
 
 import config as c
@@ -11,17 +12,13 @@ def init():
     """
     Initializes database with necessary table schemes
     """
-    db.connect(c.database)
-
     if not fsys.is_locked(".db.lock"):
-        print("Initializing database...")
+        logging.info("Init: Initializing database...")
         create_files_table()
         create_c_table()
         fsys.lock(".db.lock")
     else:
         update_coefficients()
-
-    db.disconnect()
 
 
 def create_files_table():

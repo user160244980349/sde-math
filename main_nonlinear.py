@@ -7,7 +7,7 @@ import sympy as sp
 
 import config as c
 import tools.database as db
-from init import init
+from init.init import init
 from mathematics.sde.nonlinear.schemes.euler import euler
 from mathematics.sde.nonlinear.schemes. \
     strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
@@ -37,8 +37,9 @@ def main():
 
     logging.basicConfig(level=logging.INFO)
 
-    init.init()
     db.connect(c.database)
+
+    init()
 
     y0 = np.array([
         [1],

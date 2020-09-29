@@ -16,8 +16,7 @@ def main():
     writer = Task(thread_writer, (buffer, filename), sync=False)
     writer.start()
 
-    Task(thread_c3, (buffer, 51, 56, (0, 0, 0)))
-    # Task(thread_c3, (buffer, 0, 50, (0, 0, 0)))
+    # Task(thread_c3, (buffer, 0, 56, (0, 0, 0)))
 
     # Task(thread_c2, (buffer, 0, 15, (0, 1)))
     # Task(thread_c2, (buffer, 0, 15, (1, 0)))

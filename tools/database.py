@@ -38,18 +38,18 @@ def connect(db: str):
         connection.create_function("REGEXP", 2, regex)
 
         cursor = connection.cursor()
-        logging.info(f"SQLite Database is successfully connected")
+        logging.info(f"Database: SQLite Database is successfully connected")
 
         query = "select sqlite_version();"
         cursor.execute(query)
         record = cursor.fetchall()
-        logging.info(f"SQLite Database Version is: {record[0][0]}")
+        logging.info(f"Database: SQLite Database Version is: {record[0][0]}")
 
         query = "PRAGMA foreign_keys = ON;"
         cursor.execute(query)
 
     except sqlite3.Error as error:
-        logging.error(f"Error while connecting to sqlite: {error}")
+        logging.error(f"Database: Error while connecting to sqlite: {error}")
 
 
 def disconnect():
@@ -61,10 +61,10 @@ def disconnect():
         global cursor
 
         connection.close()
-        logging.info("The SQLite connection is closed")
+        logging.info("Database: The SQLite connection is closed")
 
     except sqlite3.Error as error:
-        logging.error(f"Error while connecting to sqlite: {error}")
+        logging.error(f"Database: Error while connecting to sqlite: {error}")
 
 
 def execute(query: str):
@@ -89,7 +89,7 @@ def execute(query: str):
         return records
 
     except sqlite3.Error as error:
-        logging.error(f"Error while connecting to sqlite: {error}")
+        logging.error(f"Database: Error while connecting to sqlite: {error}")
 
 
 def regex(value, pattern):
