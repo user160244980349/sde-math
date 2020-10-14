@@ -27,7 +27,8 @@ class C01(sp.Function):
             calculated value or symbolic expression
         """
         j2, j1, dt = sp.sympify(args)
-        if isinstance(j1, sp.Number) and isinstance(j2, sp.Number) and \
+        if isinstance(j1, sp.Number) and \
+                isinstance(j2, sp.Number) and \
                 isinstance(dt, sp.Number):
             return sp.sqrt((j1 * 2 + 1) * (j2 * 2 + 1)) * \
                    dt ** 2 * C((j2, j1), (0, 1)) / 8

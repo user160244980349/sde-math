@@ -70,8 +70,9 @@ class I01_old(sp.Function):
             formula to simplify and substitutions
         """
         i1, i2, q, dt, ksi = sp.sympify(args)
-        if isinstance(i1, sp.Number) and isinstance(i2, sp.Number) \
-                and isinstance(q, sp.Number):
+        if isinstance(i1, sp.Number) and \
+                isinstance(i2, sp.Number) and \
+                isinstance(q, sp.Number):
             from sympy.abc import i
             return \
                 -dt / 2 * I00(i1, i2, q, dt, ksi) - \

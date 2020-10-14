@@ -84,9 +84,9 @@ class StrongTaylorStratonovich2p0(sp.Function):
                 sp.Sum(
                     G(b[:, i1], Lj(a, b[i, i2], dxs), dxs) *
                     (J10(i1, i2, q[2], dt, ksi) - J01(i1, i2, q[2], dt, ksi)) -
-                    Lj(a, G(b[:, i1], b[i, i1], dxs), dxs) * J10(i1, i2, q[2], dt, ksi) +
+                    Lj(a, G(b[:, i1], b[i, i2], dxs), dxs) * J10(i1, i2, q[2], dt, ksi) +
                     G(b[:, i1], G(b[:, i2], aj[i, 0], dxs), dxs) *
-                    (J10(i1, i2, q[2], dt, ksi) + dt * J00(i1, i2, q[0], dt, ksi)),
+                    (J01(i1, i2, q[2], dt, ksi) + dt * J00(i1, i2, q[0], dt, ksi)),
                     (i2, 0, m - 1)),
                 (i1, 0, m - 1)) + \
             sp.Sum(

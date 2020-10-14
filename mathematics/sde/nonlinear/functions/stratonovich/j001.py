@@ -5,13 +5,13 @@ from mathematics.sde.nonlinear.functions.coefficients.c001 import C001
 
 class J001(sp.Function):
     """
-    Iterated stochastic Ito integral
+    Iterated stochastic Stratonovich integral
     """
     nargs = 6
 
     def __new__(cls, *args, **kwargs):
         """
-        Creates new I000 object with given args
+        Creates new J001 object with given args
 
         Parameters
         ----------
@@ -23,8 +23,10 @@ class J001(sp.Function):
             formula to simplify and substitutions
         """
         i1, i2, i3, q, dt, ksi = sp.sympify(args)
-        if isinstance(i1, sp.Number) and isinstance(i2, sp.Number) \
-                and isinstance(i3, sp.Number) and isinstance(q, sp.Number):
+        if isinstance(i1, sp.Number) and \
+                isinstance(i2, sp.Number) and \
+                isinstance(i3, sp.Number) and \
+                isinstance(q, sp.Number):
             j1, j2, j3 = sp.symbols("j1 j2 j3")
             return \
                 sp.Sum(

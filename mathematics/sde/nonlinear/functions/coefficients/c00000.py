@@ -27,9 +27,12 @@ class C00000(sp.Function):
             calculated value or symbolic expression
         """
         j5, j4, j3, j2, j1, dt = sp.sympify(args)
-        if isinstance(j1, sp.Number) and isinstance(j2, sp.Number) \
-                and isinstance(j3, sp.Number) and isinstance(j4, sp.Number) \
-                and isinstance(j5, sp.Number) and isinstance(dt, sp.Number):
+        if isinstance(j1, sp.Number) and \
+                isinstance(j2, sp.Number) and \
+                isinstance(j3, sp.Number) and \
+                isinstance(j4, sp.Number) and \
+                isinstance(j5, sp.Number) and \
+                isinstance(dt, sp.Number):
             return sp.sqrt((j1 * 2 + 1) * (j2 * 2 + 1) * (j3 * 2 + 1) * (j4 * 2 + 1) * (j5 * 2 + 1)) * \
                    dt ** sp.Rational(5, 2) * C((j5, j4, j3, j2, j1), (0, 0, 0, 0, 0)) / 32
         else:

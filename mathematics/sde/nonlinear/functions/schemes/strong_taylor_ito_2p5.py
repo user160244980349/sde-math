@@ -87,9 +87,9 @@ class StrongTaylorIto2p5(sp.Function):
                 sp.Sum(
                     G(b[:, i1], L(a, b, b[i, i2], dxs), dxs) *
                     (I10(i1, i2, q[2], dt, ksi) - I01(i1, i2, q[2], dt, ksi)) -
-                    L(a, b, G(b[:, i1], b[i, i1], dxs), dxs) * I10(i1, i2, q[2], dt, ksi) +
+                    L(a, b, G(b[:, i1], b[i, i2], dxs), dxs) * I10(i1, i2, q[2], dt, ksi) +
                     G(b[:, i1], G(b[:, i2], a[i, 0], dxs), dxs) *
-                    (I10(i1, i2, q[2], dt, ksi) + dt * I00(i1, i2, q[0], dt, ksi)),
+                    (I01(i1, i2, q[2], dt, ksi) + dt * I00(i1, i2, q[0], dt, ksi)),
                     (i2, 0, m - 1)),
                 (i1, 0, m - 1)) + \
             sp.Sum(
@@ -110,12 +110,12 @@ class StrongTaylorIto2p5(sp.Function):
             sp.Sum(
                 sp.Sum(
                     sp.Sum(
-                        G(b[:, i1], L(a, b, G(b[:, i2], b[i, i1], dxs), dxs), dxs) *
+                        G(b[:, i1], L(a, b, G(b[:, i2], b[i, i3], dxs), dxs), dxs) *
                         (I100(i1, i2, i3, q[6], dt, ksi) - I010(i1, i2, i3, q[5], dt, ksi)) +
                         G(b[:, i1], G(b[:, i2], L(a, b, b[i, i3], dxs), dxs), dxs) *
                         (I010(i1, i2, i3, q[5], dt, ksi) - I001(i1, i2, i3, q[4], dt, ksi)) +
                         G(b[:, i1], G(b[:, i2], G(b[:, i3], a[i, 0], dxs), dxs), dxs) *
-                        (dt * I000(i1, i2, i3, q[1], dt, ksi) - I001(i1, i2, i3, q[4], dt, ksi)) -
+                        (dt * I000(i1, i2, i3, q[1], dt, ksi) + I001(i1, i2, i3, q[4], dt, ksi)) -
                         L(a, b, G(b[:, i1], G(b[:, i2], b[i, i3], dxs), dxs), dxs) *
                         I100(i1, i2, i3, q[6], dt, ksi),
                         (i3, 0, m - 1)),

@@ -12,7 +12,7 @@ class I0100(sp.Function):
 
     def __new__(cls, *args, **kwargs):
         """
-        Creates new I0000 object with given args
+        Creates new I0100 object with given args
 
         Parameters
         ----------
@@ -24,9 +24,11 @@ class I0100(sp.Function):
             formula to simplify and substitutions
         """
         i1, i2, i3, i4, q, dt, ksi = sp.sympify(args)
-        if isinstance(i1, sp.Number) and isinstance(i2, sp.Number) \
-                and isinstance(i3, sp.Number) and isinstance(i4, sp.Number) \
-                and isinstance(q, sp.Number):
+        if isinstance(i1, sp.Number) and \
+                isinstance(i2, sp.Number) and \
+                isinstance(i3, sp.Number) and \
+                isinstance(i4, sp.Number) and \
+                isinstance(q, sp.Number):
             j1, j2, j3, j4 = sp.symbols("j1 j2 j3 j4")
             return \
                 sp.Sum(

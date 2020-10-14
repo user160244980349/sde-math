@@ -9,25 +9,25 @@ import config as c
 import tools.database as db
 from init.init import init
 from mathematics.sde.nonlinear.schemes.euler import euler
-from mathematics.sde.nonlinear.schemes. \
-    strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
-from mathematics.sde.nonlinear.schemes. \
-    strong_taylor_stratonovich_1p5 import strong_taylor_stratonovich_1p5
-from mathematics.sde.nonlinear.schemes. \
-    strong_taylor_stratonovich_2p0 import strong_taylor_stratonovich_2p0
-from mathematics.sde.nonlinear.schemes. \
-    strong_taylor_stratonovich_2p5 import strong_taylor_stratonovich_2p5
-from mathematics.sde.nonlinear.schemes. \
-    strong_taylor_stratonovich_3p0 import strong_taylor_stratonovich_3p0
-# from mathematics.sde.nonlinear.schemes.milstein import milstein
 # from mathematics.sde.nonlinear.schemes. \
-#     strong_taylor_ito_1p5 import strong_taylor_ito_1p5
+#     strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
 # from mathematics.sde.nonlinear.schemes. \
-#     strong_taylor_ito_2p0 import strong_taylor_ito_2p0
+#     strong_taylor_stratonovich_1p5 import strong_taylor_stratonovich_1p5
 # from mathematics.sde.nonlinear.schemes. \
-#     strong_taylor_ito_2p5 import strong_taylor_ito_2p5
+#     strong_taylor_stratonovich_2p0 import strong_taylor_stratonovich_2p0
 # from mathematics.sde.nonlinear.schemes. \
-#     strong_taylor_ito_3p0 import strong_taylor_ito_3p0
+#     strong_taylor_stratonovich_2p5 import strong_taylor_stratonovich_2p5
+# from mathematics.sde.nonlinear.schemes. \
+#     strong_taylor_stratonovich_3p0 import strong_taylor_stratonovich_3p0
+from mathematics.sde.nonlinear.schemes.milstein import milstein
+from mathematics.sde.nonlinear.schemes. \
+    strong_taylor_ito_1p5 import strong_taylor_ito_1p5
+from mathematics.sde.nonlinear.schemes. \
+    strong_taylor_ito_2p0 import strong_taylor_ito_2p0
+from mathematics.sde.nonlinear.schemes. \
+    strong_taylor_ito_2p5 import strong_taylor_ito_2p5
+from mathematics.sde.nonlinear.schemes. \
+    strong_taylor_ito_3p0 import strong_taylor_ito_3p0
 
 
 def main():
@@ -43,7 +43,7 @@ def main():
 
     y0 = np.array([
         [1],
-        [1.5]
+        [1]
     ])
 
     m_a = sp.Matrix([
@@ -52,8 +52,8 @@ def main():
     ])
 
     m_b = sp.Matrix([
-        ["0.5 * sin(x1)", "x2"],
-        ["x2", "0.5 * cos(x1)"]
+        ["0.1 * sin(x1)", "0.1 * x2"],
+        ["0.1 * x2", "0.1 * cos(x1)"]
     ])
 
     # m_b = sp.Matrix([
@@ -81,8 +81,8 @@ def main():
     #     "x2"
     # ])
 
-    taylor_low_order = (y0, m_a, m_b, (0, 0.1, 10))
-    taylor_higher_orders = (y0, m_a, m_b, 1000, (0, 0.1, 10))
+    taylor_low_order = (y0, m_a, m_b, (0, 0.01, 10))
+    taylor_higher_orders = (y0, m_a, m_b, 1000, (0, 0.01, 10))
 
     # Euler
     np.random.seed(703)
@@ -90,23 +90,23 @@ def main():
 
     # Taylor 1.0
     np.random.seed(703)
-    y2, t = strong_taylor_stratonovich_1p0(*taylor_higher_orders)
+    y2, t = milstein(*taylor_higher_orders)
 
     # Taylor 1.5
     np.random.seed(703)
-    y3, t = strong_taylor_stratonovich_1p5(*taylor_higher_orders)
+    y3, t = strong_taylor_ito_1p5(*taylor_higher_orders)
 
     # Taylor 2.0
     np.random.seed(703)
-    y4, t = strong_taylor_stratonovich_2p0(*taylor_higher_orders)
+    y4, t = strong_taylor_ito_2p0(*taylor_higher_orders)
 
     # Taylor 2.5
     np.random.seed(703)
-    y5, t = strong_taylor_stratonovich_2p5(*taylor_higher_orders)
+    y5, t = strong_taylor_ito_2p5(*taylor_higher_orders)
 
     # Taylor 3.0
     np.random.seed(703)
-    y6, t = strong_taylor_stratonovich_3p0(*taylor_higher_orders)
+    y6, t = strong_taylor_ito_3p0(*taylor_higher_orders)
 
     fig1 = go.Figure()
     fig1.add_trace(

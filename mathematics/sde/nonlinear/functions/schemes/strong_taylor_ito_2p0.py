@@ -82,9 +82,9 @@ class StrongTaylorIto2p0(sp.Function):
                 sp.Sum(
                     G(b[:, i1], L(a, b, b[i, i2], dxs), dxs) *
                     (I10(i1, i2, q[2], dt, ksi) - I01(i1, i2, q[2], dt, ksi)) -
-                    L(a, b, G(b[:, i1], b[i, i1], dxs), dxs) * I10(i1, i2, q[2], dt, ksi) +
+                    L(a, b, G(b[:, i1], b[i, i2], dxs), dxs) * I10(i1, i2, q[2], dt, ksi) +
                     G(b[:, i1], G(b[:, i2], a[i, 0], dxs), dxs) *
-                    (I10(i1, i2, q[2], dt, ksi) + dt * I00(i1, i2, q[0], dt, ksi)),
+                    (I01(i1, i2, q[2], dt, ksi) + dt * I00(i1, i2, q[0], dt, ksi)),
                     (i2, 0, m - 1)),
                 (i1, 0, m - 1)) + \
             sp.Sum(

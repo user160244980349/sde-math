@@ -12,7 +12,7 @@ class I00000(sp.Function):
 
     def __new__(cls, *args, **kwargs):
         """
-        Creates new I0000 object with given args
+        Creates new I00000 object with given args
 
         Parameters
         ----------
@@ -24,10 +24,13 @@ class I00000(sp.Function):
             formula to simplify and substitutions
         """
         i1, i2, i3, i4, i5, q, dt, ksi = sp.sympify(args)
-        if isinstance(i1, sp.Number) and isinstance(i2, sp.Number) \
-                and isinstance(i3, sp.Number) and isinstance(i4, sp.Number) \
-                and isinstance(i5, sp.Number) and isinstance(q, sp.Number) \
-                and isinstance(dt, sp.Number):
+        if isinstance(i1, sp.Number) and \
+                isinstance(i2, sp.Number) and \
+                isinstance(i3, sp.Number) and \
+                isinstance(i4, sp.Number) and \
+                isinstance(i5, sp.Number) and \
+                isinstance(q, sp.Number) and \
+                isinstance(dt, sp.Number):
             j1, j2, j3, j4, j5 = sp.symbols("j1 j2 j3 j4 j5")
             return \
                 sp.Sum(
@@ -38,7 +41,7 @@ class I00000(sp.Function):
                                     C00000(j5, j4, j3, j2, j1, dt) *
                                     (ksi[j1, i1] * ksi[j2, i2] * ksi[j3, i3] * ksi[j4, i4] * ksi[j5, i5] -
                                      Ind(i1, i2) * Ind(j1, j2) * ksi[j3, i3] * ksi[j4, i4] * ksi[j5, i5] -
-                                     Ind(i1, i3) * Ind(j1, j3) * ksi[j2, i2] * ksi[j3, i3] * ksi[j4, i4] -
+                                     Ind(i1, i3) * Ind(j1, j3) * ksi[j2, i2] * ksi[j4, i4] * ksi[j5, i5] -
                                      Ind(i1, i4) * Ind(j1, j4) * ksi[j2, i2] * ksi[j3, i3] * ksi[j5, i5] -
                                      Ind(i1, i5) * Ind(j1, j5) * ksi[j2, i2] * ksi[j3, i3] * ksi[j4, i4] -
                                      Ind(i2, i3) * Ind(j2, j3) * ksi[j1, i1] * ksi[j4, i4] * ksi[j5, i5] -
