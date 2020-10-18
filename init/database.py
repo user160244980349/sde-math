@@ -2,6 +2,8 @@ import csv
 import logging
 import os
 
+import sympy as sp
+
 import config as c
 import tools.database as db
 from tools import fsys
@@ -28,7 +30,7 @@ def create_files_table():
     db.execute("DROP TABLE IF EXISTS `files`")
     db.execute(
         "CREATE TABLE `files` ("
-        "    `id`    integer PRIMARY KEY AUTOINCREMENT,"
+        "    `id`   integer PRIMARY KEY AUTOINCREMENT,"
         "    `name` text unique"
         ")"
     )
@@ -43,7 +45,8 @@ def create_c_table():
         "CREATE TABLE `C` ("
         "    `id`    integer PRIMARY KEY AUTOINCREMENT,"
         "    `index` text unique,"
-        "    `value` text"
+        "    `value` text,"
+        "    `value_f` double"
         ")"
     )
 
@@ -58,19 +61,19 @@ def update_coefficients():
     loaded_files = [record[0] for record in db.execute("SELECT `name` FROM `files`")]
     difference = [f for f in files if f not in loaded_files]
 
-    pairs = []
+    rows = []
     for file in difference:
 
         with open(os.path.join(file)) as f:
             reader = csv.reader(f, delimiter=';', quotechar='"')
             for row in reader:
-                if len(pairs) > c.read_buffer_size:
-                    db.execute(f"INSERT INTO `C` (`index`, `value`) VALUES {','.join(pairs)}")
-                    pairs.clear()
+                if len(rows) > c.read_buffer_size:
+                    db.execute(f"INSERT INTO `C` (`index`, `value`, `value_f`) VALUES {','.join(rows)}")
+                    rows.clear()
 
-                pairs.append(f"('{row[0]}', '{row[1]}')")
+                rows.append(f"('{row[0]}', '{row[1]}', {float(sp.sympify(row[1]).evalf())})")
 
         db.execute(f"INSERT INTO `files` (`name`) VALUES ('{file}')")
 
-    if len(pairs) > 0:
-        db.execute(f"INSERT INTO `C` (`index`, `value`) VALUES {','.join(pairs)}")
+    if len(rows) > 0:
+        db.execute(f"INSERT INTO `C` (`index`, `value`, `value_f`) VALUES {','.join(rows)}")

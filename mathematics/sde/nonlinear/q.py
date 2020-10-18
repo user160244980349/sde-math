@@ -15,9 +15,9 @@ def solve_q(i):
     values : float
         value for iteration of loop that calculates amount of q
     """
-    return 1 / 2 - sum([
-        1 / (4 * (j ** 2) - 1)
-        for j in range(1, i)
+    return 1 / 4 - 1 / 2 * sum([
+        1 / (4 * j ** 2 - 1)
+        for j in range(1, i + 1)
     ])
 
 
@@ -40,9 +40,9 @@ def solve_q1(i):
         (2 * j2 + 1) *
         (2 * j3 + 1) *
         C((j1, j2, j3), (0, 0, 0)) ** 2
-        for j1 in range(i)
-        for j2 in range(i)
-        for j3 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
+        for j3 in range(i + 1)
     ])
 
 
@@ -64,8 +64,8 @@ def solve_q2(i):
         (2 * j1 + 1) *
         (2 * j2 + 1) *
         (C((j1, j2), (0, 1)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
     ])
 
 
@@ -87,8 +87,8 @@ def solve_q2_optional(i):
         (2 * j1 + 1) *
         (2 * j2 + 1) *
         (C((j1, j2), (1, 0)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
     ])
 
 
@@ -112,10 +112,10 @@ def solve_q3(i):
         (2 * j3 + 1) *
         (2 * j4 + 1) *
         (C((j1, j2, j3, j4), (0, 0, 0, 0)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
-        for j3 in range(i)
-        for j4 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
+        for j3 in range(i + 1)
+        for j4 in range(i + 1)
     ])
 
 
@@ -140,11 +140,11 @@ def solve_q4(i):
         (2 * j4 + 1) *
         (2 * j5 + 1) *
         (C((j1, j2, j3, j4, j5), (0, 0, 0, 0, 0)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
-        for j3 in range(i)
-        for j4 in range(i)
-        for j5 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
+        for j3 in range(i + 1)
+        for j4 in range(i + 1)
+        for j5 in range(i + 1)
     ])
 
 
@@ -166,8 +166,8 @@ def solve_q5(i):
         (2 * j1 + 1) *
         (2 * j2 + 1) *
         (C((j1, j2), (2, 0)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
     ])
 
 
@@ -189,8 +189,8 @@ def solve_q6(i):
         (2 * j1 + 1) *
         (2 * j2 + 1) *
         (C((j1, j2), (1, 1)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
     ])
 
 
@@ -212,8 +212,8 @@ def solve_q7(i):
         (2 * j1 + 1) *
         (2 * j2 + 1) *
         (C((j1, j2), (0, 2)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
     ])
 
 
@@ -236,9 +236,9 @@ def solve_q8(i):
         (2 * j2 + 1) *
         (2 * j3 + 1) *
         (C((j1, j2, j3), (0, 0, 1)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
-        for j3 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
+        for j3 in range(i + 1)
     ])
 
 
@@ -261,9 +261,9 @@ def solve_q9(i):
         (2 * j2 + 1) *
         (2 * j3 + 1) *
         (C((j1, j2, j3), (0, 1, 0)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
-        for j3 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
+        for j3 in range(i + 1)
     ])
 
 
@@ -286,9 +286,9 @@ def solve_q10(i):
         (2 * j2 + 1) *
         (2 * j3 + 1) *
         (C((j1, j2, j3), (1, 0, 0)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
-        for j3 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
+        for j3 in range(i + 1)
     ])
 
 
@@ -312,10 +312,10 @@ def solve_q11(i):
         (2 * j3 + 1) *
         (2 * j4 + 1) *
         (C((j1, j2, j3, j4), (0, 0, 0, 1)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
-        for j3 in range(i)
-        for j4 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
+        for j3 in range(i + 1)
+        for j4 in range(i + 1)
     ])
 
 
@@ -339,10 +339,10 @@ def solve_q12(i):
         (2 * j3 + 1) *
         (2 * j4 + 1) *
         (C((j1, j2, j3, j4), (0, 0, 1, 0)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
-        for j3 in range(i)
-        for j4 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
+        for j3 in range(i + 1)
+        for j4 in range(i + 1)
     ])
 
 
@@ -366,10 +366,10 @@ def solve_q13(i):
         (2 * j3 + 1) *
         (2 * j4 + 1) *
         (C((j1, j2, j3, j4), (0, 1, 0, 0)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
-        for j3 in range(i)
-        for j4 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
+        for j3 in range(i + 1)
+        for j4 in range(i + 1)
     ])
 
 
@@ -393,10 +393,10 @@ def solve_q14(i):
         (2 * j3 + 1) *
         (2 * j4 + 1) *
         (C((j1, j2, j3, j4), (1, 0, 0, 0)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
-        for j3 in range(i)
-        for j4 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
+        for j3 in range(i + 1)
+        for j4 in range(i + 1)
     ])
 
 
@@ -422,12 +422,12 @@ def solve_q15(i):
         (2 * j5 + 1) *
         (2 * j6 + 1) *
         (C((j1, j2, j3, j4, j5, j6), (0, 0, 0, 0, 0, 0)) ** 2)
-        for j1 in range(i)
-        for j2 in range(i)
-        for j3 in range(i)
-        for j4 in range(i)
-        for j5 in range(i)
-        for j6 in range(i)
+        for j1 in range(i + 1)
+        for j2 in range(i + 1)
+        for j3 in range(i + 1)
+        for j4 in range(i + 1)
+        for j5 in range(i + 1)
+        for j6 in range(i + 1)
     ])
 
 
@@ -471,7 +471,7 @@ def loop(dt: float, k: float, degree: int, solver):
     i : int
         amount of q
     """
-    i = 1
+    i = 0
     while True:
         if solver(i) <= k * dt ** degree:
             break

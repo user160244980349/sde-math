@@ -30,6 +30,7 @@ class Task:
 def _store(buffer, file):
     with open(os.path.join(c.resources, file), "a") as f:
         f.write("\n".join(buffer))
+        f.close()
 
 
 def thread_writer(task, args):

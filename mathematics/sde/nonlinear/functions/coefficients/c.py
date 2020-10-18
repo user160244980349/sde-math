@@ -12,7 +12,7 @@ class C(sp.Function):
     """
     _preloaded = dict()
 
-    def __new__(cls, indices: tuple, weights: tuple, **kwargs):
+    def __new__(cls, indices: tuple, weights: tuple, f=False, **kwargs):
         """
         Creates C coefficient object with needed indices and weights
 
@@ -32,22 +32,33 @@ class C(sp.Function):
                 len(indices) == len(weights):
             index = f"{':'.join([str(i) for i in indices])}_{':'.join([str(i) for i in weights])}"
             try:
-                return sp.Rational(cls._preloaded[index])
+                if not f:
+                    return sp.Rational(cls._preloaded[index][0])
+                else:
+                    return sp.Rational(cls._preloaded[index][1])
             except KeyError:
                 logging.info(f"C: MISSING PRELOADED VERSION OF C_{index}")
                 respond = db.execute(
-                    f"SELECT `value` FROM `C`"
+                    f"SELECT `value`, `value_f` FROM `C`"
                     f"WHERE REGEXP(`index`, '^{index}$')"
                 )
                 if len(respond) == 0:
                     new_c = get_c(indices, weights)
+                    evaluated_c = float(sp.sympify(new_c).evalf())
                     logging.info(f"C: ADDING NEW C_{index} = {new_c}")
-                    db.execute(f"INSERT INTO `C` (`index`, `value`) VALUES ('{index}', '{new_c}')")
-                    cls._preloaded.update([(index, new_c)])
-                    return sp.sympify(new_c)
+                    db.execute(f"INSERT INTO `C` (`index`, `value`, `value_f`) VALUES ('{index}', '{new_c}', "
+                               f"{float(sp.sympify(new_c).evalf())})")
+                    cls._preloaded.update([(index, (new_c, evaluated_c))])
+                    if not f:
+                        return sp.sympify(new_c)
+                    else:
+                        return evaluated_c
                 else:
-                    cls._preloaded.update([(index, respond[0][0])])
-                    return sp.sympify(respond[0][0])
+                    cls._preloaded.update([(index, respond[0])])
+                    if not f:
+                        return sp.sympify(respond[0][0])
+                    else:
+                        return respond[0][1]
         else:
             return super(C, cls).__new__(cls, indices, weights, **kwargs)
 
@@ -84,11 +95,13 @@ class C(sp.Function):
 
             regex = f"^{':'.join(['|'.join(pattern) for _ in range(q + 2)])}_.*$"
             query.append(
-                f"SELECT `index`, `value` FROM `C`"
+                f"SELECT `index`, `value`, `value_f` FROM `C`"
                 f"WHERE REGEXP(`index`, '{regex}')"
             )
 
-        cls._preloaded.update(db.execute("\nUNION\n".join(query)))
+        result = db.execute("\nUNION\n".join(query))
+        result = [(result[i][0], (result[i][1], result[i][2])) for i in range(len(result))]
+        cls._preloaded.update(result)
 
     def doit(self, **hints):
         """

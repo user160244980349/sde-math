@@ -108,6 +108,7 @@ Entry                   | Description
 - [ ] Review all schemes and formulas
 - [ ] Rewrite some of tests
 - [ ] Statistical tests
+- [ ] Rewrite approximations with indicators
 
 ##### NOTES #####
 The most common solution is to use QStackedWidget and put all possible 
