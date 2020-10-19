@@ -5,15 +5,15 @@ import sympy as sp
 
 import config as c
 import tools.database as db
-from mathematics.sde.nonlinear.functions.aj import Aj
-from mathematics.sde.nonlinear.functions.coefficients.c import C
-from mathematics.sde.nonlinear.functions.g import G
-from mathematics.sde.nonlinear.functions.ind import Ind
-from mathematics.sde.nonlinear.functions.ito.i0 import I0
-from mathematics.sde.nonlinear.functions.ito.i00 import I00
-from mathematics.sde.nonlinear.functions.ito.i000 import I000
-from mathematics.sde.nonlinear.functions.l import L
-from mathematics.sde.nonlinear.functions.lj import Lj
+from mathematics.sde.nonlinear.symbolic.aj import Aj
+from mathematics.sde.nonlinear.symbolic.coefficients.c import C
+from mathematics.sde.nonlinear.symbolic.g import G
+from mathematics.sde.nonlinear.symbolic.ind import Ind
+from mathematics.sde.nonlinear.symbolic.ito.i0 import I0
+from mathematics.sde.nonlinear.symbolic.ito.i00 import I00
+from mathematics.sde.nonlinear.symbolic.ito.i000 import I000
+from mathematics.sde.nonlinear.symbolic.l import L
+from mathematics.sde.nonlinear.symbolic.lj import Lj
 from mathematics.sde.nonlinear.q import get_q
 
 logging.basicConfig(level=logging.INFO)

@@ -4,7 +4,7 @@ from time import time
 import numpy as np
 import sympy as sp
 
-from mathematics.sde.nonlinear.functions.schemes.euler import Euler
+from mathematics.sde.nonlinear.symbolic.schemes.euler import Euler
 
 
 def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):

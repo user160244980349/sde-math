@@ -4,7 +4,7 @@ from time import time
 import numpy as np
 import sympy as sp
 
-from mathematics.sde.nonlinear.functions.schemes.milstein import Milstein
+from mathematics.sde.nonlinear.symbolic.schemes.milstein import Milstein
 from mathematics.sde.nonlinear.q import get_q
 
 

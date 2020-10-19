@@ -4,7 +4,7 @@ from time import time
 import numpy as np
 import sympy as sp
 
-from mathematics.sde.nonlinear.functions.schemes.strong_taylor_ito_3p0 import StrongTaylorIto3p0
+from mathematics.sde.nonlinear.symbolic.schemes.strong_taylor_ito_3p0 import StrongTaylorIto3p0
 from mathematics.sde.nonlinear.q import get_q
 
 

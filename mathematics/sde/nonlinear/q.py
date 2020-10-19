@@ -1,4 +1,4 @@
-from mathematics.sde.nonlinear.functions.coefficients.c import C
+from mathematics.sde.nonlinear.symbolic.coefficients.c import C
 
 
 def solve_q(i):

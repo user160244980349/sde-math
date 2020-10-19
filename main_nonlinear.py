@@ -84,69 +84,69 @@ def main():
     taylor_low_order = (y0, m_a, m_b, (0, 0.05, 10))
     taylor_higher_orders = (y0, m_a, m_b, 1000, (0, 0.05, 10))
 
+    fig1 = go.Figure()
+
     # Euler
     np.random.seed(703)
-    y1, t = euler(*taylor_low_order)
-
-    # Taylor 1.0
-    np.random.seed(703)
-    y2, t = strong_taylor_stratonovich_1p0(*taylor_higher_orders)
-
-    # Taylor 1.5
-    np.random.seed(703)
-    y3, t = strong_taylor_stratonovich_1p5(*taylor_higher_orders)
-
-    # Taylor 2.0
-    np.random.seed(703)
-    y4, t = strong_taylor_stratonovich_2p0(*taylor_higher_orders)
-
-    # Taylor 2.5
-    np.random.seed(703)
-    y5, t = strong_taylor_stratonovich_2p5(*taylor_higher_orders)
-
-    # Taylor 3.0
-    np.random.seed(703)
-    y6, t = strong_taylor_stratonovich_3p0(*taylor_higher_orders)
-
-    fig1 = go.Figure()
+    y, t = euler(*taylor_low_order)
     fig1.add_trace(
         go.Scatter(
-            x=t, y=np.array(y1[1, :]).astype(float),
+            x=t, y=np.array(y[1, :]).astype(float),
             mode="lines",
             name="Order 0.5"
         )
     )
+
+    # Taylor 1.0
+    np.random.seed(703)
+    y, t = strong_taylor_stratonovich_1p0(*taylor_higher_orders)
     fig1.add_trace(
         go.Scatter(
-            x=t, y=np.array(y2[1, :]).astype(float),
+            x=t, y=np.array(y[1, :]).astype(float),
             mode="lines",
             name="Order 1.0"
         )
     )
+
+    # Taylor 1.5
+    np.random.seed(703)
+    y, t = strong_taylor_stratonovich_1p5(*taylor_higher_orders)
     fig1.add_trace(
         go.Scatter(
-            x=t, y=np.array(y3[1, :]).astype(float),
+            x=t, y=np.array(y[1, :]).astype(float),
             mode="lines",
             name="Order 1.5"
         )
     )
+
+    # Taylor 2.0
+    np.random.seed(703)
+    y, t = strong_taylor_stratonovich_2p0(*taylor_higher_orders)
     fig1.add_trace(
         go.Scatter(
-            x=t, y=np.array(y4[1, :]).astype(float),
+            x=t, y=np.array(y[1, :]).astype(float),
             mode="lines",
             name="Order 2.0"
         )
     )
+
+    # Taylor 2.5
+    np.random.seed(703)
+    y, t = strong_taylor_stratonovich_2p5(*taylor_higher_orders)
     fig1.add_trace(
         go.Scatter(
-            x=t, y=np.array(y5[1, :]).astype(float),
+            x=t, y=np.array(y[1, :]).astype(float),
             mode="lines",
             name="Order 2.5"
         )
     )
+
+    # Taylor 3.0
+    np.random.seed(703)
+    y, t = strong_taylor_stratonovich_3p0(*taylor_higher_orders)
     fig1.add_trace(
         go.Scatter(
-            x=t, y=np.array(y6[1, :]).astype(float),
+            x=t, y=np.array(y[1, :]).astype(float),
             mode="lines",
             name="Order 3.0"
         )

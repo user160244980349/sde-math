@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import config as c
 import tools.database as db
-from mathematics.sde.nonlinear.functions.coefficients.c import C
+from mathematics.sde.nonlinear.symbolic.coefficients.c import C
 
 
 def m():
