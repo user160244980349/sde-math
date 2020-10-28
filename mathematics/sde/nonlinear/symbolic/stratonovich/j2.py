@@ -12,9 +12,8 @@ class J2(Function):
     def __new__(cls, *args, **kwargs):
         """
         Creates new J2 object with given args
-
         Parameters
-        −−−−−−−−−−
+        ==========
         i1 : int
             integral index
         dt : float
@@ -22,8 +21,8 @@ class J2(Function):
         ksi : numpy.ndarray
             matrix of Gaussian variables
         Returns
-        −−−−−−−
-        sympy . Expr
+        =======
+        sympy.Expr
             formula to simplify and substitute
         """
         i1, dt, ksi = sympify(args)
@@ -37,9 +36,8 @@ class J2(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         J2
         """
         return J2(*self.args, **hints)

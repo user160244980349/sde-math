@@ -11,31 +11,20 @@ from mathematics.sde.nonlinear.symbolic.schemes.strong_taylor_ito_2p5 import Str
 def strong_taylor_ito_2p5(y0: np.array, a: Matrix, b: Matrix, k: float, times: tuple):
     """
     Performs modeling with Strong Taylor-Ito 2.0 method with matrix substitutions in a loop
-
     Parameters
-    ----------
+    ==========
     y0 : numpy.ndarray
         initial conditions
     a : numpy.ndarray
         matrix a
     b : numpy.ndarray
         matrix b
-    q : int
-        amount of independent random variables
-    q1 : int
-        amount of independent random variables
-    q2 : int
-        amount of independent random variables
-    q3 : int
-        amount of independent random variables
-    q4 : int
-        amount of independent random variables
-    q5 : int
-        amount of independent random variables
+    k : float
+        precision constant
     times : tuple
         integration limits and step
     Returns
-    -------
+    =======
     y : numpy.ndarray
         solutions matrix
     t : list

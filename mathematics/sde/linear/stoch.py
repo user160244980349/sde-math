@@ -7,15 +7,14 @@ from mathematics.sde.linear.matrix import vec_to_eye
 def stoch(n: int, m_a: np.ndarray, m_f: np.ndarray, dt: float):
     """
     Root function for set of algorithms implemented below
-    
     Parameters
-    ----------
+    ==========
     n : int
     m_a : numpy.ndarray
     m_f : numpy.ndarray
     dt : float
     Returns
-    -------
+    =======
     numpy.ndarray
     """
     v_l2, m_s, m_d1 = algorithm_11_2(n, m_a, m_f, dt)
@@ -27,15 +26,14 @@ def algorithm_11_2(n: int, m_a: np.ndarray, m_f: np.ndarray, dt: float):
     """ Algorithm 11.2
     Algorithm in this module is implementation
     from the book named "xxx" in chapter nnn
-    
     Parameters
-    ----------
+    ==========
     n : int
     m_a : numpy.ndarray
     m_f : numpy.ndarray
     dt : float
     Returns
-    -------
+    =======
     eigenvalues : numpy.ndarray
     eigenvectors : numpy.ndarray
     m_d1 : numpy.ndarray

@@ -4,14 +4,12 @@ from mathematics.sde.nonlinear.symbolic.coefficients.c import C
 def solve_q(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -24,14 +22,12 @@ def solve_q(i):
 def solve_q1(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -49,14 +45,12 @@ def solve_q1(i):
 def solve_q2(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -72,14 +66,12 @@ def solve_q2(i):
 def solve_q2_optional(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -95,14 +87,12 @@ def solve_q2_optional(i):
 def solve_q3(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -122,14 +112,12 @@ def solve_q3(i):
 def solve_q4(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -151,14 +139,12 @@ def solve_q4(i):
 def solve_q5(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -174,14 +160,12 @@ def solve_q5(i):
 def solve_q6(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -197,14 +181,12 @@ def solve_q6(i):
 def solve_q7(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -220,14 +202,12 @@ def solve_q7(i):
 def solve_q8(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -245,14 +225,12 @@ def solve_q8(i):
 def solve_q9(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -270,14 +248,12 @@ def solve_q9(i):
 def solve_q10(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -295,14 +271,12 @@ def solve_q10(i):
 def solve_q11(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -322,14 +296,12 @@ def solve_q11(i):
 def solve_q12(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -349,14 +321,12 @@ def solve_q12(i):
 def solve_q13(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -376,14 +346,12 @@ def solve_q13(i):
 def solve_q14(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -403,14 +371,12 @@ def solve_q14(i):
 def solve_q15(i):
     """
     Calculates value for iteration of loop
-
     Parameters
-    ----------
+    ==========
     i : int
         amount of members
-
     Returns
-    -------
+    =======
     values : float
         value for iteration of loop that calculates amount of q
     """
@@ -453,10 +419,9 @@ q_ranges = [
 
 def loop(dt: float, k: float, degree: int, solver):
     """
-    Loop that choses amount of q that provides necessary accuracy
-
+    Loop that chooses amount of q that provides necessary accuracy
     Parameters
-    ----------
+    ==========
     dt : float
         delta time
     k : float
@@ -465,9 +430,8 @@ def loop(dt: float, k: float, degree: int, solver):
         degree of dt depending on q
     solver : function
         function that
-
     Returns
-    -------
+    =======
     i : int
         amount of q
     """
@@ -483,18 +447,16 @@ def get_q(dt: float, k: float, r: float):
     """
     Iterates solvers and get q values necessary to
     achieve given accuracy
-
     Parameters
-    ----------
+    ==========
     dt: float
         integration step
     k: float
         user chosen coefficient of accuracy
     r: float
         strong numerical scheme order
-
     Returns
-    -------
+    =======
     qs_result: tuple
         q values
     """

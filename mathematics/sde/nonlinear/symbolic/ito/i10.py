@@ -14,9 +14,8 @@ class I10(Function):
     def __new__(cls, *args, **kwargs):
         """
         Creates new I10 object with given args
-
         Parameters
-        −−−−−−−−−−
+        ==========
         i1 : int
             integral index
         i2 : int
@@ -28,8 +27,8 @@ class I10(Function):
         ksi : numpy.ndarray
             matrix of Gaussian variables
         Returns
-        −−−−−−−
-        sympy . Expr
+        =======
+        sympy.Expr
             formula to simplify and substitute
         """
         i1, i2, q, dt, ksi = sympify(args)
@@ -49,55 +48,54 @@ class I10(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         I10
         """
         return I10(*self.args, **hints)
 
 
-class I10_old(Function):
-    """
-    Iterated stochastic Ito integral
-    """
-    nargs = 5
-
-    def __new__(cls, *args, **kwargs):
-        """
-        Creates new I10 object with given args
-
-        Parameters
-        ----------
-        args
-            bunch of necessary arguments
-        Returns
-        -------
-        sympy.Expr
-            formula to simplify and substitutions
-        """
-        i1, i2, q, dt, ksi = sympify(args)
-        if isinstance(i1, Number) and isinstance(i2, Number) \
-                and isinstance(q, Number):
-            from sympy.abc import i
-            return \
-                -dt / 2 * I00(i1, i2, q, dt, ksi) - \
-                dt ** 2 / 4 * (ksi[0, i2] * ksi[1, i1] / sqrt(3) +
-                               Sum(
-                                   ((i + 1) * ksi[i + 2, i2] * ksi[i, i1] -
-                                    (i + 2) * ksi[i, i2] * ksi[i + 2, i1]) /
-                                   sqrt((2 * i + 1) * (2 * i + 5)) / (2 * i + 3) +
-                                   ksi[i, i1] * ksi[i, i2] / (2 * i - 1) / (2 * i + 3),
-                                   (i, 0, q)))
-        else:
-            return super(I10_old, cls).__new__(cls, *args, **kwargs)
-
-    def doit(self, **hints):
-        """
-        Tries to expand or calculate function
-
-        Returns
-        -------
-        I10
-        """
-        return I10_old(*self.args, **hints)
+# class I10_old(Function):
+#     """
+#     Iterated stochastic Ito integral
+#     """
+#     nargs = 5
+#
+#     def __new__(cls, *args, **kwargs):
+#         """
+#         Creates new I10 object with given args
+#
+#         Parameters
+#         ----------
+#         args
+#             bunch of necessary arguments
+#         Returns
+#         -------
+#         sympy.Expr
+#             formula to simplify and substitutions
+#         """
+#         i1, i2, q, dt, ksi = sympify(args)
+#         if isinstance(i1, Number) and isinstance(i2, Number) \
+#                 and isinstance(q, Number):
+#             from sympy.abc import i
+#             return \
+#                 -dt / 2 * I00(i1, i2, q, dt, ksi) - \
+#                 dt ** 2 / 4 * (ksi[0, i2] * ksi[1, i1] / sqrt(3) +
+#                                Sum(
+#                                    ((i + 1) * ksi[i + 2, i2] * ksi[i, i1] -
+#                                     (i + 2) * ksi[i, i2] * ksi[i + 2, i1]) /
+#                                    sqrt((2 * i + 1) * (2 * i + 5)) / (2 * i + 3) +
+#                                    ksi[i, i1] * ksi[i, i2] / (2 * i - 1) / (2 * i + 3),
+#                                    (i, 0, q)))
+#         else:
+#             return super(I10_old, cls).__new__(cls, *args, **kwargs)
+#
+#     def doit(self, **hints):
+#         """
+#         Tries to expand or calculate function
+#
+#         Returns
+#         -------
+#         I10
+#         """
+#         return I10_old(*self.args, **hints)

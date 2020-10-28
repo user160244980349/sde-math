@@ -13,9 +13,8 @@ class I11(Function):
     def __new__(cls, *args, **kwargs):
         """
         Creates new I11 object with given args
-
         Parameters
-        −−−−−−−−−−
+        ==========
         i1 : int
             integral index
         i2 : int
@@ -27,8 +26,8 @@ class I11(Function):
         ksi : numpy.ndarray
             matrix of Gaussian variables
         Returns
-        −−−−−−−
-        sympy . Expr
+        =======
+        sympy.Expr
             formula to simplify and substitute
         """
         i1, i2, q, dt, ksi = sympify(args)
@@ -46,9 +45,8 @@ class I11(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         I20
         """
         return I11(*self.args, **hints)

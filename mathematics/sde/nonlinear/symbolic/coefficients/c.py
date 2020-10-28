@@ -15,15 +15,14 @@ class C(Function):
     def __new__(cls, indices: tuple, weights: tuple, to_float=True, **kwargs):
         """
         Creates C coefficient object with needed indices and weights
-
         Parameters
-        ----------
+        ==========
         indices: tuple
             requested indices
         weights: tuple
             requested weights
         Returns
-        -------
+        =======
         symbolic.Rational or C
             calculated value or symbolic expression
         """
@@ -83,9 +82,8 @@ class C(Function):
         Updates dictionary of preloaded coefficients_legacy
         Note: weights are not accepted, such coefficients_legacy are loaded
         with all available weights
-
         Parameters
-        ----------
+        ==========
         args
             Indices for coefficients_legacy to download them from database
         """
@@ -122,9 +120,8 @@ class C(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-        
         Returns
-        -------
+        =======
         C
         """
         return C(*self.args, **hints)

@@ -12,9 +12,8 @@ class J20(Function):
     def __new__(cls, *args, **kwargs):
         """
         Creates new J20 object with given args
-
         Parameters
-        −−−−−−−−−−
+        ==========
         i1 : int
             integral index
         i2 : int
@@ -26,8 +25,8 @@ class J20(Function):
         ksi : numpy.ndarray
             matrix of Gaussian variables
         Returns
-        −−−−−−−
-        sympy . Expr
+        =======
+        sympy.Expr
             formula to simplify and substitute
         """
         i1, i2, q, dt, ksi = sympify(args)
@@ -45,9 +44,8 @@ class J20(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         J20
         """
         return J20(*self.args, **hints)

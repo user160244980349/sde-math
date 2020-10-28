@@ -12,9 +12,8 @@ class J0(Function):
     def __new__(cls, *args, **kwargs):
         """
         Calculates J0 integral approximation
-
         Parameters
-        −−−−−−−−−−
+        ==========
         i1 : int
             integral index
         dt : float
@@ -22,8 +21,8 @@ class J0(Function):
         ksi : numpy.ndarray
             matrix of Gaussian variables
         Returns
-        −−−−−−−
-        sympy . Expr
+        =======
+        sympy.Expr
             formula to simplify and substitute
         """
         i1, dt, ksi = sympify(args)
@@ -36,9 +35,8 @@ class J0(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         J0
         """
         return J0(*self.args, **hints)

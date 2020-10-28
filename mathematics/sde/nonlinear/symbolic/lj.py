@@ -12,13 +12,12 @@ class Lj(Operator):
     def __new__(cls, *args, **kwargs):
         """
         Creates new Lj object with given args
-
         Parameters
-        ----------
+        ==========
         args
             bunch of necessary arguments
         Returns
-        -------
+        =======
         sympy.Expr
             formula to simplify and substitutions
         """
@@ -36,9 +35,8 @@ class Lj(Operator):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         Lj
         """
         return Lj(*self.args, **hints)

@@ -7,14 +7,14 @@ def dindet(n: int, k: int, m_a: np.ndarray, m_b: np.ndarray, dt: float):
     Algorithm in this module is implementation
     from the book named "xxx" in chapter nnn
     Parameters
-    ----------
+    ==========
     n : int
     k : int
     m_a : numpy.array
     m_b : numpy.array
     dt : float
     Returns
-    -------
+    =======
     m_ad : numpy.array
     m_bd : numpy.array
     """

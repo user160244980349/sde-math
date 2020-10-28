@@ -6,15 +6,14 @@ from mathematics.sde.nonlinear.legendre_polynomial import polynomial
 def get_c(indices: tuple, weights: tuple):
     """
     Calculates C coefficient depending on indices and weights
-
     Parameters
-    ----------
+    ==========
     indices : tuple
         indices of coefficient
     weights : tuple
         weights of coefficient
     Returns
-    -------
+    =======
     sympy.Rational
     """
     from sympy.abc import x, y

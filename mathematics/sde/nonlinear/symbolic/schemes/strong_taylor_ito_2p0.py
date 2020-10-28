@@ -20,28 +20,24 @@ class StrongTaylorIto2p0(Function):
     def __new__(cls, *args, **kwargs):
         """
         Creates new StrongTaylorIto2p0 object with given args
-
         Parameters
-        ----------
+        ==========
         i : int
             component of stochastic process
         yp : numpy.ndarray
             initial conditions
-        m_a : numpy.ndarray
+        a : numpy.ndarray
             algebraic, given in the variables x and t
-        m_b : numpy.ndarray
+        b : numpy.ndarray
             algebraic, given in the variables x and t
         dt : float
             integration step
         ksi : numpy.ndarray
             matrix of Gaussian variables
-        dxs : tuple
-            variables to differentiate
         q : tuple
             amounts of q for integrals approximations
-
         Returns
-        -------
+        =======
         sympy.Expr
             formula to simplify and substitute
         """
@@ -94,9 +90,8 @@ class StrongTaylorIto2p0(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         sympy.Expr
         """
         return StrongTaylorIto2p0(*self.args, **hints)

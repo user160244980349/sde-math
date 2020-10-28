@@ -10,13 +10,12 @@ class Ind(Function):
     def __new__(cls, *args, **kwargs):
         """
         Creates new Ind object with given args
-
         Parameters
-        ----------
+        ==========
         args
             bunch of necessary arguments
         Returns
-        -------
+        =======
         sympy.Expr
             formula to simplify and substitutions
         """
@@ -34,9 +33,8 @@ class Ind(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         Ind
         """
         return Ind(*self.args, **hints)

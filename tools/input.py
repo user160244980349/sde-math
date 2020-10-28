@@ -8,9 +8,8 @@ class BoundExceedError(Exception):
 def input_matrix(n, m, s):
     """
     Input of matrix
-    
     Parameters
-    ----------
+    ==========
     n : int
         0 dimension volume of matrix
     m : int
@@ -18,7 +17,7 @@ def input_matrix(n, m, s):
     s : str
         split character
     Returns
-    -------
+    =======
     numpy.ndarray
     """
     mat = []
@@ -37,15 +36,14 @@ def input_matrix(n, m, s):
 def input_vector(n, s):
     """
     Input of vector
-    
     Parameters
-    ----------
+    ==========
     n : int
         volume of vector
     s : str
         split character
     Returns
-    -------
+    =======
     numpy.ndarray
     """
     row = input().strip().split(s)

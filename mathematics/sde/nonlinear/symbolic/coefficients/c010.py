@@ -15,15 +15,14 @@ class C010(Function):
         """
         Creates C coefficient object with needed
         indices and weights and calculates it
-
         Parameters
-        ----------
+        ==========
         indices: tuple
             requested indices
         weights: tuple
             requested weights
         Returns
-        -------
+        =======
         symbolic.Rational or C010
             calculated value or symbolic expression
         """
@@ -45,9 +44,8 @@ class C010(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         C010
         """
         return C010(*self.args, **hints)

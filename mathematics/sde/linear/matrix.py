@@ -8,13 +8,11 @@ class NotASquareMatrix(Exception):
 def vec_to_eye(vector):
     """
     Converts vector to eye matrix
-    
     Parameters
-    ----------
+    ==========
     vector : iterable
-
     Returns
-    -------
+    =======
     numpy.ndarray
     """
     n = len(vector)
@@ -29,12 +27,11 @@ def vec_to_eye(vector):
 def diagonal_to_column(matrix):
     """
     Converts diagonal  matrix to column vector
-    
     Parameters
-    ----------
+    ==========
     matrix : numpy.ndarray
     Returns
-    -------
+    =======
     column : numpy.ndarray
     """
     height = np.shape(matrix)[0]

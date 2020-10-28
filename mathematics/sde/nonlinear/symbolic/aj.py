@@ -13,13 +13,12 @@ class Aj(Operator):
     def __new__(cls, *args, **kwargs):
         """
         Creates new Aj object with given args
-
         Parameters
-        ----------
+        ==========
         args
             bunch of necessary arguments
         Returns
-        -------
+        =======
         sympy.Expr
             formula for simplifications and substitutions
         """

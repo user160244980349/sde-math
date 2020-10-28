@@ -15,13 +15,12 @@ class Zero(AbstractDistortion):
     def t(self, t: float):
         """
         Provides zero distortion at moment t
-
         Parameters
-        ----------
+        ==========
         t : float
             moment of time
         Returns
-        -------
+        =======
         float
             value of distortion
         """
@@ -39,13 +38,12 @@ class Const(AbstractDistortion):
     def t(self, t):
         """
         Provides const distortion at moment t
-
         Parameters
-        ----------
+        ==========
         t : float
             moment of time
         Returns
-        -------
+        =======
         float
             value of distortion
         """

@@ -11,21 +11,20 @@ from mathematics.sde.nonlinear.symbolic.schemes.strong_taylor_stratonovich_1p0 i
 def strong_taylor_stratonovich_1p0(y0: np.array, a: Matrix, b: Matrix, k: float, times: tuple):
     """
     Performs modeling with Strong Taylor-Stratonovich 1.0 method with matrix substitutions in a loop
-    
     Parameters
-    ----------
+    ==========
     y0 : numpy.ndarray
         initial conditions
     a : numpy.ndarray
         matrix a
     b : numpy.ndarray
         matrix b
-    q : int
-        amount of independent random variables
+    k : float
+        precision constant
     times : tuple
         integration limits and step
     Returns
-    -------
+    =======
     y : numpy.ndarray
         solutions matrix
     t : list

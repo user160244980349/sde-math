@@ -15,15 +15,14 @@ class C1000(Function):
         """
         Creates C coefficient object with needed
         indices and weights and calculates it
-
         Parameters
-        ----------
+        ==========
         indices: tuple
             requested indices
         weights: tuple
             requested weights
         Returns
-        -------
+        =======
         symbolic.Rational or C1000
             calculated value or symbolic expression
         """
@@ -47,9 +46,8 @@ class C1000(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         C1000
         """
         return C1000(*self.args, **hints)

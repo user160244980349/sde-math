@@ -15,15 +15,14 @@ class C20(Function):
         """
         Creates C coefficient object with needed
         indices and weights and calculates it
-
         Parameters
-        ----------
+        ==========
         indices: tuple
             requested indices
         weights: tuple
             requested weights
         Returns
-        -------
+        =======
         symbolic.Rational or C20
             calculated value or symbolic expression
         """
@@ -43,9 +42,8 @@ class C20(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         C20
         """
         return C20(*self.args, **hints)

@@ -10,9 +10,8 @@ from mathematics.sde.nonlinear.symbolic.schemes.euler import Euler
 def euler(y0: np.array, a: Matrix, b: Matrix, times: tuple):
     """
     Performs modeling with Euler method with matrix substitutions in a loop
-    
     Parameters
-    ----------
+    ==========
     y0 : numpy.ndarray
         initial conditions
     a : numpy.ndarray
@@ -22,7 +21,7 @@ def euler(y0: np.array, a: Matrix, b: Matrix, times: tuple):
     times : tuple
         integration limits and step
     Returns
-    -------
+    =======
     y : numpy.ndarray
         solutions matrix
     t : list

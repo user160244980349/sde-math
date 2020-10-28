@@ -13,9 +13,8 @@ class I00000(Function):
     def __new__(cls, *args, **kwargs):
         """
         Creates new I00000 object with given args
-
         Parameters
-        −−−−−−−−−−
+        ==========
         i1 : int
             integral index
         i2 : int
@@ -33,8 +32,8 @@ class I00000(Function):
         ksi : numpy.ndarray
             matrix of Gaussian variables
         Returns
-        −−−−−−−
-        sympy . Expr
+        =======
+        sympy.Expr
             formula to simplify and substitute
         """
         i1, i2, i3, i4, i5, q, dt, ksi = sympify(args)
@@ -85,9 +84,8 @@ class I00000(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         I00000
         """
         return I00000(*self.args, **hints)

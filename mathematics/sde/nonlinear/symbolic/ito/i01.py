@@ -2,7 +2,6 @@ from sympy import Function, Number, sympify, Sum, Add
 
 from mathematics.sde.nonlinear.symbolic.coefficients.c01 import C01
 from mathematics.sde.nonlinear.symbolic.ind import Ind
-from mathematics.sde.nonlinear.symbolic.ito.i00 import I00
 
 
 class I01(Function):
@@ -14,9 +13,8 @@ class I01(Function):
     def __new__(cls, *args, **kwargs):
         """
         Creates new I01 object with given args
-
         Parameters
-        −−−−−−−−−−
+        ==========
         i1 : int
             integral index
         i2 : int
@@ -28,8 +26,8 @@ class I01(Function):
         ksi : numpy.ndarray
             matrix of Gaussian variables
         Returns
-        −−−−−−−
-        sympy . Expr
+        =======
+        sympy.Expr
             formula to simplify and substitute
         """
         i1, i2, q, dt, ksi = sympify(args)
@@ -49,56 +47,55 @@ class I01(Function):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         I01
         """
         return I01(*self.args, **hints)
 
 
-class I01_old(Function):
-    """
-    Iterated stochastic Ito integral
-    """
-    nargs = 5
-
-    def __new__(cls, *args, **kwargs):
-        """
-        Creates new I01 object with given args
-
-        Parameters
-        ----------
-        args
-            bunch of necessary arguments
-        Returns
-        -------
-        sympy.Expr
-            formula to simplify and substitutions
-        """
-        i1, i2, q, dt, ksi = sympify(args)
-        if isinstance(i1, Number) and \
-                isinstance(i2, Number) and \
-                isinstance(q, Number):
-            from sympy.abc import i
-            return \
-                -dt / 2 * I00(i1, i2, q, dt, ksi) - \
-                dt ** 2 / 4 * (ksi[0, i1] * ksi[1, i2] / sqrt(3) +
-                               Sum(
-                                   ((i + 1) * ksi[i, i1] * ksi[i + 2, i2] -
-                                    (i + 1) * ksi[i + 2, i1] * ksi[i, i2]) /
-                                   sqrt((2 * i + 1) * (2 * i + 5)) / (2 * i + 3) -
-                                   ksi[i, i1] * ksi[i, i2] / (2 * i - 1) / (2 * i + 3),
-                                   (i, 0, q)))
-        else:
-            return super(I01_old, cls).__new__(cls, *args, **kwargs)
-
-    def doit(self, **hints):
-        """
-        Tries to expand or calculate function
-
-        Returns
-        -------
-        I01
-        """
-        return I01_old(*self.args, **hints)
+# class I01_old(Function):
+#     """
+#     Iterated stochastic Ito integral
+#     """
+#     nargs = 5
+#
+#     def __new__(cls, *args, **kwargs):
+#         """
+#         Creates new I01 object with given args
+#
+#         Parameters
+#         ----------
+#         args
+#             bunch of necessary arguments
+#         Returns
+#         -------
+#         sympy.Expr
+#             formula to simplify and substitutions
+#         """
+#         i1, i2, q, dt, ksi = sympify(args)
+#         if isinstance(i1, Number) and \
+#                 isinstance(i2, Number) and \
+#                 isinstance(q, Number):
+#             from sympy.abc import i
+#             return \
+#                 -dt / 2 * I00(i1, i2, q, dt, ksi) - \
+#                 dt ** 2 / 4 * (ksi[0, i1] * ksi[1, i2] / sqrt(3) +
+#                                Sum(
+#                                    ((i + 1) * ksi[i, i1] * ksi[i + 2, i2] -
+#                                     (i + 1) * ksi[i + 2, i1] * ksi[i, i2]) /
+#                                    sqrt((2 * i + 1) * (2 * i + 5)) / (2 * i + 3) -
+#                                    ksi[i, i1] * ksi[i, i2] / (2 * i - 1) / (2 * i + 3),
+#                                    (i, 0, q)))
+#         else:
+#             return super(I01_old, cls).__new__(cls, *args, **kwargs)
+#
+#     def doit(self, **hints):
+#         """
+#         Tries to expand or calculate function
+#
+#         Returns
+#         -------
+#         I01
+#         """
+#         return I01_old(*self.args, **hints)

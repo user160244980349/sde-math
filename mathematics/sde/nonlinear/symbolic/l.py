@@ -12,13 +12,12 @@ class L(Operator):
     def __new__(cls, *args, **kwargs):
         """
         Creates new L object with given args
-
         Parameters
-        ----------
+        ==========
         args
             bunch of necessary arguments
         Returns
-        -------
+        =======
         sympy.Expr
             formula to simplify and substitutions
         """
@@ -44,9 +43,8 @@ class L(Operator):
     def doit(self, **hints):
         """
         Tries to expand or calculate function
-
         Returns
-        -------
+        =======
         L
         """
         return L(*self.args, **hints)

@@ -8,6 +8,8 @@ from sympy import Matrix
 import config as c
 import tools.database as db
 from init.init import init
+from mathematics.sde.nonlinear.symbolic.coefficients.c import C
+
 from mathematics.sde.nonlinear.drivers.euler import euler
 from mathematics.sde.nonlinear.drivers. \
     strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
@@ -19,8 +21,6 @@ from mathematics.sde.nonlinear.drivers. \
     strong_taylor_stratonovich_2p5 import strong_taylor_stratonovich_2p5
 from mathematics.sde.nonlinear.drivers. \
     strong_taylor_stratonovich_3p0 import strong_taylor_stratonovich_3p0
-from mathematics.sde.nonlinear.symbolic.coefficients.c import C
-
 
 # from mathematics.sde.nonlinear.drivers.milstein import milstein
 # from mathematics.sde.nonlinear.drivers. \
@@ -84,8 +84,8 @@ def main():
     #     "x2"
     # ])
 
-    taylor_low_order = (y0, m_a, m_b, (0, 0.1, 10))
-    taylor_higher_orders = (y0, m_a, m_b, 1000, (0, 0.1, 10))
+    taylor_low_order = (y0, m_a, m_b, (0, 0.05, 10))
+    taylor_higher_orders = (y0, m_a, m_b, 1000, (0, 0.05, 10))
 
     C.preload(56, 56, 56, 56, 56)
 

@@ -11,9 +11,8 @@ from mathematics.sde.nonlinear.symbolic.schemes.milstein import Milstein
 def milstein(y0: np.array, a: Matrix, b: Matrix, k: float, times: tuple):
     """
     Performs modeling with Milstein method with matrix substitutions in a loop
-    
     Parameters
-    ----------
+    ==========
     y0 : numpy.ndarray
         initial conditions
     a : numpy.ndarray
@@ -25,7 +24,7 @@ def milstein(y0: np.array, a: Matrix, b: Matrix, k: float, times: tuple):
     times : tuple
         integration limits and step
     Returns
-    -------
+    =======
     y : numpy.ndarray
         solutions matrix
     t : list
