@@ -1,11 +1,11 @@
-import sympy as sp
+from sympy import Function, sympify, Number, Add
 
 from mathematics.sde.nonlinear.symbolic.coefficients.c11 import C11
 
 
-class J11(sp.Function):
+class J11(Function):
     """
-    Iterated stochastic Stratonovich integral
+    Iterated Stratonovich stochastic integral
     """
     nargs = 5
 
@@ -14,26 +14,33 @@ class J11(sp.Function):
         Creates new J11 object with given args
 
         Parameters
-        ----------
-        args
-            bunch of necessary arguments
+        −−−−−−−−−−
+        i1 : int
+            integral index
+        i2 : int
+            integral index
+        q : int
+            amount of terms in approximation of integral
+        dt : float
+            delta time
+        ksi : numpy.ndarray
+            matrix of Gaussian variables
         Returns
-        -------
-        sympy.Expr
-            formula to simplify and substitutions
+        −−−−−−−
+        sympy . Expr
+            formula to simplify and substitute
         """
-        i1, i2, q, dt, ksi = sp.sympify(args)
-        if isinstance(i1, sp.Number) and \
-                isinstance(i2, sp.Number):
-            j1, j2 = sp.symbols("j1 j2")
-            return \
-                sp.Sum(
-                    sp.Sum(
-                        C11(j2, j1, dt) * ksi[j1, i1] * ksi[j2, i2],
-                        (j1, 0, q)),
-                    (j2, 0, q))
-        else:
+        i1, i2, q, dt, ksi = sympify(args)
+
+        if not (isinstance(i1, Number) and
+                isinstance(i2, Number)):
             return super(J11, cls).__new__(cls, *args, **kwargs)
+
+        return Add(*[
+            C11(j2, j1, dt) *
+            ksi[j1, i1] * ksi[j2, i2]
+            for j2 in range(q + 1)
+            for j1 in range(q + 1)])
 
     def doit(self, **hints):
         """

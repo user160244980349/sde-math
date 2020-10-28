@@ -1,7 +1,9 @@
-import sympy as sp
+from math import sqrt
+
+from sympy import sympify, Number, Function
 
 
-class I2(sp.Function):
+class I2(Function):
     """
     Stochastic Ito integral
     """
@@ -12,20 +14,25 @@ class I2(sp.Function):
         Creates new I2 object with given args
 
         Parameters
-        ----------
-        args
-            bunch of necessary arguments
+        −−−−−−−−−−
+        i1 : int
+            integral index
+        dt : float
+            delta time
+        ksi : numpy.ndarray
+            matrix of Gaussian variables
         Returns
-        -------
-        sympy.Expr
-            formula to simplify and substitutions
+        −−−−−−−
+        sympy . Expr
+            formula to simplify and substitute
         """
-        i1, dt, ksi = sp.sympify(args)
-        if isinstance(i1, sp.Number):
-            return dt ** sp.Rational(5, 2) / 3 * \
-                   (ksi[0, i1] + ksi[1, i1] * sp.sqrt(3) / 2 + ksi[2, i1] / sp.sqrt(5) / 2)
-        else:
+        i1, dt, ksi = sympify(args)
+
+        if not isinstance(i1, Number):
             return super(I2, cls).__new__(cls, *args, **kwargs)
+
+        return (ksi[0, i1] + ksi[1, i1] * sqrt(3) / 2 +
+                ksi[2, i1] / sqrt(5) / 2) * dt ** 2.5 / 3
 
     def doit(self, **hints):
         """

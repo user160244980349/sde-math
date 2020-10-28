@@ -1,4 +1,4 @@
-import sympy as sp
+from sympy import sympify, Matrix, Add
 
 from mathematics.sde.nonlinear.symbolic.g import G
 from mathematics.sde.nonlinear.symbolic.operator import Operator
@@ -23,12 +23,11 @@ class Aj(Operator):
         sympy.Expr
             formula for simplifications and substitutions
         """
-        i, a, b, dxs = sp.sympify(args)
+        i, a, b, dxs = sympify(args)
         n = b.shape[0]
         m = b.shape[1]
-        sym_a = sp.MatrixSymbol("a", n, 1)
-        sym_b = sp.MatrixSymbol("b", n, m)
-        return sp.Matrix([sym_a[i, 0] -
-                          (sum([sp.Rational(1, 2) * G(sym_b[:, j], sym_b[i, j], dxs)
-                                for j in range(m)]))
-                          for i in range(n)]).subs([(sym_a, a), (sym_b, b)])
+
+        return Matrix([a[i, 0] -
+                       (Add(*[0.5 * G(b[:, j], b[i, j], dxs)
+                              for j in range(m)]))
+                       for i in range(n)])

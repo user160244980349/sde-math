@@ -1,19 +1,18 @@
 import logging
 
-import sympy as sp
-from sympy import sympify
+from sympy import sympify, Function
 
 import tools.database as db
 from mathematics.sde.nonlinear.c import get_c
 
 
-class C(sp.Function):
+class C(Function):
     """
     Gives coefficient with requested indices and weights
     """
     _preloaded = dict()
 
-    def __new__(cls, indices: tuple, weights: tuple, to_float=False, **kwargs):
+    def __new__(cls, indices: tuple, weights: tuple, to_float=True, **kwargs):
         """
         Creates C coefficient object with needed indices and weights
 
@@ -28,23 +27,24 @@ class C(sp.Function):
         symbolic.Rational or C
             calculated value or symbolic expression
         """
-        if len(indices) == len(weights):
-            index = f"{':'.join([str(i) for i in indices])}_{':'.join([str(i) for i in weights])}"
-            try:
-                return cls._value(index, to_float)
-
-            except KeyError:
-                respond = cls._download_one(index)
-                if len(respond) != 0:
-                    cls._preloaded.update(respond)
-                    return cls._value(index, to_float)
-                else:
-                    new_c = cls._calculate(index, indices, weights)
-                    cls._upload_one(new_c)
-                    cls._preloaded.update(new_c)
-                    return cls._value(index, to_float)
-        else:
+        if not len(indices) == len(weights):
             return super(C, cls).__new__(cls, indices, weights, **kwargs)
+
+        index = f"{':'.join([str(i) for i in indices])}_{':'.join([str(i) for i in weights])}"
+        try:
+            return cls._value(index, to_float)
+
+        except KeyError:
+            # TODO: may be error here when updating dictionary
+            respond = cls._download_one(index)
+            if len(respond) != 0:
+                cls._preloaded[respond[0]] = respond[1]
+                return cls._value(index, to_float)
+            else:
+                new_c = cls._calculate(index, indices, weights)
+                cls._upload_one(new_c)
+                cls._preloaded[new_c[0]] = new_c[1]
+                return cls._value(index, to_float)
 
     @classmethod
     def _calculate(cls, index, indices, weights):
@@ -66,7 +66,7 @@ class C(sp.Function):
         if to_float:
             return c[1]
         else:
-            return sp.sympify(c[0])
+            return sympify(c[0])
 
     @classmethod
     def _download_one(cls, index):

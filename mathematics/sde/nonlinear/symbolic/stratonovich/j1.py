@@ -1,7 +1,9 @@
-import sympy as sp
+from math import sqrt
+
+from sympy import Function, sympify, Number
 
 
-class J1(sp.Function):
+class J1(Function):
     """
     Stochastic Stratonovich integral
     """
@@ -12,20 +14,24 @@ class J1(sp.Function):
         Creates new J1 object with given args
 
         Parameters
-        ----------
-        args
-            bunch of necessary arguments
+        −−−−−−−−−−
+        i1 : int
+            integral index
+        dt : float
+            delta time
+        ksi : numpy.ndarray
+            matrix of Gaussian variables
         Returns
-        -------
-        sympy.Expr
-            formula to simplify and substitutions
+        −−−−−−−
+        sympy . Expr
+            formula to simplify and substitute
         """
-        i1, dt, ksi = sp.sympify(args)
-        if isinstance(i1, sp.Number):
-            return -dt ** sp.Rational(3, 2) / 2 * \
-                   (ksi[0, i1] + ksi[1, i1] / sp.sqrt(3))
-        else:
+        i1, dt, ksi = sympify(args)
+
+        if not isinstance(i1, Number):
             return super(J1, cls).__new__(cls, *args, **kwargs)
+
+        return -(ksi[0, i1] + ksi[1, i1] / sqrt(3)) * dt ** 1.5 / 2
 
     def doit(self, **hints):
         """

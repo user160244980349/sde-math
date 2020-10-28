@@ -1,7 +1,7 @@
-import sympy as sp
+from sympy import sympify, Number, Function
 
 
-class Ind(sp.Function):
+class Ind(Function):
     """
     Stochastic Ito integral
     """
@@ -20,14 +20,16 @@ class Ind(sp.Function):
         sympy.Expr
             formula to simplify and substitutions
         """
-        i1, i2 = sp.sympify(args)
-        if isinstance(i1, sp.Number) and isinstance(i2, sp.Number):
-            if i1 == i2:
-                return sp.S.One
-            else:
-                return sp.S.Zero
-        else:
+        i1, i2 = sympify(args)
+
+        if not (isinstance(i1, Number) and
+                isinstance(i2, Number)):
             return super(Ind, cls).__new__(cls, *args, **kwargs)
+
+        if i1 == i2:
+            return 1
+        else:
+            return 0
 
     def doit(self, **hints):
         """

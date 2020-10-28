@@ -1,7 +1,7 @@
 import unittest
 
 import numpy as np
-import sympy as sp
+from sympy import Symbol, pprint, diff, sympify
 
 from tools.input import input_matrix
 
@@ -12,23 +12,23 @@ class TestInput(unittest.TestCase):
         print()
         mat = input_matrix(2, 2, ";")
 
-        x = sp.Symbol("x")
+        x = Symbol("x")
         print()
-        sp.pprint(sp.diff(mat, x))
+        pprint(diff(mat, x))
 
     def test_input_formula(self):
         print("\nf(x, y) = x**2 + 2*x + y**2 + y + 2")
-        f = sp.sympify(input())
+        f = sympify(input())
         print("f(x, y) = ")
-        sp.pprint(f)
+        pprint(f)
 
-        x, y = sp.Symbol("x"), sp.Symbol("y")
+        x, y = Symbol("x"), Symbol("y")
         print("f'xy(x, y) =")
-        f1 = sp.diff(sp.diff(f, x), y)
-        sp.pprint(f1)
+        f1 = diff(diff(f, x), y)
+        pprint(f1)
         print("f'yx(x, y) =")
-        f2 = sp.diff(sp.diff(f, y), x)
-        sp.pprint(f2)
+        f2 = diff(diff(f, y), x)
+        pprint(f2)
 
         self.assertEqual(f, x ** 2 + 2 * x + y ** 2 + y + 2)
         self.assertEqual(f1, f2)

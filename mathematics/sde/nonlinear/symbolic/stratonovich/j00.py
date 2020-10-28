@@ -1,9 +1,11 @@
-import sympy as sp
+from math import sqrt
+
+from sympy import sympify, Number, Function, Add
 
 
-class J00(sp.Function):
+class J00(Function):
     """
-    Iterated stochastic Stratonovich integral
+    Iterated Stratonovich stochastic integral
     """
     nargs = 5
 
@@ -12,28 +14,36 @@ class J00(sp.Function):
         Creates new J00 object with given args
 
         Parameters
-        ----------
-        args
-            bunch of necessary arguments
+        −−−−−−−−−−
+        i1 : int
+            integral index
+        i2 : int
+            integral index
+        q : int
+            amount of terms in approximation of integral
+        dt : float
+            delta time
+        ksi : numpy.ndarray
+            matrix of Gaussian variables
         Returns
-        -------
-        sympy.Expr
-            formula to simplify and substitutions
+        −−−−−−−
+        sympy . Expr
+            formula to simplify and substitute
         """
-        i1, i2, q, dt, ksi = sp.sympify(args)
-        if isinstance(i1, sp.Number) and \
-                isinstance(i2, sp.Number) and \
-                isinstance(q, sp.Number):
-            from sympy.abc import i
-            return \
-                dt / 2 * (ksi[0, i1] * ksi[0, i2] +
-                          sp.Sum(
-                              (ksi[i - 1, i1] * ksi[i, i2] -
-                               ksi[i, i1] * ksi[i - 1, i2]) /
-                              sp.sqrt(i ** 2 * 4 - 1),
-                              (i, 1, q)))
-        else:
+        i1, i2, q, dt, ksi = sympify(args)
+
+        if not (isinstance(i1, Number) and
+                isinstance(i2, Number) and
+                isinstance(q, Number)):
             return super(J00, cls).__new__(cls, *args, **kwargs)
+
+        return \
+            (ksi[0, i1] * ksi[0, i2] +
+             Add(*[
+                 (ksi[j1 - 1, i1] * ksi[j1, i2] -
+                  ksi[j1, i1] * ksi[j1 - 1, i2]) /
+                 sqrt(j1 ** 2 * 4 - 1)
+                 for j1 in range(1, q + 1)])) * dt / 2
 
     def doit(self, **hints):
         """

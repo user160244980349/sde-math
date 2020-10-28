@@ -1,9 +1,11 @@
-import sympy as sp
+from math import sqrt
+
+from sympy import sympify, Function, Number
 
 from mathematics.sde.nonlinear.symbolic.coefficients.c import C
 
 
-class C001(sp.Function):
+class C001(Function):
     """
     Gives coefficient with requested indices and weights
     """
@@ -11,9 +13,8 @@ class C001(sp.Function):
 
     def __new__(cls, *args, **kwargs):
         """
-        Creates C coefficient object with needed 
-        indices and weights and calculates it in
-        another normalized form
+        Creates C coefficient object with needed
+        indices and weights and calculates it
 
         Parameters
         ----------
@@ -23,18 +24,23 @@ class C001(sp.Function):
             requested weights
         Returns
         -------
-        symbolic.Rational or C000
+        symbolic.Rational or C001
             calculated value or symbolic expression
         """
-        j3, j2, j1, dt = sp.sympify(args)
-        if isinstance(j1, sp.Number) and \
-                isinstance(j2, sp.Number) and \
-                isinstance(j3, sp.Number) and \
-                isinstance(dt, sp.Number):
-            return sp.sqrt((j1 * 2 + 1) * (j2 * 2 + 1) * (j3 * 2 + 1)) * \
-                   dt ** sp.Rational(5, 2) * C((j3, j2, j1), (0, 0, 1)) / 16
-        else:
+        j3, j2, j1, dt = sympify(args)
+
+        if not (isinstance(j1, Number) and
+                isinstance(j2, Number) and
+                isinstance(j3, Number) and
+                isinstance(dt, Number)):
             return super(C001, cls).__new__(cls, *args, **kwargs)
+
+        return sqrt(
+            (j1 * 2 + 1) *
+            (j2 * 2 + 1) *
+            (j3 * 2 + 1)) * \
+               dt ** 2.5 * \
+               C((j3, j2, j1), (0, 0, 1)) / 16
 
     def doit(self, **hints):
         """

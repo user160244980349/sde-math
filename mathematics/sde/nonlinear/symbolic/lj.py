@@ -1,4 +1,4 @@
-import sympy as sp
+from sympy import sympify, Number, diff, Add
 
 from mathematics.sde.nonlinear.symbolic.operator import Operator
 
@@ -22,13 +22,16 @@ class Lj(Operator):
         sympy.Expr
             formula to simplify and substitutions
         """
-        a, f, dxs = sp.sympify(args)
-        from sympy.abc import t
-        if (isinstance(f, sp.Number) or f.has(*dxs)) and not f.has(Operator):
-            n = a.shape[0]
-            return sp.diff(f, t) + sum([a[i, 0] * sp.diff(f, dxs[i]) for i in range(n)])
-        else:
+        a, f, dxs = sympify(args)
+
+        if not (isinstance(f, Number) or f.has(*dxs)) and \
+                not f.has(Operator):
             return super(Lj, cls).__new__(cls, *args, **kwargs)
+
+        n = a.shape[0]
+        from sympy.abc import t
+        return Add(diff(f, t), *[a[i, 0] * diff(f, dxs[i])
+                                 for i in range(n)])
 
     def doit(self, **hints):
         """

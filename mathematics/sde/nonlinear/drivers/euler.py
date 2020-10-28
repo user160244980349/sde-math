@@ -2,12 +2,12 @@ import logging
 from time import time
 
 import numpy as np
-import sympy as sp
+from sympy import lambdify, Matrix, symbols, MatrixSymbol, Symbol
 
 from mathematics.sde.nonlinear.symbolic.schemes.euler import Euler
 
 
-def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
+def euler(y0: np.array, a: Matrix, b: Matrix, times: tuple):
     """
     Performs modeling with Euler method with matrix substitutions in a loop
     
@@ -39,13 +39,13 @@ def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
     t2 = times[2]
 
     # Defining context
-    args = sp.symbols(f"x1:{n + 1}")
+    args = symbols(f"x1:{n + 1}")
     ticks = int((t2 - t1) / dt)
 
     # Symbols
-    sym_i, sym_t = sp.Symbol("i"), sp.Symbol("t")
-    sym_ksi = sp.MatrixSymbol("ksi", 1, m)
-    sym_y = Euler(sym_i, sp.Matrix(args), a, b, dt, sym_ksi).doit()
+    sym_i, sym_t = Symbol("i"), Symbol("t")
+    sym_ksi = MatrixSymbol("ksi", 1, m)
+    sym_y = Euler(sym_i, Matrix(args), a, b, dt, sym_ksi)
 
     args_extended = list()
     args_extended.extend(args)
@@ -54,7 +54,7 @@ def euler(y0: np.array, a: sp.Matrix, b: sp.Matrix, times: tuple):
     # Compilation of formulas
     y_compiled = list()
     for tr in range(n):
-        y_compiled.append(sp.utilities.lambdify(args_extended, sym_y.subs(sym_i, tr), "numpy"))
+        y_compiled.append(lambdify(args_extended, sym_y.subs(sym_i, tr), "numpy"))
 
     logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Euler subs are finished")
 

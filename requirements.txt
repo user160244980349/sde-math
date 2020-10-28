@@ -3,3 +3,4 @@ numpy==1.19.1
 scipy==1.5.2
 PyQt5==5.15.0
 plotly==4.9.0
+matplotlib==3.3.2

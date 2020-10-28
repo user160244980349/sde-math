@@ -2,13 +2,13 @@ import logging
 from time import time
 
 import numpy as np
-import sympy as sp
+from sympy import Matrix, symbols, MatrixSymbol, lambdify
 
-from mathematics.sde.nonlinear.symbolic.schemes.strong_taylor_stratonovich_3p0 import StrongTaylorStratonovich3p0
 from mathematics.sde.nonlinear.q import get_q
+from mathematics.sde.nonlinear.symbolic.schemes.strong_taylor_stratonovich_2p5 import StrongTaylorStratonovich2p5
 
 
-def strong_taylor_stratonovich_3p0(y0: np.array, a: sp.Matrix, b: sp.Matrix, k: float, times: tuple):
+def strong_taylor_stratonovich_2p5(y0: np.array, a: Matrix, b: Matrix, k: float, times: tuple):
     """
     Performs modeling with Strong Taylor-Stratonovich 2.0 method with matrix substitutions in a loop
 
@@ -42,7 +42,7 @@ def strong_taylor_stratonovich_3p0(y0: np.array, a: sp.Matrix, b: sp.Matrix, k: 
         list of time moments
     """
     start_time = time()
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong Taylor-Stratonovich 3.0 start")
+    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong Taylor-Stratonovich 2.5 start")
 
     # Ranges
     n = b.shape[0]
@@ -52,16 +52,17 @@ def strong_taylor_stratonovich_3p0(y0: np.array, a: sp.Matrix, b: sp.Matrix, k: 
     t2 = times[2]
 
     # Defining context
-    args = sp.symbols(f"x1:{n + 1}")
+    args = symbols(f"x1:{n + 1}")
     ticks = int((t2 - t1) / dt)
-    q = get_q(dt, k, 3)
+    q = get_q(dt, k, 2.5)
     logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using C = {k}")
+    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using dt = {dt}")
     logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using q = {q}")
 
     # Symbols
-    sym_i, sym_t = sp.Symbol("i"), sp.Symbol("t")
-    sym_ksi = sp.MatrixSymbol("ksi", q[0] + 3, m)
-    sym_y = StrongTaylorStratonovich3p0(sym_i, sp.Matrix(args), a, b, dt, sym_ksi, args, q).doit()
+    sym_i, sym_t = symbols("i t")
+    sym_ksi = MatrixSymbol("ksi", q[0] + 3, m)
+    sym_y = StrongTaylorStratonovich2p5(sym_i, Matrix(args), a, b, dt, sym_ksi, args, q)
 
     args_extended = list()
     args_extended.extend(args)
@@ -70,10 +71,10 @@ def strong_taylor_stratonovich_3p0(y0: np.array, a: sp.Matrix, b: sp.Matrix, k: 
     # Compilation of formulas
     y_compiled = list()
     for tr in range(n):
-        y_compiled.append(sp.utilities.lambdify(args_extended, sym_y.subs(sym_i, tr), "numpy"))
+        y_compiled.append(lambdify(args_extended, sym_y.subs(sym_i, tr), "numpy"))
 
     logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong "
-                 f"Taylor-Stratonovich 3.0 subs are finished")
+                 f"Taylor-Stratonovich 2.5 subs are finished")
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]
@@ -87,6 +88,6 @@ def strong_taylor_stratonovich_3p0(y0: np.array, a: sp.Matrix, b: sp.Matrix, k: 
             y[tr, p + 1] = y_compiled[tr](*values)
 
     logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong "
-                 f"Taylor-Stratonovich 3.0 calculations are finished")
+                 f"Taylor-Stratonovich 2.5 calculations are finished")
 
     return y, t

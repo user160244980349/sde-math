@@ -1,4 +1,4 @@
-import sympy as sp
+from sympy import Add, sympify, Number, diff
 
 from mathematics.sde.nonlinear.symbolic.operator import Operator
 
@@ -22,20 +22,24 @@ class L(Operator):
         sympy.Expr
             formula to simplify and substitutions
         """
-        a, b, f, dxs = sp.sympify(args)
-        if (isinstance(f, sp.Number) or f.has(*dxs)) and not f.has(Operator) and a.is_Matrix:
-            n = b.shape[0]
-            m = b.shape[1]
-            from sympy.abc import t
-            return \
-                sp.diff(f, t) + \
-                sum([a[i, 0] * sp.diff(f, dxs[i]) for i in range(n)]) + \
-                sum([sp.Rational(1, 2) * b[i, j] * b[k, j] * sp.diff(f, dxs[i], dxs[k])
-                     for j in range(m)
-                     for i in range(n)
-                     for k in range(n)])
-        else:
+        a, b, f, dxs = sympify(args)
+
+        if not ((isinstance(f, Number) or f.has(*dxs)) and
+                not f.has(Operator) and a.is_Matrix):
             return super(L, cls).__new__(cls, *args, **kwargs)
+
+        n = b.shape[0]
+        m = b.shape[1]
+        from sympy.abc import t
+
+        return Add(
+            diff(f, t),
+            *[a[i, 0] * diff(f, dxs[i]) for i in range(n)],
+            *[0.5 * b[i, j] * b[k, j] * diff(f, dxs[i], dxs[k])
+              for j in range(m)
+              for i in range(n)
+              for k in range(n)]
+        )
 
     def doit(self, **hints):
         """

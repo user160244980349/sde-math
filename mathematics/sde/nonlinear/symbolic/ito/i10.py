@@ -1,13 +1,13 @@
-import sympy as sp
+from sympy import Sum, Function, sympify, Number, Add
 
 from mathematics.sde.nonlinear.symbolic.coefficients.c10 import C10
 from mathematics.sde.nonlinear.symbolic.ind import Ind
 from mathematics.sde.nonlinear.symbolic.ito.i00 import I00
 
 
-class I10(sp.Function):
+class I10(Function):
     """
-    Iterated stochastic Ito integral
+    Iterated Ito stochastic integral
     """
     nargs = 5
 
@@ -16,29 +16,35 @@ class I10(sp.Function):
         Creates new I10 object with given args
 
         Parameters
-        ----------
-        args
-            bunch of necessary arguments
+        −−−−−−−−−−
+        i1 : int
+            integral index
+        i2 : int
+            integral index
+        q : int
+            amount of terms in approximation of integral
+        dt : float
+            delta time
+        ksi : numpy.ndarray
+            matrix of Gaussian variables
         Returns
-        -------
-        sympy.Expr
-            formula to simplify and substitutions
+        −−−−−−−
+        sympy . Expr
+            formula to simplify and substitute
         """
-        i1, i2, q, dt, ksi = sp.sympify(args)
-        if isinstance(i1, sp.Number) and \
-                isinstance(i2, sp.Number) and \
-                isinstance(q, sp.Number):
-            j1, j2 = sp.symbols("j1 j2")
-            from sympy.abc import i
-            return sp.Sum(
-                sp.Sum(
-                    C10(j2, j1, dt) *
-                    (ksi[j1, i1] * ksi[j2, i2] -
-                     Ind(i1, i2) * Ind(j1, j2)),
-                    (j2, 0, q)),
-                (j1, 0, q))
-        else:
+        i1, i2, q, dt, ksi = sympify(args)
+
+        if not (isinstance(i1, Number) and
+                isinstance(i2, Number) and
+                isinstance(q, Number)):
             return super(I10, cls).__new__(cls, *args, **kwargs)
+
+        return Add(*[
+            C10(j2, j1, dt) *
+            (ksi[j1, i1] * ksi[j2, i2] -
+             Ind(i1, i2) * Ind(j1, j2))
+            for j2 in range(q + 1)
+            for j1 in range(q + 1)])
 
     def doit(self, **hints):
         """
@@ -51,7 +57,7 @@ class I10(sp.Function):
         return I10(*self.args, **hints)
 
 
-class I10_old(sp.Function):
+class I10_old(Function):
     """
     Iterated stochastic Ito integral
     """
@@ -70,17 +76,17 @@ class I10_old(sp.Function):
         sympy.Expr
             formula to simplify and substitutions
         """
-        i1, i2, q, dt, ksi = sp.sympify(args)
-        if isinstance(i1, sp.Number) and isinstance(i2, sp.Number) \
-                and isinstance(q, sp.Number):
+        i1, i2, q, dt, ksi = sympify(args)
+        if isinstance(i1, Number) and isinstance(i2, Number) \
+                and isinstance(q, Number):
             from sympy.abc import i
             return \
                 -dt / 2 * I00(i1, i2, q, dt, ksi) - \
-                dt ** 2 / 4 * (ksi[0, i2] * ksi[1, i1] / sp.sqrt(3) +
-                               sp.Sum(
+                dt ** 2 / 4 * (ksi[0, i2] * ksi[1, i1] / sqrt(3) +
+                               Sum(
                                    ((i + 1) * ksi[i + 2, i2] * ksi[i, i1] -
                                     (i + 2) * ksi[i, i2] * ksi[i + 2, i1]) /
-                                   sp.sqrt((2 * i + 1) * (2 * i + 5)) / (2 * i + 3) +
+                                   sqrt((2 * i + 1) * (2 * i + 5)) / (2 * i + 3) +
                                    ksi[i, i1] * ksi[i, i2] / (2 * i - 1) / (2 * i + 3),
                                    (i, 0, q)))
         else:

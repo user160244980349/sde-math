@@ -500,8 +500,6 @@ def get_q(dt: float, k: float, r: float):
     """
     qs_result = []
 
-    C.preload(50, 50, 50, 50, 50)
-
     degree = int(r * 2)
     range_id = degree - 2
 
@@ -509,3 +507,4 @@ def get_q(dt: float, k: float, r: float):
         qs_result.append(loop(dt, k, dt_degrees[range_id][q_id], solvers[q_id]))
 
     return tuple(qs_result)
+    # return 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0

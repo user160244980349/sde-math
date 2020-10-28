@@ -1,11 +1,11 @@
-import sympy as sp
+from sympy import Function, sympify, Number, Add
 
 from mathematics.sde.nonlinear.symbolic.coefficients.c0010 import C0010
 
 
-class J0010(sp.Function):
+class J0010(Function):
     """
-    Iterated stochastic Stratonovich integral
+    Iterated Stratonovich stochastic integral
     """
     nargs = 7
 
@@ -14,34 +14,42 @@ class J0010(sp.Function):
         Creates new J0010 object with given args
 
         Parameters
-        ----------
-        args
-            bunch of necessary arguments
+        −−−−−−−−−−
+        i1 : int
+            integral index
+        i2 : int
+            integral index
+        i3 : int
+            integral index
+        i3 : int
+            integral index
+        q : int
+            amount of terms in approximation of integral
+        dt : float
+            delta time
+        ksi : numpy.ndarray
+            matrix of Gaussian variables
         Returns
-        -------
-        sympy.Expr
-            formula to simplify and substitutions
+        −−−−−−−
+        sympy . Expr
+            formula to simplify and substitute
         """
-        i1, i2, i3, i4, q, dt, ksi = sp.sympify(args)
-        if isinstance(i1, sp.Number) and \
-                isinstance(i2, sp.Number) and \
-                isinstance(i3, sp.Number) and \
-                isinstance(i4, sp.Number) and \
-                isinstance(q, sp.Number):
-            j1, j2, j3, j4 = sp.symbols("j1 j2 j3 j4")
-            return \
-                sp.Sum(
-                    sp.Sum(
-                        sp.Sum(
-                            sp.Sum(
-                                C0010(j4, j3, j2, j1, dt) *
-                                ksi[j1, i1] * ksi[j2, i2] * ksi[j3, i3] * ksi[j4, i4],
-                                (j4, 0, q)),
-                            (j3, 0, q)),
-                        (j2, 0, q)),
-                    (j1, 0, q))
-        else:
+        i1, i2, i3, i4, q, dt, ksi = sympify(args)
+
+        if not (isinstance(i1, Number) and
+                isinstance(i2, Number) and
+                isinstance(i3, Number) and
+                isinstance(i4, Number) and
+                isinstance(q, Number)):
             return super(J0010, cls).__new__(cls, *args, **kwargs)
+
+        return Add(*[
+            C0010(j4, j3, j2, j1, dt) *
+            ksi[j1, i1] * ksi[j2, i2] * ksi[j3, i3] * ksi[j4, i4]
+            for j4 in range(q + 1)
+            for j3 in range(q + 1)
+            for j2 in range(q + 1)
+            for j1 in range(q + 1)])
 
     def doit(self, **hints):
         """

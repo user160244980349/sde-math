@@ -1,4 +1,4 @@
-import sympy as sp
+from sympy import Rational, factorial, diff
 
 
 def polynomial(n: int):
@@ -14,5 +14,4 @@ def polynomial(n: int):
     sympy.Expr
     """
     from sympy.abc import x
-    return (sp.Rational(1, 2) ** n / sp.factorial(n) *
-            sp.Derivative((x ** 2 - 1) ** n, x, n)).doit()
+    return Rational(1, 2) ** n / factorial(n) * diff((x ** 2 - 1) ** n, x, n)

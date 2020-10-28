@@ -12,7 +12,7 @@ from tools.fsys import get_files
 
 def init():
     """
-    Initializes database with necessary table schemes
+    Initializes database with necessary table drivers
     """
     if not fsys.is_locked(".db.lock"):
         logging.info("Init: Initializing database...")

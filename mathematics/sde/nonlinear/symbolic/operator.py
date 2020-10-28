@@ -1,7 +1,7 @@
-import sympy as sp
+from sympy import Function
 
 
-class Operator(sp.Function):
+class Operator(Function):
     """
     Dummy class helping to manage conditions
     of expand of recursive G and L usages
