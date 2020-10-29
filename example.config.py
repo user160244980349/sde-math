@@ -10,3 +10,6 @@ database = "./resources/database.db"
 
 # Size of read buffer for coefficients
 read_buffer_size = 8192
+
+# Recursion limit for calculations
+recursion_limit = 10 ** 8

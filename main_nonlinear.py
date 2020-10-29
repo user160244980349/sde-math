@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import logging
+from sys import setrecursionlimit
 
 import numpy as np
 import plotly.graph_objects as go
@@ -11,26 +12,26 @@ from init.init import init
 from mathematics.sde.nonlinear.symbolic.coefficients.c import C
 
 from mathematics.sde.nonlinear.drivers.euler import euler
-from mathematics.sde.nonlinear.drivers. \
-    strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
-from mathematics.sde.nonlinear.drivers. \
-    strong_taylor_stratonovich_1p5 import strong_taylor_stratonovich_1p5
-from mathematics.sde.nonlinear.drivers. \
-    strong_taylor_stratonovich_2p0 import strong_taylor_stratonovich_2p0
-from mathematics.sde.nonlinear.drivers. \
-    strong_taylor_stratonovich_2p5 import strong_taylor_stratonovich_2p5
-from mathematics.sde.nonlinear.drivers. \
-    strong_taylor_stratonovich_3p0 import strong_taylor_stratonovich_3p0
+# from mathematics.sde.nonlinear.drivers. \
+#     strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
+# from mathematics.sde.nonlinear.drivers. \
+#     strong_taylor_stratonovich_1p5 import strong_taylor_stratonovich_1p5
+# from mathematics.sde.nonlinear.drivers. \
+#     strong_taylor_stratonovich_2p0 import strong_taylor_stratonovich_2p0
+# from mathematics.sde.nonlinear.drivers. \
+#     strong_taylor_stratonovich_2p5 import strong_taylor_stratonovich_2p5
+# from mathematics.sde.nonlinear.drivers. \
+#     strong_taylor_stratonovich_3p0 import strong_taylor_stratonovich_3p0
 
-# from mathematics.sde.nonlinear.drivers.milstein import milstein
-# from mathematics.sde.nonlinear.drivers. \
-#     strong_taylor_ito_1p5 import strong_taylor_ito_1p5
-# from mathematics.sde.nonlinear.drivers. \
-#     strong_taylor_ito_2p0 import strong_taylor_ito_2p0
-# from mathematics.sde.nonlinear.drivers. \
-#     strong_taylor_ito_2p5 import strong_taylor_ito_2p5
-# from mathematics.sde.nonlinear.drivers. \
-#     strong_taylor_ito_3p0 import strong_taylor_ito_3p0
+from mathematics.sde.nonlinear.drivers.milstein import milstein
+from mathematics.sde.nonlinear.drivers. \
+    strong_taylor_ito_1p5 import strong_taylor_ito_1p5
+from mathematics.sde.nonlinear.drivers. \
+    strong_taylor_ito_2p0 import strong_taylor_ito_2p0
+from mathematics.sde.nonlinear.drivers. \
+    strong_taylor_ito_2p5 import strong_taylor_ito_2p5
+from mathematics.sde.nonlinear.drivers. \
+    strong_taylor_ito_3p0 import strong_taylor_ito_3p0
 
 
 def main():
@@ -39,6 +40,7 @@ def main():
     """
 
     logging.basicConfig(level=logging.INFO)
+    setrecursionlimit(c.recursion_limit)
 
     db.connect(c.database)
 
@@ -84,8 +86,8 @@ def main():
     #     "x2"
     # ])
 
-    taylor_low_order = (y0, m_a, m_b, (0, 0.05, 10))
-    taylor_higher_orders = (y0, m_a, m_b, 1000, (0, 0.05, 10))
+    taylor_low_order = (y0, m_a, m_b, (0, 0.07, 20))
+    taylor_higher_orders = (y0, m_a, m_b, 0.1, (0, 0.07, 20))
 
     C.preload(56, 56, 56, 56, 56)
 
@@ -112,7 +114,7 @@ def main():
 
     # Taylor 1.0
     np.random.seed(703)
-    y, t = strong_taylor_stratonovich_1p0(*taylor_higher_orders)
+    y, t = milstein(*taylor_higher_orders)
     fig1.add_trace(
         go.Scatter(
             x=t, y=np.array(y[0, :]).astype(float),
@@ -130,7 +132,7 @@ def main():
 
     # Taylor 1.5
     np.random.seed(703)
-    y, t = strong_taylor_stratonovich_1p5(*taylor_higher_orders)
+    y, t = strong_taylor_ito_1p5(*taylor_higher_orders)
     fig1.add_trace(
         go.Scatter(
             x=t, y=np.array(y[0, :]).astype(float),
@@ -147,58 +149,58 @@ def main():
     )
 
     # Taylor 2.0
-    np.random.seed(703)
-    y, t = strong_taylor_stratonovich_2p0(*taylor_higher_orders)
-    fig1.add_trace(
-        go.Scatter(
-            x=t, y=np.array(y[0, :]).astype(float),
-            mode="lines",
-            name="Order 2.0"
-        )
-    )
-    fig2.add_trace(
-        go.Scatter(
-            x=t, y=np.array(y[1, :]).astype(float),
-            mode="lines",
-            name="Order 2.0"
-        )
-    )
+    # np.random.seed(703)
+    # y, t = strong_taylor_ito_2p0(*taylor_higher_orders)
+    # fig1.add_trace(
+    #     go.Scatter(
+    #         x=t, y=np.array(y[0, :]).astype(float),
+    #         mode="lines",
+    #         name="Order 2.0"
+    #     )
+    # )
+    # fig2.add_trace(
+    #     go.Scatter(
+    #         x=t, y=np.array(y[1, :]).astype(float),
+    #         mode="lines",
+    #         name="Order 2.0"
+    #     )
+    # )
 
     # Taylor 2.5
-    np.random.seed(703)
-    y, t = strong_taylor_stratonovich_2p5(*taylor_higher_orders)
-    fig1.add_trace(
-        go.Scatter(
-            x=t, y=np.array(y[0, :]).astype(float),
-            mode="lines",
-            name="Order 2.5"
-        )
-    )
-    fig2.add_trace(
-        go.Scatter(
-            x=t, y=np.array(y[1, :]).astype(float),
-            mode="lines",
-            name="Order 2.5"
-        )
-    )
+    # np.random.seed(703)
+    # y, t = strong_taylor_ito_2p5(*taylor_higher_orders)
+    # fig1.add_trace(
+    #     go.Scatter(
+    #         x=t, y=np.array(y[0, :]).astype(float),
+    #         mode="lines",
+    #         name="Order 2.5"
+    #     )
+    # )
+    # fig2.add_trace(
+    #     go.Scatter(
+    #         x=t, y=np.array(y[1, :]).astype(float),
+    #         mode="lines",
+    #         name="Order 2.5"
+    #     )
+    # )
 
     # Taylor 3.0
-    np.random.seed(703)
-    y, t = strong_taylor_stratonovich_3p0(*taylor_higher_orders)
-    fig1.add_trace(
-        go.Scatter(
-            x=t, y=np.array(y[0, :]).astype(float),
-            mode="lines",
-            name="Order 3.0"
-        )
-    )
-    fig2.add_trace(
-        go.Scatter(
-            x=t, y=np.array(y[1, :]).astype(float),
-            mode="lines",
-            name="Order 3.0"
-        )
-    )
+    # np.random.seed(703)
+    # y, t = strong_taylor_ito_3p0(*taylor_higher_orders)
+    # fig1.add_trace(
+    #     go.Scatter(
+    #         x=t, y=np.array(y[0, :]).astype(float),
+    #         mode="lines",
+    #         name="Order 3.0"
+    #     )
+    # )
+    # fig2.add_trace(
+    #     go.Scatter(
+    #         x=t, y=np.array(y[1, :]).astype(float),
+    #         mode="lines",
+    #         name="Order 3.0"
+    #     )
+    # )
     fig1.show()
     fig2.show()
 
