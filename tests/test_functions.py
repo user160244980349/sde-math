@@ -1,7 +1,7 @@
 import logging
 import unittest
 
-from sympy import Matrix, Symbol, symbols, MatrixSymbol, pprint
+from sympy import Matrix, Symbol, symbols, MatrixSymbol, pprint, S
 
 import config as c
 import tools.database as db
