@@ -9,9 +9,13 @@ from sympy import Matrix
 import config as c
 import tools.database as db
 from init.init import init
+from mathematics.sde.nonlinear.drivers.euler import euler
+from mathematics.sde.nonlinear.drivers.milstein import milstein
+from mathematics.sde.nonlinear.drivers. \
+    strong_taylor_ito_1p5 import strong_taylor_ito_1p5
 from mathematics.sde.nonlinear.symbolic.coefficients.c import C
 
-from mathematics.sde.nonlinear.drivers.euler import euler
+
 # from mathematics.sde.nonlinear.drivers. \
 #     strong_taylor_stratonovich_1p0 import strong_taylor_stratonovich_1p0
 # from mathematics.sde.nonlinear.drivers. \
@@ -23,16 +27,6 @@ from mathematics.sde.nonlinear.drivers.euler import euler
 # from mathematics.sde.nonlinear.drivers. \
 #     strong_taylor_stratonovich_3p0 import strong_taylor_stratonovich_3p0
 
-from mathematics.sde.nonlinear.drivers.milstein import milstein
-from mathematics.sde.nonlinear.drivers. \
-    strong_taylor_ito_1p5 import strong_taylor_ito_1p5
-from mathematics.sde.nonlinear.drivers. \
-    strong_taylor_ito_2p0 import strong_taylor_ito_2p0
-from mathematics.sde.nonlinear.drivers. \
-    strong_taylor_ito_2p5 import strong_taylor_ito_2p5
-from mathematics.sde.nonlinear.drivers. \
-    strong_taylor_ito_3p0 import strong_taylor_ito_3p0
-
 
 def main():
     """
@@ -42,9 +36,9 @@ def main():
     logging.basicConfig(level=logging.INFO)
     setrecursionlimit(c.recursion_limit)
 
-    db.connect(c.database)
-
     init()
+
+    db.connect(c.database)
 
     y0 = np.array([
         [1],

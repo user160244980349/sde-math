@@ -5,7 +5,6 @@ import numpy as np
 from sympy import Matrix, symbols, MatrixSymbol, lambdify
 
 from mathematics.sde.nonlinear.q import get_q
-from mathematics.sde.nonlinear.symbolic.schemes.strong_taylor_stratonovich_3p0 import StrongTaylorStratonovich3p0
 from mathematics.sde.nonlinear.symbolic.schemes.strong_taylor_stratonovich_3p0_mp import StrongTaylorStratonovich3p0MP
 
 
@@ -54,6 +53,7 @@ def strong_taylor_stratonovich_3p0_mp(y0: np.array, a: Matrix, b: Matrix, k: flo
     sym_ksi = MatrixSymbol("ksi", q[0] + 3, m)
     sym_y = StrongTaylorStratonovich3p0MP(sym_i, Matrix(args), a, b, dt, sym_ksi, args, q)
 
+    print("OL GUD")
     exit()
 
     args_extended = list()

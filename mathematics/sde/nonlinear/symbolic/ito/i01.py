@@ -1,4 +1,4 @@
-from sympy import Function, Number, sympify, Sum, Add
+from sympy import Function, Number, sympify, Add
 
 from mathematics.sde.nonlinear.symbolic.coefficients.c01 import C01
 from mathematics.sde.nonlinear.symbolic.ind import Ind
@@ -52,7 +52,6 @@ class I01(Function):
         I01
         """
         return I01(*self.args, **hints)
-
 
 # class I01_old(Function):
 #     """

@@ -43,3 +43,14 @@ def lock(filename):
     """
     f = open(os.path.join(c.resources, filename), "w")
     f.close()
+
+
+def unlock(filename):
+    """
+    Performs unlocking
+    Parameters
+    ==========
+    filename : str
+        name of lock file
+    """
+    os.remove(os.path.join(c.resources, filename))

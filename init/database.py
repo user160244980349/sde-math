@@ -9,17 +9,21 @@ import tools.database as db
 from tools import fsys
 from tools.fsys import get_files
 
+logger = logging.getLogger(__name__)
+
 
 def init():
     """
     Initializes database with necessary table drivers
     """
+
     if not fsys.is_locked(".db.lock"):
-        logging.info("Init: Initializing database...")
+        logger.info("Initializing database...")
         create_files_table()
         create_c_table()
         fsys.lock(".db.lock")
     else:
+        logger.info("Updating database...")
         update_coefficients()
 
 

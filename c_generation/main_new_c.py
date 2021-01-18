@@ -2,7 +2,7 @@
 import logging
 from datetime import datetime
 
-from tools.new_c import Task, thread_writer
+from c_generation.new_c import Task, thread_writer
 
 
 def main():

@@ -4,46 +4,26 @@ from sympy import Function, sympify, Add, S
 
 from mathematics.sde.nonlinear.symbolic.aj import Aj
 from mathematics.sde.nonlinear.symbolic.g import G
-from mathematics.sde.nonlinear.symbolic.lj import Lj
 from mathematics.sde.nonlinear.symbolic.stratonovich.j0 import J0
 from mathematics.sde.nonlinear.symbolic.stratonovich.j00 import J00
-from mathematics.sde.nonlinear.symbolic.stratonovich.j000 import J000
-from mathematics.sde.nonlinear.symbolic.stratonovich.j0000 import J0000
-from mathematics.sde.nonlinear.symbolic.stratonovich.j00000 import J00000
-from mathematics.sde.nonlinear.symbolic.stratonovich.j000000 import J000000
-from mathematics.sde.nonlinear.symbolic.stratonovich.j0001 import J0001
-from mathematics.sde.nonlinear.symbolic.stratonovich.j001 import J001
-from mathematics.sde.nonlinear.symbolic.stratonovich.j0010 import J0010
-from mathematics.sde.nonlinear.symbolic.stratonovich.j01 import J01
-from mathematics.sde.nonlinear.symbolic.stratonovich.j010 import J010
-from mathematics.sde.nonlinear.symbolic.stratonovich.j0100 import J0100
-from mathematics.sde.nonlinear.symbolic.stratonovich.j02 import J02
-from mathematics.sde.nonlinear.symbolic.stratonovich.j1 import J1
-from mathematics.sde.nonlinear.symbolic.stratonovich.j10 import J10
-from mathematics.sde.nonlinear.symbolic.stratonovich.j100 import J100
-from mathematics.sde.nonlinear.symbolic.stratonovich.j1000 import J1000
-from mathematics.sde.nonlinear.symbolic.stratonovich.j11 import J11
-from mathematics.sde.nonlinear.symbolic.stratonovich.j2 import J2
-from mathematics.sde.nonlinear.symbolic.stratonovich.j20 import J20
 
 
 class _Routine:
 
-    def __init__(self, i, b, q, dt, ksi):
+    def __init__(self, i, b, dt, ksi):
         self.i, self.b = i, b
-        self.q, self.dt, self.ksi = q, dt, ksi
-        self.n, self.m = b.shape[0], b.shape[1]
+        self.dt, self.ksi = dt, ksi
 
     def __call__(self, x):
         return S.one
 
 
 class _Routine1(_Routine):
-    def __init__(self, i, b, q, dt, ksi):
-        super().__init__(i, b, q, dt, ksi)
+    def __init__(self, i, b, dt, ksi):
+        super().__init__(i, b, dt, ksi)
 
     def __call__(self, range_of_indices):
-        i, b, q, dt, ksi = self.i, self.b, self.q, self.dt, self.ksi
+        i, b, dt, ksi = self.i, self.b, self.dt, self.ksi
         return Add(
             *[b[i, i1] * J0(i1, dt, ksi)
               for i1 in range(range_of_indices)])
@@ -51,7 +31,8 @@ class _Routine1(_Routine):
 
 class _Routine2(_Routine):
     def __init__(self, i, b, q, dt, ksi, dxs):
-        super().__init__(i, b, q, dt, ksi)
+        super().__init__(i, b, dt, ksi)
+        self.q = q
         self.dxs = dxs
 
     def __call__(self, range_of_indices):
@@ -60,8 +41,8 @@ class _Routine2(_Routine):
         return Add(
             *[G(b[:, i1], b[i, i2], dxs) *
               J00(i1, i2, q, dt, ksi)
-              for i2 in range(self.m)
-              for i1 in range(self.m)])
+              for i2 in range(range_of_indices[0])
+              for i1 in range(range_of_indices[1])])
 
 
 class _Routine3(_Routine):
@@ -240,15 +221,7 @@ def ranges(limit, size):
                 counter += 1
                 if counter > size:
                     counter = 0
-
                     chunk = (chunk[0][1], i1), (chunk[1][1], i2), (chunk[2][1], i3)
-                    if i3 < chunk[2][1]:
-                        chunk[2][0] = 0
-                        if i2 < chunk[1][1]:
-                            chunk[1][0] = 0
-                            if i1 < chunk[1][1]:
-                                chunk[0][0] = 0
-
                     chunks.append(chunk)
                     continue
 
@@ -290,6 +263,10 @@ class StrongTaylorStratonovich3p0MP(Function):
 
         aj = Aj(i, a, b, dxs)
 
+        print(ranges(1200, 10))
+
+        exit()
+
         ranges1 = []
         ranges2 = []
         ranges3 = []
@@ -306,21 +283,22 @@ class StrongTaylorStratonovich3p0MP(Function):
         with Pool(cpu_count()) as pool:
             chunks = [
                 yp[i, 0], aj[i, 0] * dt,
-                *pool.map(_Routine1(i, a, b, dt, ksi), ranges1),
-                *pool.map(_Routine2(i, a, b, q[0], dt, ksi), ranges2),
-                *pool.map(_Routine3(i, a, b, dt, ksi), ranges3),
-                *pool.map(_Routine4(i, a, b, dt, ksi), ranges4),
-                dt ** 2 / 2 * Lj(a, aj[i, 0], dxs),
-                *pool.map(_Routine5(i, a, b, dt, ksi), ranges5),
-                *pool.map(_Routine6(i, a, b, dt, ksi), ranges6),
-                *pool.map(_Routine7(i, a, b, dt, ksi), ranges7),
-                *pool.map(_Routine8(i, a, b, dt, ksi), ranges8),
-                *pool.map(_Routine9(i, a, b, dt, ksi), ranges9),
-                dt ** 3 / 6 * Lj(a, Lj(a, aj[i, 0], dxs), dxs),
-                *pool.map(_Routine10(i, a, b, dt, ksi), ranges10),
-                *pool.map(_Routine11(i, a, b, dt, ksi), ranges11),
-                *pool.map(_Routine12(i, a, b, dt, ksi), ranges12),
+                *pool.map(_Routine1(i, b, dt, ksi), ranges1),
+                *pool.map(_Routine2(i, b, q[0], dt, ksi, dxs), ranges2),
+                # *pool.map(_Routine3(i, a, b, dt, ksi), ranges3),
+                # *pool.map(_Routine4(i, a, b, dt, ksi), ranges4),
+                # dt ** 2 / 2 * Lj(a, aj[i, 0], dxs),
+                # *pool.map(_Routine5(i, a, b, dt, ksi), ranges5),
+                # *pool.map(_Routine6(i, a, b, dt, ksi), ranges6),
+                # *pool.map(_Routine7(i, a, b, dt, ksi), ranges7),
+                # *pool.map(_Routine8(i, a, b, dt, ksi), ranges8),
+                # *pool.map(_Routine9(i, a, b, dt, ksi), ranges9),
+                # dt ** 3 / 6 * Lj(a, Lj(a, aj[i, 0], dxs), dxs),
+                # *pool.map(_Routine10(i, a, b, dt, ksi), ranges10),
+                # *pool.map(_Routine11(i, a, b, dt, ksi), ranges11),
+                # *pool.map(_Routine12(i, a, b, dt, ksi), ranges12),
             ]
+            print("WAITING")
             pool.close()
             pool.join()
 

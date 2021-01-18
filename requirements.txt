@@ -1,7 +1,8 @@
-SymPy==1.6.2
-numpy==1.19.1
-scipy==1.5.2
-PyQt5==5.15.0
-plotly==4.9.0
-matplotlib==3.3.2
-pathos==0.2.6
+SymPy
+numpy==1.19.3
+scipy
+PyQt5
+plotly
+matplotlib
+pathos
+pyqtspinner

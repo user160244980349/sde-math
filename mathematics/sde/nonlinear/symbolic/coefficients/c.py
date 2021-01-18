@@ -34,7 +34,6 @@ class C(Function):
             return cls._value(index, to_float)
 
         except KeyError:
-            # TODO: may be error here when updating dictionary
             respond = cls._download_one(index)
             if len(respond) != 0:
                 cls._preloaded[respond[0]] = respond[1]

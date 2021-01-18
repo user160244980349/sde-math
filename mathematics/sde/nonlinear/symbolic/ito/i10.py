@@ -1,8 +1,7 @@
-from sympy import Sum, Function, sympify, Number, Add
+from sympy import Function, sympify, Number, Add
 
 from mathematics.sde.nonlinear.symbolic.coefficients.c10 import C10
 from mathematics.sde.nonlinear.symbolic.ind import Ind
-from mathematics.sde.nonlinear.symbolic.ito.i00 import I00
 
 
 class I10(Function):
@@ -53,7 +52,6 @@ class I10(Function):
         I10
         """
         return I10(*self.args, **hints)
-
 
 # class I10_old(Function):
 #     """
