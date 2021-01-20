@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QLineEdit, QGridLayout
 from ui.main.info import InfoIcon
 
 
-class Step5(QWidget):
+class Step8(QWidget):
     """
     Application main window
     """
@@ -20,13 +20,11 @@ class Step5(QWidget):
         self.dt = 0
         self.t1 = sys.float_info.max
         self.s = 0
-        self.c = 0
 
         self.t0_is_valid = False
         self.dt_is_valid = False
         self.t1_is_valid = False
         self.s_is_valid = True
-        self.c_is_valid = False
 
         self.input_stack = self.parent()
 
@@ -42,13 +40,11 @@ class Step5(QWidget):
         label_dt = QLabel("dt")
         label_t1 = QLabel("t1")
         label_s = QLabel("seed")
-        self.label_c = QLabel("C")
 
         self.lineedit_t0 = QLineEdit()
         self.lineedit_dt = QLineEdit()
         self.lineedit_t1 = QLineEdit()
         self.lineedit_s = QLineEdit()
-        self.lineedit_c = QLineEdit()
 
         self.msg_t0 = QLabel()
         self.msg_t0.setStyleSheet("color: rgb(255, 0, 0);")
@@ -65,10 +61,6 @@ class Step5(QWidget):
         self.msg_s = QLabel()
         self.msg_s.setStyleSheet("color: rgb(255, 0, 0);")
         self.msg_s.hide()
-
-        self.msg_c = QLabel()
-        self.msg_c.setStyleSheet("color: rgb(255, 0, 0);")
-        self.msg_c.hide()
 
         header = QLabel("Accuracy settings", parent=self)
         font = header.font()
@@ -119,12 +111,6 @@ class Step5(QWidget):
         grid_layout.addWidget(label_s, 3, 1)
         grid_layout.addWidget(self.lineedit_s, 3, 2)
 
-        grid_layout.addWidget(self.msg_c, 2, 5)
-
-        grid_layout.addWidget(self.info_c, 3, 3)
-        grid_layout.addWidget(self.label_c, 3, 4)
-        grid_layout.addWidget(self.lineedit_c, 3, 5)
-
         column_layout = QVBoxLayout()
         column_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
         column_layout.addLayout(header_layout)
@@ -153,19 +139,14 @@ class Step5(QWidget):
         self.lineedit_t1.textChanged.connect(self.validate_t1)
         self.lineedit_t1.textChanged.connect(self.validate_dt)
         self.lineedit_s.textChanged.connect(self.validate_s)
-        self.lineedit_c.textChanged.connect(self.validate_c)
 
     def count_c(self, flag: bool):
         if flag:
             self.info_c.show()
             self.label_c.show()
-            self.lineedit_c.show()
-            self.validate_c()
         else:
             self.info_c.hide()
             self.label_c.hide()
-            self.lineedit_c.hide()
-            self.c_is_valid = True
 
         self.msg_c.hide()
 
@@ -173,8 +154,7 @@ class Step5(QWidget):
         if self.t0_is_valid \
                 and self.dt_is_valid \
                 and self.t1_is_valid \
-                and self.s_is_valid \
-                and self.c_is_valid:
+                and self.s_is_valid:
             self.run_btn.setEnabled(True)
         else:
             self.run_btn.setEnabled(False)
@@ -243,24 +223,6 @@ class Step5(QWidget):
             self.s_is_valid = False
             self.msg_s.setText("Wrong value!")
             self.msg_s.show()
-
-        finally:
-            self.validate_form()
-
-    def validate_c(self):
-        try:
-            typed_value = float(self.lineedit_c.text())
-            if typed_value <= 0:
-                raise ValueError("input error")
-
-            self.c_is_valid = True
-            self.c = typed_value
-            self.msg_c.hide()
-
-        except ValueError:
-            self.c_is_valid = False
-            self.msg_c.setText("Wrong value!")
-            self.msg_c.show()
 
         finally:
             self.validate_form()

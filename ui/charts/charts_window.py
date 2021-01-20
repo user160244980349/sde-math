@@ -1,28 +1,19 @@
-from PyQt5.QtCore import pyqtSignal, QObject
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QMainWindow, QSplitter
 
-from ui.charts.charts_list.available_charts_widget import AvailableChartsWidget
-from ui.charts.charts_list.item_widget import ItemWidget
-from ui.charts.charts_widget import PlotWidget
-
-
-class PlotWindowSignals(QObject):
-
-    charts_show = pyqtSignal()
-    charts_hide = pyqtSignal()
+from ui.charts.side.available_charts_widget import AvailableChartsWidget
+from ui.charts.visuals.charts_widget import PlotWidget
 
 
 class PlotWindow(QMainWindow):
     """
     Application main window
     """
+    charts_show = pyqtSignal()
+    charts_hide = pyqtSignal()
 
     def __init__(self, main_window):
         super(QMainWindow, self).__init__()
-
-        self.custom_signals = PlotWindowSignals()
-
-        main_window.custom_signals.main_window_close.connect(self.close)
 
         self.plot_widget = PlotWidget(self)
         self.charts_list = AvailableChartsWidget(self)
@@ -42,14 +33,8 @@ class PlotWindow(QMainWindow):
         self.setWindowTitle("SDE-MATH: charts window")
         self.resize(1200, 800)
 
-    def checkbox_changed(self):
-        if self.sender().isChecked():
-            self.show()
-        else:
-            self.close()
-
     def showEvent(self, event):
-        self.custom_signals.charts_show.emit()
+        self.charts_show.emit()
 
     def closeEvent(self, event):
-        self.custom_signals.charts_hide.emit()
+        self.charts_hide.emit()

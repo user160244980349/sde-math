@@ -1,58 +1,39 @@
-from PyQt5.QtCore import QThreadPool, QObject, pyqtSignal
+from PyQt5.QtCore import QThreadPool, pyqtSignal
 from PyQt5.QtWidgets import QStackedWidget, QMainWindow
 
 from init.init import init
 from tools.fsys import is_locked
-from ui.main.modeling.nonliear.base import NonlinearModelingWidget
-from ui.worker import Worker
+from ui.async_calls.worker import Worker
 from ui.charts.charts_window import PlotWindow
 from ui.main.greetings import GreetingsWidget
+from ui.main.menu.base import MainMenuWidget
 from ui.main.modeling.linear.base import LinearModelingWidget
-from ui.main.menu.main_menu import MainMenuWidget
-from ui.main.progress.complex_progress_widget import ComplexProgressWidget
-from ui.main.progress.simple_progress_widget import SimpleProgressWidget
-
-
-class MainWindowSignals(QObject):
-    main_window_close = pyqtSignal()
-    start_simple_progress = pyqtSignal(str)
-    stop_simple_progress = pyqtSignal(str)
+from ui.main.modeling.nonliear.base import NonlinearModelingWidget
+from ui.main.progress.complex_progress import ComplexProgressWidget
+from ui.main.progress.simple_progress import SimpleProgressWidget
 
 
 class MainWindow(QMainWindow):
     """
     Application main window
     """
+    main_window_close = pyqtSignal()
+    start_simple_progress = pyqtSignal(str)
+    stop_simple_progress = pyqtSignal(str)
 
     def __init__(self):
         super(QMainWindow, self).__init__()
 
-        self.custom_signals = MainWindowSignals()
         self.plot_window = PlotWindow(self)
+
         self.stack_widget = QStackedWidget(self)
 
         self.main_menu = MainMenuWidget(self.stack_widget)
-
-        self.main_menu.group1.custom_signals.show_nonlinear_dialog.connect(self.show_nonlinear)
-        self.main_menu.group2.custom_signals.show_nonlinear_dialog.connect(self.show_nonlinear)
-        self.main_menu.group3.custom_signals.show_linear_dialog.connect(lambda: self.stack_widget.setCurrentIndex(2))
-
-        self.nonlinear_modeling = NonlinearModelingWidget(self.stack_widget)
-        self.nonlinear_modeling.custom_signals.show_main_menu.connect(lambda: self.stack_widget.setCurrentIndex(0))
-        self.nonlinear_modeling.custom_signals.start_progress.connect(lambda: self.stack_widget.setCurrentIndex(5))
-
-        self.linear_modeling = LinearModelingWidget(self.stack_widget)
-        self.linear_modeling.custom_signals.show_main_menu.connect(lambda: self.stack_widget.setCurrentIndex(0))
-        self.linear_modeling.custom_signals.start_progress.connect(lambda: self.stack_widget.setCurrentIndex(5))
-
-        self.greetings = GreetingsWidget(self.stack_widget)
-        self.greetings.custom_signals.show_main_menu.connect(lambda: self.stack_widget.setCurrentIndex(0))
-
-        self.simple_progress = SimpleProgressWidget(self.stack_widget)
-        self.greetings.custom_signals.show_main_menu.connect(lambda: self.stack_widget.setCurrentIndex(0))
-
         self.complex_progress = ComplexProgressWidget(self.stack_widget)
-        self.greetings.custom_signals.show_main_menu.connect(lambda: self.stack_widget.setCurrentIndex(0))
+        self.simple_progress = SimpleProgressWidget(self.stack_widget)
+        self.greetings = GreetingsWidget(self.stack_widget)
+        self.linear_modeling = LinearModelingWidget(self.stack_widget)
+        self.nonlinear_modeling = NonlinearModelingWidget(self.stack_widget)
 
         self.stack_widget.addWidget(self.main_menu)
         self.stack_widget.addWidget(self.nonlinear_modeling)
@@ -69,33 +50,83 @@ class MainWindow(QMainWindow):
         self.resize(800, 600)
         self.show()
 
+        # stack widget events
+
+        self.main_menu.group1.show_nonlinear_dialog.connect(self.show_nonlinear)
+        self.main_menu.group2.show_nonlinear_dialog.connect(self.show_nonlinear)
+        self.main_menu.group3.show_linear_dialog.connect(
+            lambda: self.stack_widget.setCurrentWidget(self.linear_modeling))
+
+        self.nonlinear_modeling.show_main_menu.connect(
+            lambda: self.stack_widget.setCurrentWidget(self.main_menu))
+        self.nonlinear_modeling.start_progress.connect(
+            lambda: self.stack_widget.setCurrentWidget(self.complex_progress))
+
+        self.linear_modeling.show_main_menu.connect(
+            lambda: self.stack_widget.setCurrentWidget(self.main_menu))
+        self.linear_modeling.start_progress.connect(
+            lambda: self.stack_widget.setCurrentWidget(self.complex_progress))
+
+        self.greetings.show_main_menu.connect(
+            lambda: self.stack_widget.setCurrentWidget(self.main_menu))
+
+        self.greetings.show_main_menu.connect(
+            lambda: self.stack_widget.setCurrentWidget(self.main_menu))
+
+        self.greetings.show_main_menu.connect(
+            lambda: self.stack_widget.setCurrentWidget(self.main_menu))
+
+        self.complex_progress.back_btn.clicked.connect(
+            lambda: self.stack_widget.setCurrentWidget(self.main_menu))
+
+        # plot events
+
+        self.main_window_close.connect(self.plot_window.close)
+
+        self.main_menu.charts_check.clicked.connect(self.plot_window.setVisible)
+        self.plot_window.charts_show.connect(lambda: self.main_menu.charts_check.setChecked(True))
+        self.plot_window.charts_hide.connect(lambda: self.main_menu.charts_check.setChecked(False))
+
+        self.nonlinear_modeling.draw_chart.connect(self.plot_window.charts_list.new_items)
+        self.nonlinear_modeling.draw_chart.connect(self.plot_window.plot_widget.new_items)
+        self.nonlinear_modeling.stop_progress.connect(self.plot_window.show)
+
+        self.nonlinear_modeling.charts_check.stateChanged.connect(self.plot_window.setVisible)
+        self.plot_window.charts_show.connect(lambda: self.nonlinear_modeling.charts_check.setChecked(True))
+        self.plot_window.charts_hide.connect(lambda: self.nonlinear_modeling.charts_check.setChecked(False))
+
+        self.linear_modeling.draw_chart.connect(self.plot_window.charts_list.new_items)
+        self.linear_modeling.draw_chart.connect(self.plot_window.plot_widget.new_items)
+        self.linear_modeling.stop_progress.connect(self.plot_window.show)
+
+        self.linear_modeling.charts_check.clicked.connect(self.plot_window.setVisible)
+        self.plot_window.charts_show.connect(lambda: self.linear_modeling.charts_check.setChecked(True))
+        self.plot_window.charts_hide.connect(lambda: self.linear_modeling.charts_check.setChecked(False))
+
+        self.linear_modeling.start_progress.connect(self.complex_progress.spin)
+        self.nonlinear_modeling.start_progress.connect(self.complex_progress.spin)
+        self.linear_modeling.stop_progress.connect(self.complex_progress.stop)
+        self.nonlinear_modeling.stop_progress.connect(self.complex_progress.stop)
+
     def closeEvent(self, event):
-        self.custom_signals.main_window_close.emit()
+        self.main_window_close.emit()
 
     def exec_init(self):
-        worker = Worker(init)
-        worker.custom_signals.finished.connect(self.init_done)
-
         self.simple_progress.spin("Observing the database...")
+        self.stack_widget.setCurrentWidget(self.simple_progress)
+
+        worker = Worker(init)
+        worker.signals.finished.connect(self.init_done)
+
         QThreadPool.globalInstance().start(worker)
-        self.stack_widget.setCurrentIndex(4)
 
     def init_done(self):
         if not is_locked(".welcome.lock"):
-            self.stack_widget.setCurrentIndex(3)
+            self.stack_widget.setCurrentWidget(self.greetings)
         else:
-            self.stack_widget.setCurrentIndex(0)
+            self.stack_widget.setCurrentWidget(self.main_menu)
         self.simple_progress.stop()
 
     def show_nonlinear(self, scheme_id):
-        self.stack_widget.setCurrentIndex(1)
-        self.nonlinear_modeling.scheme_id = scheme_id
-
-        if scheme_id == "Euler":
-            self.nonlinear_modeling.step5.info_c.hide()
-            self.nonlinear_modeling.step5.label_c.hide()
-            self.nonlinear_modeling.step5.lineedit_c.hide()
-        else:
-            self.nonlinear_modeling.step5.info_c.show()
-            self.nonlinear_modeling.step5.label_c.show()
-            self.nonlinear_modeling.step5.lineedit_c.show()
+        self.nonlinear_modeling.set_scheme(scheme_id)
+        self.stack_widget.setCurrentWidget(self.nonlinear_modeling)

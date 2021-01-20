@@ -1,6 +1,8 @@
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QLineEdit, QGridLayout, QVBoxLayout, QSpacerItem, QSizePolicy
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QSpacerItem, QSizePolicy, QPushButton, \
+    QApplication, QStyle
 
-from ui.main.info_icon import InfoIcon
+from ui.main.info import InfoIcon
+from ui.main.modeling.matrix_widget import MatrixWidget
 
 
 class Step7(QWidget):
@@ -11,57 +13,38 @@ class Step7(QWidget):
     def __init__(self, parent=None):
         super(QWidget, self).__init__(parent)
 
-        info_t0 = InfoIcon("TOOLTIP")
-        info_dt = InfoIcon("TOOLTIP")
-        info_t1 = InfoIcon("TOOLTIP")
-        info_s = InfoIcon("TOOLTIP")
+        # widgets creation
 
-        label_t0 = QLabel("t0")
-        label_dt = QLabel("dt")
-        label_t1 = QLabel("t1")
-        label_s = QLabel("seed")
-
-        lineedit_t0 = QLineEdit()
-        lineedit_dt = QLineEdit()
-        lineedit_t1 = QLineEdit()
-        lineedit_s = QLineEdit()
-
-        grid_layout = QGridLayout()
-        grid_layout.addWidget(info_t0, 0, 0)
-        grid_layout.addWidget(label_t0, 0, 1)
-        grid_layout.addWidget(lineedit_t0, 0, 2)
-
-        grid_layout.addWidget(info_dt, 0, 3)
-        grid_layout.addWidget(label_dt, 0, 4)
-        grid_layout.addWidget(lineedit_dt, 0, 5)
-
-        grid_layout.addWidget(info_t1, 0, 6)
-        grid_layout.addWidget(label_t1, 0, 7)
-        grid_layout.addWidget(lineedit_t1, 0, 8)
-
-        grid_layout.addWidget(info_s, 1, 0)
-        grid_layout.addWidget(label_s, 1, 1)
-        grid_layout.addWidget(lineedit_s, 1, 2)
-
-        header = QLabel("Accuracy settings", parent=self)
+        header = QLabel("Setting of x0 column", parent=self)
         font = header.font()
         font.setPointSize(15)
         header.setFont(font)
 
+        info = InfoIcon("")
+
+        self.matrix = MatrixWidget(self)
+
+        self.next_btn = QPushButton("Next", self)
+        self.next_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_ArrowForward))
+
+        self.prev_btn = QPushButton("Back", self)
+        self.prev_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_ArrowBack))
+
+        # layout configuration
+
         header_layout = QHBoxLayout()
+        header_layout.addWidget(info)
         header_layout.addWidget(header)
         header_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
-        column_layout = QVBoxLayout()
-        column_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
-        column_layout.addLayout(header_layout)
-        column_layout.addItem(QSpacerItem(0, 25, QSizePolicy.Minimum, QSizePolicy.Minimum))
-        column_layout.addLayout(grid_layout)
-        column_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
+        bottom_bar = QHBoxLayout()
+        bottom_bar.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        bottom_bar.addWidget(self.prev_btn)
+        bottom_bar.addWidget(self.next_btn)
 
-        layout = QHBoxLayout()
-        layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
-        layout.addLayout(column_layout)
-        layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
+        layout = QVBoxLayout()
+        layout.addLayout(header_layout)
+        layout.addWidget(self.matrix)
+        layout.addLayout(bottom_bar)
 
         self.setLayout(layout)

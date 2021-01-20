@@ -1,8 +1,7 @@
-from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QGroupBox, \
     QScrollArea
 
-from ui.charts.charts_list.item_widget import ItemWidget
+from ui.charts.side.item_widget import ItemWidget
 
 
 class AvailableChartsWidget(QGroupBox):
@@ -12,8 +11,6 @@ class AvailableChartsWidget(QGroupBox):
 
     def __init__(self, parent=None):
         super(QGroupBox, self).__init__(parent)
-
-        self.counter = 0
 
         self.spacer = QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.plot_widget = self.parent().plot_widget
@@ -37,14 +34,12 @@ class AvailableChartsWidget(QGroupBox):
         self.setTitle("Series")
         self.setSizePolicy(QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding))
 
-    def new_items(self, name: str, values: tuple):
-
+    def new_items(self, lines: list):
         self.layout.removeItem(self.spacer)
 
-        for i in range(len(values[0])):
-            item_widget = ItemWidget(f"{name}, [{i}]", parent=self)
-            item_widget.uid = self.counter
-            self.counter += 1
+        for i in range(len(lines)):
+            item_widget = ItemWidget(f"{lines[i].name}, [{i}]", parent=self)
+            item_widget.uid = lines[i].uid
             item_widget.on_show.connect(self.plot_widget.show_item)
             item_widget.on_hide.connect(self.plot_widget.hide_item)
             item_widget.on_delete.connect(self.plot_widget.delete_item)

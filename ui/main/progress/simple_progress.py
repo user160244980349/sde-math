@@ -15,12 +15,15 @@ class SimpleProgressWidget(QWidget):
         font.setPointSize(15)
         self.label.setFont(font)
 
+        # layout configuration
+
         layout = QVBoxLayout()
         layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
         layout.addWidget(self.spinner)
         layout.addItem(QSpacerItem(0, 50, QSizePolicy.Minimum, QSizePolicy.Minimum))
         layout.addWidget(self.label)
         layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
+
         self.setLayout(layout)
 
     def spin(self, text):

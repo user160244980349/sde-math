@@ -1,14 +1,9 @@
 import sys
 import traceback
 
-from PyQt5.QtCore import QRunnable, pyqtSlot, pyqtSignal, QObject
+from PyQt5.QtCore import QRunnable, pyqtSlot
 
-
-class WorkerSignals(QObject):
-    finished = pyqtSignal()
-    error = pyqtSignal(tuple)
-    result = pyqtSignal(object)
-    progress = pyqtSignal(int)
+from ui.async_calls.signals import WorkerSignals
 
 
 class Worker(QRunnable):
@@ -17,10 +12,8 @@ class Worker(QRunnable):
     source: https://www.learnpyqt.com/tutorials/multithreading-pyqt-applications-qthreadpool/
 
     Example:
-
     worker = Worker(self.sl)
     worker.signals.finished.connect(self.stop)
-
     self.stack4.spin()
     QThreadPool.globalInstance().start(worker)
 
@@ -31,23 +24,6 @@ class Worker(QRunnable):
         Arguments to pass to the callback function
     kwargs:
         Keywords to pass to the callback function
-
-    Defines the signals available from a running worker thread.
-
-    Supported signals are:
-
-    finished
-        No data
-
-    error
-        tuple (exctype, value, traceback.format_exc() )
-
-    result
-        object data returned from processing, anything
-
-    progress
-        int indicating % progress
-
     """
 
     def __init__(self, fn, *args, **kwargs):
@@ -57,7 +33,7 @@ class Worker(QRunnable):
         self.fn = fn
         self.args = args
         self.kwargs = kwargs
-        self.custom_signals = WorkerSignals()
+        self.signals = WorkerSignals()
 
     @pyqtSlot()
     def run(self):
@@ -71,8 +47,8 @@ class Worker(QRunnable):
         except:
             traceback.print_exc()
             exctype, value = sys.exc_info()[:2]
-            self.custom_signals.error.emit((exctype, value, traceback.format_exc()))
+            self.signals.error.emit((exctype, value, traceback.format_exc()))
         else:
-            self.custom_signals.result.emit(result)  # Return the result of the processing
+            self.signals.result.emit(result)  # Return the result of the processing
         finally:
-            self.custom_signals.finished.emit()  # Done
+            self.signals.finished.emit()  # Done

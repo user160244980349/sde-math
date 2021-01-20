@@ -6,30 +6,48 @@ class MatrixWidget(QTableWidget):
     def __init__(self, parent=None):
         super(QTableWidget, self).__init__(parent)
 
-        self.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
         self.itemChanged.connect(self.item_changed)
-        self.matrix = None
-        self.size_x = 0
-        self.size_y = 0
+        self.m = [["0"]]
 
-    def resize_matrix(self, h: int, w: int):
+        self.setRowCount(1)
+        self.setColumnCount(1)
+        self.setItem(0, 0, QTableWidgetItem("0"))
+
+        self.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+
+    def resize_w(self, w: int):
+        old_w = self.columnCount()
         self.setColumnCount(w)
-        self.setRowCount(h)
+        h = self.rowCount()
 
-        self.matrix = [[self.matrix[i][j] if i < self.size_y and j < self.size_x else "0"
-                        for j in range(w)]
-                       for i in range(h)]
+        self.m = [[self.m[i][j] if i < h and j < old_w else "0"
+                   for j in range(w)]
+                  for i in range(h)]
 
-        self.size_x = w
-        self.size_y = h
-
-        for i in range(self.size_y):
-            for j in range(self.size_x):
+        for i in range(h):
+            for j in range(w):
                 item = self.item(i, j)
                 if item is not None:
-                    item.setText(self.matrix[i][j])
+                    item.setText(self.m[i][j])
                 else:
-                    self.setItem(i, j, QTableWidgetItem(self.matrix[i][j]))
+                    self.setItem(i, j, QTableWidgetItem(self.m[i][j]))
+
+    def resize_h(self, h: int):
+        old_h = self.rowCount()
+        w = self.columnCount()
+        self.setRowCount(h)
+
+        self.m = [[self.m[i][j] if i < old_h and j < w else "0"
+                   for j in range(w)]
+                  for i in range(h)]
+
+        for i in range(h):
+            for j in range(w):
+                item = self.item(i, j)
+                if item is not None:
+                    item.setText(self.m[i][j])
+                else:
+                    self.setItem(i, j, QTableWidgetItem(self.m[i][j]))
 
     def item_changed(self, item):
-        self.matrix[item.row()][item.column()] = item.text()
+        self.m[item.row()][item.column()] = item.text()

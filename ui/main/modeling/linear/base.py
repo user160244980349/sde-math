@@ -2,11 +2,17 @@ import logging
 from pprint import pprint
 from time import sleep
 
-from PyQt5.QtCore import QThreadPool, pyqtSignal, QObject
+import numpy as np
+from PyQt5.QtCore import QThreadPool, pyqtSignal
 from PyQt5.QtWidgets import QCheckBox, QPushButton, QStyle, QApplication, QSizePolicy, QHBoxLayout, \
     QSpacerItem, QVBoxLayout, QStackedWidget, QWidget
 
-from ui.worker import Worker
+from mathematics.sde.linear.dindet import dindet
+from mathematics.sde.linear.distortions import Symbolic, ComplexDistortion
+from mathematics.sde.linear.integration import Integral
+from mathematics.sde.linear.stoch import stoch
+from ui.async_calls.worker import Worker
+from ui.charts.visuals.line import Line
 from ui.main.modeling.linear.step1 import Step1
 from ui.main.modeling.linear.step2 import Step2
 from ui.main.modeling.linear.step3 import Step3
@@ -14,73 +20,45 @@ from ui.main.modeling.linear.step4 import Step4
 from ui.main.modeling.linear.step5 import Step5
 from ui.main.modeling.linear.step6 import Step6
 from ui.main.modeling.linear.step7 import Step7
-
-
-class LinearModelingSignals(QObject):
-
-    show_main_menu = pyqtSignal()
-    start_progress = pyqtSignal(str)
-    stop_progress = pyqtSignal(str)
+from ui.main.modeling.linear.step8 import Step8
 
 
 class LinearModelingWidget(QWidget):
     """
     Application main window
     """
+    show_main_menu = pyqtSignal()
+    start_progress = pyqtSignal(str)
+    stop_progress = pyqtSignal(str)
+    draw_chart = pyqtSignal(list)
 
     def __init__(self, parent=None):
         super(QWidget, self).__init__(parent)
 
-        main_window = self.parent().parent()
+        # widgets creation
 
-        self.custom_signals = LinearModelingSignals()
-        self.index = 0
+        self.stack_widget = QStackedWidget(self)
 
-        charts_check = QCheckBox("Charts window", self)
-        charts_check.clicked.connect(main_window.plot_window.checkbox_changed)
-        main_window.plot_window.custom_signals.charts_show.connect(lambda: charts_check.setChecked(True))
-        main_window.plot_window.custom_signals.charts_hide.connect(lambda: charts_check.setChecked(False))
-
-        self.custom_signals.stop_progress.connect(main_window.plot_window.show)
+        self.step1 = Step1()
+        self.step2 = Step2()
+        self.step3 = Step3()
+        self.step4 = Step4()
+        self.step5 = Step5()
+        self.step6 = Step6()
+        self.step7 = Step7()
+        self.step8 = Step8()
 
         back_btn = QPushButton("Back", self)
         back_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_ArrowBack))
-        back_btn.clicked.connect(self.custom_signals.show_main_menu.emit)
 
-        self.next_step_btn = QPushButton("Next", self)
-        self.next_step_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_ArrowForward))
-        self.next_step_btn.clicked.connect(self.next_frame)
+        self.charts_check = QCheckBox("Charts window", self)
 
-        self.prev_step_btn = QPushButton("Back", self)
-        self.prev_step_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_ArrowBack))
-        self.prev_step_btn.clicked.connect(self.prev_frame)
-        self.prev_step_btn.hide()
-
-        self.run_btn = QPushButton("Perform modeling", self)
-        self.run_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_ArrowForward))
-        self.run_btn.clicked.connect(self.run_modeling)
-        self.run_btn.hide()
-
-        bottom_bar = QHBoxLayout()
-        bottom_bar.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
-        bottom_bar.addWidget(self.prev_step_btn)
-        bottom_bar.addWidget(self.next_step_btn)
-        bottom_bar.addWidget(self.run_btn)
+        # configuring layout
 
         bar_layout = QHBoxLayout()
         bar_layout.addWidget(back_btn)
         bar_layout.addItem(QSpacerItem(0, 40, QSizePolicy.Expanding, QSizePolicy.Minimum))
-        bar_layout.addWidget(charts_check)
-
-        self.stack_widget = QStackedWidget(self)
-
-        self.step1 = Step1(self.stack_widget)
-        self.step2 = Step2(self.stack_widget)
-        self.step3 = Step3(self.stack_widget)
-        self.step4 = Step4(self.stack_widget)
-        self.step5 = Step5(self.stack_widget)
-        self.step6 = Step6(self.stack_widget)
-        self.step7 = Step7(self.stack_widget)
+        bar_layout.addWidget(self.charts_check)
 
         self.stack_widget.addWidget(self.step1)
         self.stack_widget.addWidget(self.step2)
@@ -89,61 +67,104 @@ class LinearModelingWidget(QWidget):
         self.stack_widget.addWidget(self.step5)
         self.stack_widget.addWidget(self.step6)
         self.stack_widget.addWidget(self.step7)
+        self.stack_widget.addWidget(self.step8)
 
         layout = QVBoxLayout()
         layout.addLayout(bar_layout)
         layout.addWidget(self.stack_widget)
-        layout.addLayout(bottom_bar)
 
         self.setLayout(layout)
 
-    def next_frame(self):
-        self.index += 1
+        # events binding
 
-        if self.index == 6:
-            self.run_btn.show()
-            self.next_step_btn.hide()
+        back_btn.clicked.connect(self.show_main_menu.emit)
+        back_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step1))
 
-        if self.index == 1:
-            self.step2.matrix.resize_matrix(int(self.step1.lineedit_n.text()), 1)
-            self.step3.matrix.resize_matrix(int(self.step1.lineedit_n.text()), int(self.step1.lineedit_m.text()))
-            self.step4.matrix.resize_matrix(int(self.step1.lineedit_n.text()), 1)
-            self.step5.matrix.resize_matrix(int(self.step1.lineedit_n.text()), 1)
-            self.step6.matrix.resize_matrix(int(self.step1.lineedit_n.text()), 1)
-            self.prev_step_btn.show()
+        self.step1.next_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step2))
+        self.step2.prev_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step1))
+        self.step2.next_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step3))
+        self.step3.prev_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step2))
+        self.step3.next_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step4))
+        self.step4.prev_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step3))
+        self.step4.next_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step5))
+        self.step5.prev_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step4))
+        self.step5.next_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step6))
+        self.step6.prev_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step5))
+        self.step6.next_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step7))
+        self.step7.prev_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step6))
+        self.step7.next_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step8))
+        self.step8.prev_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step7))
 
-        self.stack_widget.setCurrentIndex(self.index)
+        self.step8.run_btn.clicked.connect(lambda: self.run_modeling())
+        self.step8.run_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step1))
 
-    def prev_frame(self):
-        self.index -= 1
+        self.step1.n_valid.connect(self.step2.matrix.resize_h)
+        self.step1.n_valid.connect(self.step2.matrix.resize_w)
 
-        if self.index == 5:
-            self.run_btn.hide()
-            self.next_step_btn.show()
+        self.step1.n_valid.connect(self.step3.matrix.resize_h)
+        self.step1.k_valid.connect(self.step3.matrix.resize_w)
 
-        if self.index == 0:
-            self.prev_step_btn.hide()
+        self.step1.n_valid.connect(self.step4.matrix.resize_h)
+        self.step1.m_valid.connect(self.step4.matrix.resize_w)
 
-        self.stack_widget.setCurrentIndex(self.index)
+        self.step1.k_valid.connect(self.step5.matrix.resize_h)
+
+        self.step1.n_valid.connect(self.step6.matrix.resize_w)
+
+        self.step1.n_valid.connect(self.step7.matrix.resize_h)
 
     def run_modeling(self):
+        self.start_progress.emit("The modeling is being performed...")
 
-        worker = Worker(self.modeling_routine)
-        worker.custom_signals.finished.connect(self.on_modeling_finish)
-
+        worker = Worker(self.routine)
+        worker.signals.result.connect(self.on_modeling_finish)
         QThreadPool.globalInstance().start(worker)
-        self.custom_signals.start_progress.emit("The modeling is being performed...")
 
-    def modeling_routine(self, a, b, times: tuple):
+    def routine(self):
 
-        pprint(a)
-        pprint(b)
-        pprint(times)
+        n = int(self.step1.lineedit_n.text())
+        m = int(self.step1.lineedit_m.text())
+        k = int(self.step1.lineedit_k.text())
+        t0 = float(self.step8.lineedit_t0.text())
+        dt = float(self.step8.lineedit_dt.text())
+        t1 = float(self.step8.lineedit_t1.text())
 
-        logger = logging.getLogger(__name__)
-        for _ in range(25):
-            sleep(0.5)
-            logger.info("plotting")
+        integral = Integral(n)
 
-    def on_modeling_finish(self):
-        self.custom_signals.stop_progress.emit("The modeling has been performed!")
+        integral.k, integral.m, integral.dt, integral.t0, integral.tk = \
+            k, m, dt, t0, t1
+
+        integral.m_a = np.array([[float(self.step2.matrix.m[i][j]) for j in range(self.step2.matrix.columnCount())] for i in range(self.step2.matrix.rowCount())])
+        integral.mat_b = np.array([[float(self.step3.matrix.m[i][j]) for j in range(self.step3.matrix.columnCount())] for i in range(self.step3.matrix.rowCount())])
+        integral.mat_f = np.array([[float(self.step4.matrix.m[i][j]) for j in range(self.step4.matrix.columnCount())] for i in range(self.step4.matrix.rowCount())])
+        integral.m_h = np.array([[float(self.step6.matrix.m[i][j]) for j in range(self.step6.matrix.columnCount())] for i in range(self.step6.matrix.rowCount())])
+        integral.m_x0 = np.array([[float(self.step7.matrix.m[i][j]) for j in range(self.step7.matrix.columnCount())] for i in range(self.step7.matrix.rowCount())])
+        integral.m_mx0 = np.array([[float(self.step7.matrix.m[i][j]) for j in range(self.step7.matrix.columnCount())] for i in range(self.step7.matrix.rowCount())])
+
+        integral.m_dx0 = np.zeros((integral.n, integral.n))
+        integral.m_ad, integral.m_bd = dindet(integral.n, integral.k, integral.m_a, integral.mat_b, integral.dt)
+        integral.m_fd = stoch(integral.n, integral.m_a, integral.mat_f, integral.dt)
+
+        mat_u = np.array([[object]] * self.step5.matrix.rowCount())
+        for i in range(self.step5.matrix.rowCount()):
+            mat_u[i][0] = Symbolic(self.step5.matrix.m[i][0])
+
+        integral.distortion = ComplexDistortion(self.step5.matrix.rowCount(), mat_u)
+        integral.integrate()
+
+        return integral.m_xt, integral.v_t
+
+    def on_modeling_finish(self, result):
+        self.stop_progress.emit("The modeling has been completed!")
+
+        name = f"Linear, " \
+               f"t=({self.step8.lineedit_t0.text()}, " \
+               f"{self.step8.lineedit_dt.text()}, " \
+               f"{self.step8.lineedit_t1.text()})"
+
+        lines = [Line(name,
+                      np.array(result[1]).astype(float),
+                      np.array(result[0][i, :]).astype(float))
+                 for i in range(len(result[0]))]
+
+        self.draw_chart.emit(lines)

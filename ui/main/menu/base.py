@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QWidget, QSizePolicy, QSpacerItem, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel
 
-from ui.main.info_icon import InfoIcon
-from ui.main.menu.linear_schemes import LinearGroupWidget
-from ui.main.menu.taylor_ito_schemes import ItoGroupWidget
-from ui.main.menu.taylor_stratonovich_schemes import StratonovichGroupWidget
+from ui.main.info import InfoIcon
+from ui.main.menu.linear import LinearGroupWidget
+from ui.main.menu.taylor_ito import ItoGroupWidget
+from ui.main.menu.taylor_stratonovich import StratonovichGroupWidget
 
 
 class MainMenuWidget(QWidget):
@@ -14,12 +14,7 @@ class MainMenuWidget(QWidget):
     def __init__(self, parent=None):
         super(QWidget, self).__init__(parent)
 
-        main_window = self.parent().parent()
-
-        charts_check = QCheckBox("Charts window", self)
-        charts_check.clicked.connect(main_window.plot_window.checkbox_changed)
-        main_window.plot_window.custom_signals.charts_show.connect(lambda: charts_check.setChecked(True))
-        main_window.plot_window.custom_signals.charts_hide.connect(lambda: charts_check.setChecked(False))
+        self.charts_check = QCheckBox("Charts window", self)
 
         icon = InfoIcon("This is charts window checkbox, it will\n"
                         "follow you on every application dialog, so\n"
@@ -28,7 +23,7 @@ class MainMenuWidget(QWidget):
         bar_layout = QHBoxLayout()
         bar_layout.addItem(QSpacerItem(0, 40, QSizePolicy.Expanding, QSizePolicy.Minimum))
         bar_layout.addWidget(icon)
-        bar_layout.addWidget(charts_check)
+        bar_layout.addWidget(self.charts_check)
 
         # Ito`s cap
         header = QLabel("Strong Numerical Schemes for Ito SDEs", parent=self)
@@ -55,7 +50,7 @@ class MainMenuWidget(QWidget):
         menu_layout.addWidget(self.group3)
 
         center_widget = QWidget()
-        center_widget.setMinimumWidth(800)
+        # center_widget.setMinimumWidth(800)
         center_widget.setLayout(menu_layout)
 
         column_layout = QHBoxLayout()

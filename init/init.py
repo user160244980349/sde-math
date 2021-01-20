@@ -1,7 +1,6 @@
-
+from config import database as dbname
 from init import database
 from tools import database as db
-from config import database as dbname
 
 
 def init():

@@ -1,4 +1,5 @@
 import numpy as np
+from sympy import lambdify, sympify, Symbol
 
 
 class AbstractDistortion:
@@ -103,6 +104,31 @@ class Harmonic(AbstractDistortion):
         return self._u[0] * np.sin(self._u[1] * t + self._u[2])
 
 
+class Symbolic(AbstractDistortion):
+    """
+    Provides harmonic distortion
+    """
+
+    def __init__(self, fn: str):
+        from sympy.abc import t
+        self._u = lambdify(t, sympify(fn), "numpy")
+
+    def t(self, t):
+        """
+        Provides harmonic distortion at moment t
+
+        Parameters
+        ----------
+        t : float
+            moment of time
+        Returns
+        -------
+        float
+            value of distortion
+        """
+        return self._u(t)
+
+
 class ComplexDistortion(AbstractDistortion):
     """
     Container for various distortions
@@ -127,5 +153,5 @@ class ComplexDistortion(AbstractDistortion):
             column of distortions values
         """
         for i in range(self._size):
-            self._mat_ut[i, 0] = self._mat_u[i, 0].t(t)
+            self._mat_ut[i, 0] = self._mat_u[i][0].t(t)
         return self._mat_ut

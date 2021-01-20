@@ -83,8 +83,7 @@ Entry                         | Description
 - [x] Replace formats with f-strings
 - [x] Move preload in schemes classes
 - [x] New Lj and Aj (review G and L)
-- [x] L and G expansion and their symbols are understood but are not tested in terms of
-  performance
+- [x] L and G expansion and their symbols are understood but are not tested in terms of performance
 - [x] I10 and I01 with C from database
 - [x] Q ordering
 - [x] Replace prints with logs
@@ -105,29 +104,39 @@ Entry                         | Description
         - [x] Do not show again check
         - [ ] Actualize greeting message
         - [ ] Latex on greetings page
-    - [ ] Linear section
-        - [ ] Input fields
-        - [ ] Make symbolic input for linear
+    - [x] Linear section
+        - [x] Input fields
+        - [x] Make symbolic input for linear
         - [x] Console with info
         - [x] Calculate button
         - [x] Add on plot window button
-    - [ ] Nonlinear section
+        - [x] 0 < dt < 1
+    - [x] Nonlinear section
         - [x] Input fields
         - [x] Console with info
         - [x] Calculate button
         - [x] Add on plot window button
+        - [x] 0 < dt < 1
     - [ ] Plot window
         - [x] Remove chart
         - [x] Hide chart
         - [ ] Adjust lines labels
-    - [ ] Validate data
-        - [ ] t0 = t1 is causes error
-        - [ ] all empty fields cause errors 
+        - [ ] Hide some options of the toolbar
+        - [ ] Thinner lines
+        - [ ] Paint labels in color
+        - [x] Fix bug with ghost lines
+    - [x] Validate data
+        - [x] t0 = t1 is causes error
+        - [x] all empty fields cause errors
     - [ ] Actualize all tooltips
     - [ ] Message when critical duration detected
-    - [ ] Cleanup UI code
+    - [x] Cleanup UI code
+    - [ ] Improve logging
+    - [ ] Handle modeling errors
 - [ ] Review all schemes and formulas
 - [ ] Rewrite some tests
 - [ ] Statistical tests
 
 ##### NOTES #####
+
+Example for linear (solar activity) p. 916-917

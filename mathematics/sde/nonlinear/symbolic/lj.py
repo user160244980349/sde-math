@@ -23,8 +23,8 @@ class Lj(Operator):
         """
         a, f, dxs = sympify(args)
 
-        if not (isinstance(f, Number) or f.has(*dxs)) and \
-                not f.has(Operator):
+        if not (isinstance(f, Number) or (f.has(*dxs)) and
+                not f.has(Operator)):
             return super(Lj, cls).__new__(cls, *args, **kwargs)
 
         n = a.shape[0]

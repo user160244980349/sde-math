@@ -1,10 +1,7 @@
-from pprint import pprint
-
-from PyQt5.QtCore import QThreadPool, pyqtSignal, QObject
+import numpy as np
+from PyQt5.QtCore import QThreadPool, pyqtSignal
 from PyQt5.QtWidgets import QCheckBox, QPushButton, QStyle, QApplication, QSizePolicy, QHBoxLayout, \
     QSpacerItem, QVBoxLayout, QStackedWidget, QWidget
-
-import numpy as np
 from sympy import Matrix
 
 import config
@@ -21,7 +18,8 @@ from mathematics.sde.nonlinear.drivers.strong_taylor_stratonovich_2p5 import str
 from mathematics.sde.nonlinear.drivers.strong_taylor_stratonovich_3p0 import strong_taylor_stratonovich_3p0
 from mathematics.sde.nonlinear.symbolic.coefficients.c import C
 from tools import database
-from ui.worker import Worker
+from ui.async_calls.worker import Worker
+from ui.charts.visuals.line import Line
 from ui.main.modeling.nonliear.step1 import Step1
 from ui.main.modeling.nonliear.step2 import Step2
 from ui.main.modeling.nonliear.step3 import Step3
@@ -29,25 +27,20 @@ from ui.main.modeling.nonliear.step4 import Step4
 from ui.main.modeling.nonliear.step5 import Step5
 
 
-class NonlinearModelingSignals(QObject):
-    show_main_menu = pyqtSignal()
-    start_progress = pyqtSignal(str)
-    stop_progress = pyqtSignal(str)
-    draw_chart = pyqtSignal(str, object)
-
-
 class NonlinearModelingWidget(QWidget):
     """
     Application main window
     """
+    show_main_menu = pyqtSignal()
+    start_progress = pyqtSignal(str)
+    stop_progress = pyqtSignal(str)
+    draw_chart = pyqtSignal(list)
 
     def __init__(self, parent=None):
         super(QWidget, self).__init__(parent)
 
-        main_window = self.parent().parent()
-        self.custom_signals = NonlinearModelingSignals()
-        self.page = 0
-        self.chart_uid = 0
+        # other variables
+
         self.scheme_id = None
         self.schemes = {
             "Euler": euler,
@@ -63,53 +56,27 @@ class NonlinearModelingWidget(QWidget):
             "T.-Strat. 3.0": strong_taylor_stratonovich_3p0,
         }
 
-        charts_check = QCheckBox("Charts window", self)
-        charts_check.clicked.connect(main_window.plot_window.checkbox_changed)
-        main_window.plot_window.custom_signals.charts_show.connect(lambda: charts_check.setChecked(True))
-        main_window.plot_window.custom_signals.charts_hide.connect(lambda: charts_check.setChecked(False))
-        self.custom_signals.draw_chart.connect(main_window.plot_window.charts_list.new_items)
-        self.custom_signals.draw_chart.connect(main_window.plot_window.plot_widget.new_items)
+        # widgets creation
 
-        self.custom_signals.stop_progress.connect(main_window.plot_window.show)
+        self.stack_widget = QStackedWidget(self)
+
+        self.step1 = Step1()
+        self.step2 = Step2()
+        self.step3 = Step3()
+        self.step4 = Step4()
+        self.step5 = Step5()
 
         back_btn = QPushButton("Back", self)
         back_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_ArrowBack))
-        back_btn.clicked.connect(self.custom_signals.show_main_menu.emit)
-        back_btn.clicked.connect(self.reset_page)
 
-        self.next_step_btn = QPushButton("Next", self)
-        self.next_step_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_ArrowForward))
-        self.next_step_btn.clicked.connect(self.next_frame)
+        self.charts_check = QCheckBox("Charts window", self)
 
-        self.prev_step_btn = QPushButton("Back", self)
-        self.prev_step_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_ArrowBack))
-        self.prev_step_btn.clicked.connect(self.prev_frame)
-        self.prev_step_btn.hide()
-
-        self.run_btn = QPushButton("Perform modeling", self)
-        self.run_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_ArrowForward))
-        self.run_btn.clicked.connect(self.run_modeling)
-        self.run_btn.clicked.connect(self.reset_page)
-        self.run_btn.hide()
-
-        bottom_bar = QHBoxLayout()
-        bottom_bar.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
-        bottom_bar.addWidget(self.prev_step_btn)
-        bottom_bar.addWidget(self.next_step_btn)
-        bottom_bar.addWidget(self.run_btn)
+        # configuring layout
 
         bar_layout = QHBoxLayout()
         bar_layout.addWidget(back_btn)
         bar_layout.addItem(QSpacerItem(0, 40, QSizePolicy.Expanding, QSizePolicy.Minimum))
-        bar_layout.addWidget(charts_check)
-
-        self.stack_widget = QStackedWidget(self)
-
-        self.step1 = Step1(self.stack_widget)
-        self.step2 = Step2(self.stack_widget)
-        self.step3 = Step3(self.stack_widget)
-        self.step4 = Step4(self.stack_widget)
-        self.step5 = Step5(self.stack_widget)
+        bar_layout.addWidget(self.charts_check)
 
         self.stack_widget.addWidget(self.step1)
         self.stack_widget.addWidget(self.step2)
@@ -120,86 +87,83 @@ class NonlinearModelingWidget(QWidget):
         layout = QVBoxLayout()
         layout.addLayout(bar_layout)
         layout.addWidget(self.stack_widget)
-        layout.addLayout(bottom_bar)
 
         self.setLayout(layout)
 
-    def next_frame(self):
-        self.page += 1
+        # events binding
 
-        if self.page == 4:
-            self.run_btn.show()
-            self.next_step_btn.hide()
+        back_btn.clicked.connect(self.show_main_menu.emit)
+        back_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step1))
 
-        if self.page == 1:
-            self.step2.matrix.resize_matrix(int(self.step1.lineedit_n.text()), 1)
-            self.step3.matrix.resize_matrix(int(self.step1.lineedit_n.text()), int(self.step1.lineedit_m.text()))
-            self.step4.matrix.resize_matrix(int(self.step1.lineedit_n.text()), 1)
-            self.prev_step_btn.show()
+        self.step1.next_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step2))
+        self.step2.prev_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step1))
+        self.step2.next_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step3))
+        self.step3.prev_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step2))
+        self.step3.next_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step4))
+        self.step4.prev_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step3))
+        self.step4.next_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step5))
+        self.step5.prev_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step4))
 
-        self.stack_widget.setCurrentIndex(self.page)
+        self.step5.run_btn.clicked.connect(lambda: self.run_modeling())
+        self.step5.run_btn.clicked.connect(lambda: self.stack_widget.setCurrentWidget(self.step1))
 
-    def prev_frame(self):
-        self.page -= 1
+        self.step1.n_valid.connect(self.step2.matrix.resize_h)
+        self.step1.n_valid.connect(self.step3.matrix.resize_h)
+        self.step1.n_valid.connect(self.step4.matrix.resize_h)
 
-        if self.page == 3:
-            self.run_btn.hide()
-            self.next_step_btn.show()
+        self.step1.m_valid.connect(self.step3.matrix.resize_w)
 
-        if self.page == 0:
-            self.prev_step_btn.hide()
-
-        self.stack_widget.setCurrentIndex(self.page)
-
-    def reset_page(self):
-        self.page = 0
-        self.stack_widget.setCurrentIndex(0)
-        self.run_btn.hide()
-        self.prev_step_btn.hide()
-        self.next_step_btn.show()
+    def set_scheme(self, scheme_id):
+        self.scheme_id = scheme_id
+        if scheme_id == "Euler":
+            self.step5.count_c(False)
+        else:
+            self.step5.count_c(True)
 
     def run_modeling(self):
+        self.start_progress.emit("The modeling is being performed...")
 
         worker = Worker(self.routine)
-        worker.custom_signals.result.connect(self.on_modeling_finish)
-
+        worker.signals.result.connect(self.on_modeling_finish)
         QThreadPool.globalInstance().start(worker)
-        self.custom_signals.start_progress.emit("The modeling is being performed...")
 
     def routine(self):
 
-        a = Matrix(self.step2.matrix.matrix)
-        b = Matrix(self.step3.matrix.matrix)
+        a = Matrix(self.step2.matrix.m)
+        b = Matrix(self.step3.matrix.m)
 
-        x0 = np.ndarray(shape=(self.step4.matrix.size_y, self.step4.matrix.size_x), dtype=float)
-        for i in range(self.step4.matrix.size_y):
-            for j in range(self.step4.matrix.size_x):
-                x0[i][j] = float(self.step4.matrix.matrix[i][j])
+        x0 = np.ndarray(shape=(self.step4.matrix.rowCount(), self.step4.matrix.columnCount()), dtype=float)
+        for i in range(self.step4.matrix.rowCount()):
+            for j in range(self.step4.matrix.columnCount()):
+                x0[i][j] = float(self.step4.matrix.m[i][j])
+
+        if self.step5.s != 0:
+            np.random.seed(self.step5.s)
 
         database.connect(config.database)
 
-        if self.scheme_id != "Euler":
+        if self.scheme_id == "Euler":
+            result = self.schemes[self.scheme_id](
+                x0, a, b,
+                (self.step5.t0,
+                 self.step5.dt,
+                 self.step5.t1)
+            )
+        else:
             C.preload(56, 56, 56, 56, 56)
             result = self.schemes[self.scheme_id](
-                x0, a, b,
-                float(self.step5.lineedit_c.text()),
-                (float(self.step5.lineedit_t0.text()),
-                 float(self.step5.lineedit_dt.text()),
-                 float(self.step5.lineedit_t1.text())))
-        else:
-            result = self.schemes[self.scheme_id](
-                x0, a, b,
-                (float(self.step5.lineedit_t0.text()),
-                 float(self.step5.lineedit_dt.text()),
-                 float(self.step5.lineedit_t1.text())))
+                x0, a, b, self.step5.c,
+                (self.step5.t0,
+                 self.step5.dt,
+                 self.step5.t1)
+            )
 
         database.disconnect()
 
         return result
 
     def on_modeling_finish(self, result):
-        self.chart_uid += 1
-        self.custom_signals.stop_progress.emit("The modeling has been completed!")
+        self.stop_progress.emit("The modeling has been completed!")
 
         name = f"{self.scheme_id}, " \
                f"t=({self.step5.lineedit_t0.text()}, " \
@@ -209,4 +173,9 @@ class NonlinearModelingWidget(QWidget):
         if self.scheme_id != "Euler":
             name = f"{name}, C={self.step5.lineedit_c.text()}"
 
-        self.custom_signals.draw_chart.emit(name, result)
+        lines = [Line(name,
+                      np.array(result[1]).astype(float),
+                      np.array(result[0][i, :]).astype(float))
+                 for i in range(len(result[0]))]
+
+        self.draw_chart.emit(lines)
