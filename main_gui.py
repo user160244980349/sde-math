@@ -20,6 +20,10 @@ def main():
     app.setWindowIcon(QtGui.QIcon("resources/function.svg"))
     app.setStyle(QtWidgets.QStyleFactory.create('Fusion'))
 
+    # font = app.font()
+    # font.setPointSize(12)
+    # app.setFont(font)
+
     main_window = MainWindow()
 
     main_window.taskbar_button = QWinTaskbarButton()

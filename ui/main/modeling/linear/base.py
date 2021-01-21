@@ -55,15 +55,12 @@ class LinearModelingWidget(QWidget):
         self.charts_check = QCheckBox("Charts window", self)
 
         self.scheme_name = QLabel("Linear Ito SDEs")
-        font = self.scheme_name.font()
-        font.setPointSize(11)
-        self.scheme_name.setFont(font)
 
         # configuring layout
 
         bar_layout = QHBoxLayout()
         bar_layout.addWidget(back_btn)
-        bar_layout.addItem(QSpacerItem(10, 50, QSizePolicy.Minimum, QSizePolicy.Minimum))
+        bar_layout.addItem(QSpacerItem(10, 35, QSizePolicy.Minimum, QSizePolicy.Minimum))
         bar_layout.addWidget(self.scheme_name)
         bar_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         bar_layout.addWidget(self.charts_check)
@@ -222,7 +219,6 @@ class LinearModelingWidget(QWidget):
         self.draw_chart.emit(result)
 
     def on_modeling_corrupted(self, result):
-
         self.logger.error(result[0])
         self.logger.error(result[1])
         self.logger.error(result[2])

@@ -20,7 +20,9 @@ class Step4(QWidget):
         font.setPointSize(15)
         header.setFont(font)
 
-        info = InfoIcon("Size: n x m")
+        info = InfoIcon("Elements of matrix F are\n"
+                        "expected to be real values\n"
+                        "Size: n x m")
 
         self.matrix = MatrixWidget(self)
 

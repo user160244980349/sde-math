@@ -1,4 +1,6 @@
-from PyQt5.QtWidgets import QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QScrollArea, QLabel, QHBoxLayout
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QScrollArea, QLabel, QHBoxLayout, \
+    QPushButton, QApplication, QStyle
 
 from ui.charts.side.item_widget import ItemWidget
 from ui.main.info import InfoIcon
@@ -8,6 +10,9 @@ class AvailableChartsWidget(QWidget):
     """
     Application main window
     """
+    on_hide_all = pyqtSignal()
+    on_show_all = pyqtSignal()
+    on_remove_all = pyqtSignal()
 
     def __init__(self, parent=None):
         super(QWidget, self).__init__(parent)
@@ -17,11 +22,24 @@ class AvailableChartsWidget(QWidget):
         self.spacer = QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.plot_widget = self.parent().plot_widget
 
+        remove_all = QPushButton()
+        remove_all.setFlat(True)
+        remove_all.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogResetButton))
+
+        hide_all = QPushButton("Hide all")
+        hide_all.setFlat(True)
+
+        show_all = QPushButton("Show all")
+        show_all.setFlat(True)
+
         header_layout = QHBoxLayout()
         header_layout.addWidget(InfoIcon("Here You will see all modeling series\n"
                                          "You can hide them or delete, if you need to"))
         header_layout.addWidget(QLabel("Series"))
         header_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        header_layout.addWidget(show_all)
+        header_layout.addWidget(hide_all)
+        header_layout.addWidget(remove_all)
 
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(3, 3, 3, 3)
@@ -44,6 +62,10 @@ class AvailableChartsWidget(QWidget):
         self.setLayout(layout)
 
         self.setSizePolicy(QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding))
+
+        show_all.clicked.connect(self.show_all)
+        hide_all.clicked.connect(self.hide_all)
+        remove_all.clicked.connect(self.delete_all)
 
     def new_items(self, lines: list):
         self.layout.removeItem(self.spacer)
@@ -69,3 +91,24 @@ class AvailableChartsWidget(QWidget):
         s.setParent(None)
         self.items.pop(s.uid)
         self.layout.removeWidget(s)
+
+    def delete_all(self):
+        for item in self.items.values():
+            item.setParent(None)
+            self.layout.removeWidget(item)
+        self.items.clear()
+        self.on_remove_all.emit()
+
+    def hide_all(self):
+        for item in self.items.values():
+            item.checkbox.blockSignals(True)
+            item.checkbox.setChecked(False)
+            item.checkbox.blockSignals(False)
+        self.on_hide_all.emit()
+
+    def show_all(self):
+        for item in self.items.values():
+            item.checkbox.blockSignals(True)
+            item.checkbox.setChecked(True)
+            item.checkbox.blockSignals(False)
+        self.on_show_all.emit()

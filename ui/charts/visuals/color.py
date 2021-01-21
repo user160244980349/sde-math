@@ -1,27 +1,6 @@
 class Color:
     available_colors = [
 
-        # contrast group 1
-        "#FF0000",
-
-        # contrast group 2
-        "#00008B",
-
-        # contrast group 3
-        "#00FF00",
-
-        # contrast group 4
-        "#40E0D0",
-
-        # contrast group 5
-        "#800080",
-
-        # contrast group 6
-        "#FF1493",
-
-        # contrast group 7
-        "#8B4513",
-
         # red
         "#CD5C5C",
         "#F08080",
@@ -134,12 +113,32 @@ class Color:
         "#0000FF",
         "#0000CD",
         "#191970",
+
+        # contrast group 1
+        "#FF0000",
+
+        # contrast group 2
+        "#00008B",
+
+        # contrast group 3
+        "#00FF00",
+
+        # contrast group 4
+        "#40E0D0",
+
+        # contrast group 5
+        "#800080",
+
+        # contrast group 6
+        "#FF1493",
+
+        # contrast group 7
+        "#8B4513",
     ]
 
-    uid = 0
-
     def __new__(cls, *args, **kwargs):
-        if cls.uid > len(cls.available_colors):
-            cls.uid = 1
-        cls.uid += 1
-        return cls.available_colors[cls.uid - 1]
+        return cls.available_colors.pop()
+
+    @classmethod
+    def free(cls, code: str):
+        cls.available_colors.append(code)

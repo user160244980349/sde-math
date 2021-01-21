@@ -135,9 +135,8 @@ class ComplexDistortion(AbstractDistortion):
     """
 
     def __init__(self, n: int, mat_u: np.ndarray):
-        self._size = n
         self._mat_u = mat_u
-        self._mat_ut = np.array([[0.0]] * n)
+        self._mat_ut = np.ndarray(shape=(n, 1), dtype=float)
 
     def t(self, t: float):
         """
@@ -152,6 +151,6 @@ class ComplexDistortion(AbstractDistortion):
         numpy.ndarray
             column of distortions values
         """
-        for i in range(self._size):
-            self._mat_ut[i, 0] = self._mat_u[i][0].t(t)
+        for i in range(self._mat_u.shape[0]):
+            self._mat_ut[i][0] = self._mat_u[i][0].t(t)
         return self._mat_ut

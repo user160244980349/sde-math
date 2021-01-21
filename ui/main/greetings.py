@@ -1,8 +1,9 @@
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtWidgets import QPushButton, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QHBoxLayout, QLabel, QCheckBox, \
     QApplication, QStyle
 
 from tools.fsys import lock, unlock
+from ui.main.svg import SVG
 
 
 class GreetingsWidget(QWidget):
@@ -14,9 +15,11 @@ class GreetingsWidget(QWidget):
     def __init__(self, parent=None):
         super(QWidget, self).__init__(parent)
 
-        header = QLabel("Welcome to SDE-MATH Software Package")
+        header = QLabel("Welcome to SDE-MATH Software Package for the Numerical Solution of Systems of Ito SDEs")
         font = header.font()
         font.setPointSize(15)
+        header.setAlignment(Qt.AlignJustify)
+        header.setWordWrap(True)
         header.setFont(font)
 
         welcome = QLabel(
@@ -29,8 +32,12 @@ class GreetingsWidget(QWidget):
             "This means that in some cases, knowing the exact solution to the Ito "
             "SDE does not allow us to simulate it numerically in a simple way.", self
         )
+        # font = welcome.font()
+        # font.setPointSize(12)
+        # welcome.setFont(font)
+        welcome.setAlignment(Qt.AlignJustify)
         welcome.setWordWrap(True)
-        welcome.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+        welcome.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum))
 
         check_again = QCheckBox("Do not show again", self)
         next_btn = QPushButton("Ok", self)
@@ -45,10 +52,25 @@ class GreetingsWidget(QWidget):
         controls.addWidget(next_btn)
         controls.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
+        eq1 = QHBoxLayout()
+        eq1.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        eq1.addWidget(SVG("equation1.svg", scale_factor=1.))
+        eq1.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+
+        eq2 = QHBoxLayout()
+        eq2.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        eq2.addWidget(SVG("equation2.svg", scale_factor=0.8))
+        eq2.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+
         column = QVBoxLayout()
         column.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
         column.addWidget(header)
+        column.addItem(QSpacerItem(0, 15, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        column.addLayout(eq1)
+        column.addLayout(eq2)
+        column.addItem(QSpacerItem(0, 15, QSizePolicy.Expanding, QSizePolicy.Minimum))
         column.addWidget(welcome)
+        column.addItem(QSpacerItem(0, 30, QSizePolicy.Expanding, QSizePolicy.Minimum))
         column.addLayout(controls)
         column.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
 

@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout, QGridLayout, QLineEdit, QLabel
 
 from ui.main.error import ErrorWidget
 from ui.main.info import InfoIcon
+from ui.main.svg import SVG
 
 
 class Step1(QWidget):
@@ -62,6 +63,7 @@ class Step1(QWidget):
         # layout  configuration
 
         header_layout = QHBoxLayout()
+        header_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         header_layout.addWidget(header)
         header_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
@@ -69,20 +71,40 @@ class Step1(QWidget):
         bottom_bar.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         bottom_bar.addWidget(self.next_btn)
 
-        column_layout = QVBoxLayout()
-        column_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
-        column_layout.addLayout(header_layout)
-        column_layout.addItem(QSpacerItem(0, 25, QSizePolicy.Minimum, QSizePolicy.Minimum))
-        column_layout.addLayout(grid_layout)
-        column_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
+        eq1 = QHBoxLayout()
+        eq1.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        eq1.addWidget(SVG("equation1.svg", scale_factor=1.))
+        eq1.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
-        control_layout = QHBoxLayout()
-        control_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
-        control_layout.addLayout(column_layout)
-        control_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
+        eq2 = QHBoxLayout()
+        eq2.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        eq2.addWidget(SVG("equation2.svg", scale_factor=0.8))
+        eq2.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+
+        equalities_layout = QVBoxLayout()
+        equalities_layout.addLayout(eq1)
+        equalities_layout.addItem(QSpacerItem(0, 10, QSizePolicy.Minimum, QSizePolicy.Minimum))
+        equalities_layout.addLayout(eq2)
+
+        equalities_wrap = QHBoxLayout()
+        equalities_wrap.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        equalities_wrap.addLayout(equalities_layout)
+        equalities_wrap.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+
+        grid_wrap = QHBoxLayout()
+        grid_wrap.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        grid_wrap.addLayout(grid_layout)
+        grid_wrap.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
         layout = QVBoxLayout()
-        layout.addLayout(control_layout)
+        layout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        layout.addLayout(equalities_wrap)
+        layout.addItem(QSpacerItem(0, 25, QSizePolicy.Minimum, QSizePolicy.Minimum))
+        layout.addLayout(header_layout)
+        layout.addItem(QSpacerItem(0, 5, QSizePolicy.Minimum, QSizePolicy.Minimum))
+        layout.addLayout(grid_wrap)
+        layout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        layout.addItem(QSpacerItem(0, 25, QSizePolicy.Minimum, QSizePolicy.Minimum))
         layout.addLayout(bottom_bar)
 
         self.setLayout(layout)

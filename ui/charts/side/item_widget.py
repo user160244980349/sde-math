@@ -19,8 +19,8 @@ class ItemWidget(QFrame):
         self.setFrameShape(QFrame.StyledPanel)
         self.setStyleSheet("QFrame { background: white; }")
 
-        checkbox = QCheckBox(name)
-        checkbox.setChecked(True)
+        self.checkbox = QCheckBox(name)
+        self.checkbox.setChecked(True)
 
         btn = QPushButton()
         btn.setFlat(True)
@@ -34,7 +34,7 @@ class ItemWidget(QFrame):
         layout = QHBoxLayout()
         layout.setContentsMargins(3, 3, 3, 3)
         layout.setSpacing(0)
-        layout.addWidget(checkbox)
+        layout.addWidget(self.checkbox)
         layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         layout.addWidget(btn)
 
@@ -46,7 +46,7 @@ class ItemWidget(QFrame):
 
         self.setLayout(layout_underlined)
 
-        checkbox.stateChanged.connect(self.checkbox_changed)
+        self.checkbox.stateChanged.connect(self.checkbox_changed)
         btn.clicked.connect(lambda: self.on_delete.emit(self.uid))
 
     def checkbox_changed(self, v):

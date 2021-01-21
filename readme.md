@@ -92,14 +92,16 @@ Entry                         | Description
 - [x] Store indices in file
 - [x] Restore indices from file in a separate module
 - [x] Fix ksi index error
-- [ ] GUI
+- [x] GUI
     - [x] Main menu
     - [x] Database initialization page
     - [x] Greeting page
         - [x] Do not show again check
         - [x] Actualize greeting message
-        - [ ] Latex on greetings page
+        - [x] Latex on greetings page
+        - [x] Justify text
     - [x] Linear section
+        - [x] Picture on first input screen
         - [x] Input fields
         - [x] Make symbolic input for linear
         - [x] Console with info
@@ -107,6 +109,7 @@ Entry                         | Description
         - [x] Add on plot window button
         - [x] 0 < dt < 1
     - [x] Nonlinear section
+        - [x] Picture on first input screen
         - [x] Input fields
         - [x] Console with info
         - [x] Calculate button
@@ -121,27 +124,27 @@ Entry                         | Description
         - [x] Paint labels in color
         - [x] Fix bug with ghost lines
         - [x] Line modes
+        - [x] Stack of colors
+        - [x] Bunch of crashes
     - [x] Validate data
         - [x] t0 = t1 is causes error
         - [x] All empty fields cause errors
         - [x] Error icons
+        - [ ] Validate tables
     - [x] Actualize all tooltips
     - [x] Cleanup UI code
     - [x] Improve logging
     - [x] Input scheme header
     - [x] Handle modeling errors
-    - [ ] Cleanup UI code again
+    - [x] Place widgets a bit upper
     - [ ] Message when critical duration detected
-    - [ ] Place widgets a bit upper
-    - [ ] Picture on first input screen
+    - [ ] Cleanup UI code again
 - [ ] Fix memory error
 - [ ] More efficient C preload
 - [ ] Multiprocessing
     - [ ] Break schemes into pieces
 - [ ] Reimplement coefficients preload, so they will be preloaded by parts
 - [ ] Review all schemes and formulas
-- [ ] Rewrite some tests
-- [ ] Statistical tests
 
 ##### NOTES #####
 

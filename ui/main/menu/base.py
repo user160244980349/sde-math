@@ -21,7 +21,7 @@ class MainMenuWidget(QWidget):
                         "you can easily open or close window with available charts")
 
         bar_layout = QHBoxLayout()
-        bar_layout.addItem(QSpacerItem(0, 50, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        bar_layout.addItem(QSpacerItem(0, 35, QSizePolicy.Expanding, QSizePolicy.Minimum))
         bar_layout.addWidget(icon)
         bar_layout.addWidget(self.charts_check)
 

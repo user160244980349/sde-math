@@ -20,7 +20,8 @@ class Step5(QWidget):
         font.setPointSize(15)
         header.setFont(font)
 
-        info = InfoIcon("Size: k x 1\n"
+        info = InfoIcon("Elements of vector u(t) are expected to be functions\n"
+                        "Size: k x 1\n"
                         "Functions must be set in python and SymPy notation")
 
         self.matrix = MatrixWidget(self)

@@ -77,13 +77,10 @@ class NonlinearModelingWidget(QWidget):
         # configuring layout
 
         self.scheme_name = QLabel()
-        font = self.scheme_name.font()
-        font.setPointSize(11)
-        self.scheme_name.setFont(font)
 
         bar_layout = QHBoxLayout()
         bar_layout.addWidget(back_btn)
-        bar_layout.addItem(QSpacerItem(10, 50, QSizePolicy.Minimum, QSizePolicy.Minimum))
+        bar_layout.addItem(QSpacerItem(10, 35, QSizePolicy.Minimum, QSizePolicy.Minimum))
         bar_layout.addWidget(self.scheme_name)
         bar_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         bar_layout.addWidget(self.charts_check)

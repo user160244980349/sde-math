@@ -34,6 +34,10 @@ class PlotWindow(QMainWindow):
         self.setWindowTitle("SDE-MATH: charts window")
         self.resize(1200, 800)
 
+        self.charts_list.on_show_all.connect(self.plot_widget.show_all)
+        self.charts_list.on_hide_all.connect(self.plot_widget.hide_all)
+        self.charts_list.on_remove_all.connect(self.plot_widget.delete_all)
+
     def showEvent(self, event):
         self.charts_show.emit()
 

@@ -47,6 +47,7 @@ class MainWindow(QMainWindow):
         self.exec_init()
 
         self.setWindowTitle("SDE-MATH: software package")
+        self.setMinimumSize(640, 480)
         self.resize(800, 600)
         self.show()
 
@@ -112,7 +113,7 @@ class MainWindow(QMainWindow):
         self.main_window_close.emit()
 
     def exec_init(self):
-        self.simple_progress.spin("Observing the database...")
+        self.simple_progress.spin("Preparing the database...")
         self.stack_widget.setCurrentWidget(self.simple_progress)
 
         worker = Worker(init)

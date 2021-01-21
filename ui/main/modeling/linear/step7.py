@@ -20,7 +20,9 @@ class Step7(QWidget):
         font.setPointSize(15)
         header.setFont(font)
 
-        info = InfoIcon("Size: n x 1")
+        info = InfoIcon("Elements of column x0 are\n"
+                        "expected to be real values\n"
+                        "Size: n x 1")
 
         self.matrix = MatrixWidget(self)
 

@@ -20,7 +20,9 @@ class Step4(QWidget):
         font.setPointSize(15)
         header.setFont(font)
 
-        info = InfoIcon("Size: n x 1")
+        info = InfoIcon("Elements of column x0 are expected to be functions\n"
+                        "Size: n x 1\n"
+                        "Functions must be set in python and SymPy notation")
 
         self.matrix = MatrixWidget(self)
 

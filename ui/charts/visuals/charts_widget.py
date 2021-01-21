@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QSizePolicy, QFrame, QHBoxLayout, QPushButton, \
 from PyQt5.QtWidgets import QVBoxLayout
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
+from ui.charts.visuals.color import Color
 from ui.charts.visuals.toolbar import ToolBar
 from ui.main.info import InfoIcon
 
@@ -40,9 +41,9 @@ class ChartsWidget(QFrame):
 
         self.btn_to_fn = QPushButton("Trajectories")
         self.btn_to_fn.setFlat(True)
-        self.btn_to_mx = QPushButton("Means")
+        self.btn_to_mx = QPushButton("Expectations")
         self.btn_to_mx.setFlat(True)
-        self.btn_to_dx = QPushButton("Dispersions")
+        self.btn_to_dx = QPushButton("Variances")
         self.btn_to_dx.setFlat(True)
 
         toolbar_layout = QHBoxLayout()
@@ -50,12 +51,13 @@ class ChartsWidget(QFrame):
         toolbar_layout.setSpacing(0)
         toolbar_layout.addItem(QSpacerItem(15, 0, QSizePolicy.Minimum, QSizePolicy.Minimum))
         toolbar_layout.addWidget(InfoIcon("Click this buttons to switch plot modes\n"
-                                          "between trajectories, means and dispersions"))
+                                          "between trajectories, expectations and variances"))
         toolbar_layout.addItem(QSpacerItem(15, 0, QSizePolicy.Minimum, QSizePolicy.Minimum))
         toolbar_layout.addWidget(self.btn_to_fn)
         toolbar_layout.addWidget(self.btn_to_mx)
         toolbar_layout.addWidget(self.btn_to_dx)
         toolbar_layout.addWidget(self.toolbar)
+        toolbar_layout.addItem(QSpacerItem(15, 0, QSizePolicy.Minimum, QSizePolicy.Minimum))
 
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -71,7 +73,12 @@ class ChartsWidget(QFrame):
         self.btn_to_mx.pressed.connect(self.mx_mode)
         self.btn_to_dx.pressed.connect(self.dx_mode)
 
-    def hide_all(self):
+    def rescale(self):
+        self.ax.relim(visible_only=True)
+        self.ax.autoscale_view()
+        self.canvas.draw()
+
+    def clear(self):
         for f in self.plots.values():
             self.hide_label.emit(f.uid)
             if f.line_fn is not None:
@@ -85,7 +92,7 @@ class ChartsWidget(QFrame):
 
         self.mode = 0
 
-        self.hide_all()
+        self.clear()
 
         for f in self.plots.values():
             if f.line_fn is not None:
@@ -93,15 +100,13 @@ class ChartsWidget(QFrame):
                 if f.visible:
                     f.line_fn.set_visible(True)
 
-        self.ax.relim(visible_only=True)
-        self.ax.autoscale_view()
-        self.canvas.draw()
+        self.rescale()
 
     def mx_mode(self):
 
         self.mode = 1
 
-        self.hide_all()
+        self.clear()
 
         for f in self.plots.values():
             if f.line_mx is not None:
@@ -109,15 +114,13 @@ class ChartsWidget(QFrame):
                 if f.visible:
                     f.line_mx.set_visible(True)
 
-        self.ax.relim(visible_only=True)
-        self.ax.autoscale_view()
-        self.canvas.draw()
+        self.rescale()
 
     def dx_mode(self):
 
         self.mode = 2
 
-        self.hide_all()
+        self.clear()
 
         for f in self.plots.values():
             if f.line_dx is not None:
@@ -125,9 +128,7 @@ class ChartsWidget(QFrame):
                 if f.visible:
                     f.line_dx.set_visible(True)
 
-        self.ax.relim(visible_only=True)
-        self.ax.autoscale_view()
-        self.canvas.draw()
+        self.rescale()
 
     def new_items(self, lines: list):
 
@@ -142,8 +143,6 @@ class ChartsWidget(QFrame):
             if f.line_dx is None and f.dx is not None:
                 f.line_dx = self.ax.plot(f.t, f.dx, linewidth=1, color=f.color)[0]
 
-        self.hide_all()
-
         if self.mode == 0:
             self.fn_mode()
 
@@ -153,13 +152,9 @@ class ChartsWidget(QFrame):
         if self.mode == 2:
             self.dx_mode()
 
-        self.ax.relim(visible_only=True)
-        self.ax.autoscale_view()
-        self.figure.tight_layout()
-        self.canvas.draw()
-
     def delete_item(self, uid: int):
         item = self.plots.pop(uid)
+        Color.free(item.color)
         if item.line_fn is not None:
             item.line_fn.remove()
         if item.line_mx is not None:
@@ -167,37 +162,69 @@ class ChartsWidget(QFrame):
         if item.line_dx is not None:
             item.line_dx.remove()
 
-        self.ax.relim(visible_only=True)
-        self.ax.autoscale_view()
-        self.canvas.draw()
+        self.rescale()
 
     def hide_item(self, uid: int):
         item = self.plots[uid]
-        if item.line_fn is not None:
+        if item.line_fn is not None and self.mode == 0:
             item.line_fn.set_visible(False)
-        if item.line_mx is not None:
+        if item.line_mx is not None and self.mode == 1:
             item.line_mx.set_visible(False)
-        if item.line_dx is not None:
+        if item.line_dx is not None and self.mode == 2:
             item.line_dx.set_visible(False)
         item.visible = False
 
-        self.ax.relim(visible_only=True)
-        self.ax.autoscale_view()
-        self.canvas.draw()
+        self.rescale()
 
     def show_item(self, uid: int):
         item = self.plots[uid]
-        if item.line_fn is not None:
+        if item.line_fn is not None and self.mode == 0:
             item.line_fn.set_visible(True)
-        if item.line_mx is not None:
+        if item.line_mx is not None and self.mode == 1:
             item.line_mx.set_visible(True)
-        if item.line_dx is not None:
+        if item.line_dx is not None and self.mode == 2:
             item.line_dx.set_visible(True)
         item.visible = True
 
-        self.ax.relim(visible_only=True)
-        self.ax.autoscale_view()
-        self.canvas.draw()
+        self.rescale()
+
+    def show_all(self):
+        for item in self.plots.values():
+            if item.line_fn is not None and self.mode == 0:
+                item.line_fn.set_visible(True)
+            if item.line_mx is not None and self.mode == 1:
+                item.line_mx.set_visible(True)
+            if item.line_dx is not None and self.mode == 2:
+                item.line_dx.set_visible(True)
+            item.visible = True
+
+        self.rescale()
+
+    def hide_all(self):
+        for item in self.plots.values():
+            if item.line_fn is not None and self.mode == 0:
+                item.line_fn.set_visible(False)
+            if item.line_mx is not None and self.mode == 1:
+                item.line_mx.set_visible(False)
+            if item.line_dx is not None and self.mode == 2:
+                item.line_dx.set_visible(False)
+            item.visible = False
+
+        self.rescale()
+
+    def delete_all(self):
+        for item in reversed(self.plots.values()):
+            Color.free(item.color)
+            if item.line_fn is not None:
+                item.line_fn.remove()
+            if item.line_mx is not None:
+                item.line_mx.remove()
+            if item.line_dx is not None:
+                item.line_dx.remove()
+
+        self.plots.clear()
+
+        self.rescale()
 
     def on_resize(self, event):
         self.figure.tight_layout()
