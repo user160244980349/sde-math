@@ -1,5 +1,5 @@
 import numpy as np
-from sympy import lambdify, sympify, Symbol
+from sympy import lambdify, sympify
 
 
 class AbstractDistortion:

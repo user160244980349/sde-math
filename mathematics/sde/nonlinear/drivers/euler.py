@@ -28,7 +28,10 @@ def euler(y0: np.array, a: Matrix, b: Matrix, times: tuple):
         list of time moments
     """
     start_time = time()
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Euler start")
+
+    logger = logging.getLogger(__name__)
+
+    logger.info(f"[{(time() - start_time):.3f} seconds] Euler start")
 
     # Ranges
     n = b.shape[0]
@@ -55,7 +58,7 @@ def euler(y0: np.array, a: Matrix, b: Matrix, times: tuple):
     for tr in range(n):
         y_compiled.append(lambdify(args_extended, sym_y.subs(sym_i, tr), "numpy"))
 
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Euler subs are finished")
+    logger.info(f"[{(time() - start_time):.3f} seconds] Euler subs are finished")
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]
@@ -68,6 +71,6 @@ def euler(y0: np.array, a: Matrix, b: Matrix, times: tuple):
         for tr in range(n):
             y[tr, p + 1] = y_compiled[tr](*values)
 
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Euler calculations are finished")
+    logger.info(f"[{(time() - start_time):.3f} seconds] Euler calculations are finished")
 
     return y, t

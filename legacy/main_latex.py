@@ -1,7 +1,10 @@
+import os
+
 import matplotlib.pyplot as plt
 
 
 def main():
+    pic_name = "test.svg"
     tex = '$\\frac{1}{\\sqrt{2\\sqrt{2\\pi}}} \\exp\\left(-\\frac{(x-\\mu)^2}{2\\sigma^2}\\right)$'
 
     # Создание области отрисовки
@@ -13,7 +16,7 @@ def main():
     t = ax.text(0.5, 0.5, tex,
                 horizontalalignment='center',
                 verticalalignment='center',
-                fontsize=20, color='black')
+                fontsize=40, color='black')
 
     # Определение размеров формулы
     ax.figure.canvas.draw()
@@ -25,8 +28,8 @@ def main():
 
     # Отрисовка или сохранение формулы в файл
     # plt.show()
-    plt.savefig('test.svg')
-    # plt.savefig('test.png', dpi=300)
+    plt.savefig(os.path.join("../resources", pic_name))
+    # plt.savefig(pic_name, dpi=300)
 
 
 if __name__ == "__main__":

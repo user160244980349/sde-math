@@ -1,7 +1,7 @@
 import logging
 import unittest
 
-from sympy import Matrix, Symbol, symbols, MatrixSymbol, pprint, S
+from sympy import Matrix, Symbol, symbols, MatrixSymbol, pprint
 
 import config as c
 import tools.database as db
@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 class MyTestCase(unittest.TestCase):
-    # @unittest.skip("Success")
+    @unittest.skip("Success")
     def test_q(self):
         print()
         db.connect(c.database)
@@ -104,63 +104,106 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(True, True)
 
-    @unittest.skip("Success")
+    # @unittest.skip("Success")
     def test_L(self):
-        x1, x2, x3, x4, t = symbols("x1 x2 x3 x4 t")
-        exp = x1 ** 2 * x2 ** 2 * t ** 3
+        # exp = x1 ** 2 * x2 ** 2 * t ** 3
 
         a = Matrix([
-            ["x1**2 * x2**2 * t"],
-            ["x2 * x1**2 * 5 * t**3"]
+            ["cos(x1**2 + x2**2 + 2 * t**2)"],
+            ["sin(x1**2 - x2**2 + 3 * t**2)"]
         ])
 
         b = Matrix([
-            ["sin(x1)", "cos(x2)", "cos(2 * x1)"],
-            ["x2**2", "t * x1**2", "t * x2**3"]
+            ["sin(x1**2 + x2**2 - t**2)", "x1**2 * x2**3 * t**2"],
+            ["x1**3 * x2**2 * t**2", "cos(x1**2 + x2**2 + t**2)"]
         ])
 
-        diff_args = symbols("x1 x2")
+        diff_args = symbols("x1 x2 t")
 
         print()
-        pprint(L(a, b, L(a, b, exp, diff_args) + L(a, b, exp, diff_args), diff_args))
-        pprint(L(a, b, S.One + L(a, b, exp, diff_args), diff_args))
-        pprint(L(a, b, diff_args[0], diff_args))
-        pprint(L(a, b, b[0, 0], diff_args))
-        pprint(L(a, b, L(a, b, S.One, diff_args), diff_args))
+        # pprint(L(a, b, L(a, b, exp, diff_args) + L(a, b, exp, diff_args), diff_args))
+        # pprint(L(a, b, S.One + L(a, b, exp, diff_args), diff_args))
+        # pprint(L(a, b, diff_args[0], diff_args))
+        # pprint(L(a, b, b[0, 0], diff_args))
+        # pprint(L(a, b, L(a, b, S.One, diff_args), diff_args))
+
+        # print("a:")
+        # pprint(a)
+
+        print("L(a1):")
+        print(L(a, b, a[0, 0], diff_args))
+
+        print("L(a2):")
+        print(L(a, b, a[1, 0], diff_args))
 
         self.assertEqual(True, True)
 
     @unittest.skip("Success")
     def test_G(self):
+        # a = Matrix([
+        #     "-5 * x1",
+        #     "-5 * x2"
+        # ])
         a = Matrix([
-            "-5 * x1",
-            "-5 * x2"
+            ["cos(x1**2 + x2**2 + 2 * t**2)"],
+            ["sin(x1**2 - x2**2 + 3 * t**2)"]
         ])
-        sym_a = MatrixSymbol("a", 2, 1)
+        # sym_a = MatrixSymbol("a", 2, 1)
 
+        # b = Matrix([
+        #     ["0.5 * sin(x1) - 0.5 * cos(x2)", "0.75 * sin(x1) - 0.75 * cos(x2)"],
+        #     ["-0.5 * sin(x1) + 0.5 * cos(x2)", "-0.75 * sin(x1) + 0.75 * cos(x2)"]
+        # ])
         b = Matrix([
-            ["0.5 * sin(x1) - 0.5 * cos(x2)", "0.75 * sin(x1) - 0.75 * cos(x2)"],
-            ["-0.5 * sin(x1) + 0.5 * cos(x2)", "-0.75 * sin(x1) + 0.75 * cos(x2)"]
+            ["sin(x1**2 + x2**2 - t**2)", "x1**2 * x2**3 * t**2"],
+            ["x1**3 * x2**2 * t**2", "cos(x1**2 + x2**2 + t**2)"]
         ])
-        sym_b = MatrixSymbol("b", 2, 2)
+        # sym_b = MatrixSymbol("b", 2, 2)
 
         diff_args = symbols("x1 x2")
 
         print()
-        pprint(G(b[:, 1], b[0, 0], diff_args))
-        pprint(G(b[:, 1], b[1, 0], diff_args))
-        pprint(G(b[:, 1], b[1, 1], diff_args))
-        pprint(G(b[:, 0], G(b[:, 0], b[0, 0], diff_args), diff_args))
-        pprint(G(sym_b[:, 0], sym_a[0, 0], diff_args))
-        pprint(G(sym_b[:, 0], G(b[:, 0], sym_b[0, 0], diff_args) + G(b[:, 0], b[0, 0], diff_args), diff_args))
-        pprint(G(b[:, 0], G(b[:, 0], b[0, 0], diff_args), diff_args))
-        pprint(G(b[:, 0], G(b[:, 0], diff_args[0], diff_args), diff_args))
-        pprint(G(b[:, 0], G(b[:, 0], S.One, diff_args), diff_args))
-        pprint(G(b[:, 0], G(b[:, 1], S.One, diff_args), diff_args))
-        pprint(G(b[:, 0], G(b[:, 1], b[0, 0], diff_args), diff_args))
-        pprint(G(b[:, 1], G(b[:, 0], b[0, 0], diff_args), diff_args))
-        pprint(G(b[:, 1], G(b[:, 1], b[0, 0], diff_args), diff_args))
-        pprint(G(b[:, 1], S.One + G(b[:, 1], b[0, 0], diff_args), diff_args))
+
+        print("G1(B11):")
+        print(G(b[:, 0], b[0, 0], diff_args))
+
+        print("G1(B12):")
+        print(G(b[:, 0], b[0, 1], diff_args))
+
+        print("G1(B21):")
+        print(G(b[:, 0], b[1, 0], diff_args))
+
+        print("G1(B22):")
+        print(G(b[:, 0], b[1, 1], diff_args))
+
+        print("G2(B11):")
+        print(G(b[:, 1], b[0, 0], diff_args))
+
+        print("G2(B12):")
+        print(G(b[:, 1], b[0, 1], diff_args))
+
+        print("G2(B21):")
+        print(G(b[:, 1], b[1, 0], diff_args))
+
+        print("G2(B22):")
+        print(G(b[:, 1], b[1, 1], diff_args))
+        # pprint(G(b[:, 1], b[1, 0], diff_args))
+        # pprint(G(b[:, 1], b[1, 1], diff_args))
+        # pprint(G(b[:, 0], G(b[:, 0], b[0, 0], diff_args), diff_args))
+        # pprint(G(sym_b[:, 0], sym_a[0, 0], diff_args))
+        # pprint(G(sym_b[:, 0], G(b[:, 0], sym_b[0, 0], diff_args) + G(b[:, 0], b[0, 0], diff_args), diff_args))
+        # pprint(G(b[:, 0], G(b[:, 0], b[0, 0], diff_args), diff_args))
+        # pprint(G(b[:, 0], G(b[:, 0], diff_args[0], diff_args), diff_args))
+        # pprint(G(b[:, 0], G(b[:, 0], S.One, diff_args), diff_args))
+        # pprint(G(b[:, 0], G(b[:, 1], S.One, diff_args), diff_args))
+        # pprint(G(b[:, 0], G(b[:, 1], b[0, 0], diff_args), diff_args))
+        # pprint(G(b[:, 1], G(b[:, 0], b[0, 0], diff_args), diff_args))
+        # pprint(G(b[:, 1], G(b[:, 1], b[0, 0], diff_args), diff_args))
+        # pprint(G(b[:, 1], S.One + G(b[:, 1], b[0, 0], diff_args), diff_args))
+        #
+        # print("G(a1):")
+        # pprint(L(a, b, b[0, 0], diff_args))
+        # print("G(a2):")
 
         self.assertEqual(True, True)
 

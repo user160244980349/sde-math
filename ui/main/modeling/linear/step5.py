@@ -15,12 +15,13 @@ class Step5(QWidget):
 
         # widgets creation
 
-        header = QLabel("Setting of U column", parent=self)
+        header = QLabel("Setting of vector function u(t)", parent=self)
         font = header.font()
         font.setPointSize(15)
         header.setFont(font)
 
-        info = InfoIcon("")
+        info = InfoIcon("Size: k x 1\n"
+                        "Functions must be set in python and SymPy notation")
 
         self.matrix = MatrixWidget(self)
 

@@ -92,17 +92,12 @@ Entry                         | Description
 - [x] Store indices in file
 - [x] Restore indices from file in a separate module
 - [x] Fix ksi index error
-- [ ] Fix memory error
-- [ ] More efficient C preload
-- [ ] Multiprocessing
-    - [ ] Break schemes into pieces
-- [ ] Reimplement coefficients preload, so they will be preloaded by parts
 - [ ] GUI
     - [x] Main menu
     - [x] Database initialization page
     - [x] Greeting page
         - [x] Do not show again check
-        - [ ] Actualize greeting message
+        - [x] Actualize greeting message
         - [ ] Latex on greetings page
     - [x] Linear section
         - [x] Input fields
@@ -117,22 +112,33 @@ Entry                         | Description
         - [x] Calculate button
         - [x] Add on plot window button
         - [x] 0 < dt < 1
-    - [ ] Plot window
+    - [x] Plot window
         - [x] Remove chart
         - [x] Hide chart
-        - [ ] Adjust lines labels
-        - [ ] Hide some options of the toolbar
-        - [ ] Thinner lines
-        - [ ] Paint labels in color
+        - [x] Hide some options of the toolbar
+        - [x] Adjust lines labels
+        - [x] Thinner lines
+        - [x] Paint labels in color
         - [x] Fix bug with ghost lines
+        - [x] Line modes
     - [x] Validate data
         - [x] t0 = t1 is causes error
-        - [x] all empty fields cause errors
-    - [ ] Actualize all tooltips
-    - [ ] Message when critical duration detected
+        - [x] All empty fields cause errors
+        - [x] Error icons
+    - [x] Actualize all tooltips
     - [x] Cleanup UI code
-    - [ ] Improve logging
-    - [ ] Handle modeling errors
+    - [x] Improve logging
+    - [x] Input scheme header
+    - [x] Handle modeling errors
+    - [ ] Cleanup UI code again
+    - [ ] Message when critical duration detected
+    - [ ] Place widgets a bit upper
+    - [ ] Picture on first input screen
+- [ ] Fix memory error
+- [ ] More efficient C preload
+- [ ] Multiprocessing
+    - [ ] Break schemes into pieces
+- [ ] Reimplement coefficients preload, so they will be preloaded by parts
 - [ ] Review all schemes and formulas
 - [ ] Rewrite some tests
 - [ ] Statistical tests

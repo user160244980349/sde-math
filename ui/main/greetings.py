@@ -23,9 +23,9 @@ class GreetingsWidget(QWidget):
             "Exact solutions of Ito SDEs "
             "are known in rare cases. "
             "For this reason, it becomes necessary to construct numerical "
-            "methods for Ito SDEs."
+            "methods for Ito SDEs. "
             "Moreover, the problem of numerical solution of Ito SDEs "
-            "often occurs even in cases when the exact solution of Ito SDE is known."
+            "often occurs even in cases when the exact solution of Ito SDE is known. "
             "This means that in some cases, knowing the exact solution to the Ito "
             "SDE does not allow us to simulate it numerically in a simple way.", self
         )
@@ -43,13 +43,14 @@ class GreetingsWidget(QWidget):
         controls.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         controls.addWidget(check_again)
         controls.addWidget(next_btn)
+        controls.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
         column = QVBoxLayout()
         column.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
         column.addWidget(header)
         column.addWidget(welcome)
-        column.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
         column.addLayout(controls)
+        column.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding))
 
         layout = QHBoxLayout()
         layout.addItem(QSpacerItem(50, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))

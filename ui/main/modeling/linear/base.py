@@ -1,11 +1,10 @@
 import logging
-from pprint import pprint
-from time import sleep
+from time import time
 
 import numpy as np
 from PyQt5.QtCore import QThreadPool, pyqtSignal
 from PyQt5.QtWidgets import QCheckBox, QPushButton, QStyle, QApplication, QSizePolicy, QHBoxLayout, \
-    QSpacerItem, QVBoxLayout, QStackedWidget, QWidget
+    QSpacerItem, QVBoxLayout, QStackedWidget, QWidget, QLabel
 
 from mathematics.sde.linear.dindet import dindet
 from mathematics.sde.linear.distortions import Symbolic, ComplexDistortion
@@ -35,6 +34,8 @@ class LinearModelingWidget(QWidget):
     def __init__(self, parent=None):
         super(QWidget, self).__init__(parent)
 
+        self.logger = logging.getLogger(__name__)
+
         # widgets creation
 
         self.stack_widget = QStackedWidget(self)
@@ -53,11 +54,18 @@ class LinearModelingWidget(QWidget):
 
         self.charts_check = QCheckBox("Charts window", self)
 
+        self.scheme_name = QLabel("Linear Ito SDEs")
+        font = self.scheme_name.font()
+        font.setPointSize(11)
+        self.scheme_name.setFont(font)
+
         # configuring layout
 
         bar_layout = QHBoxLayout()
         bar_layout.addWidget(back_btn)
-        bar_layout.addItem(QSpacerItem(0, 40, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        bar_layout.addItem(QSpacerItem(10, 50, QSizePolicy.Minimum, QSizePolicy.Minimum))
+        bar_layout.addWidget(self.scheme_name)
+        bar_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         bar_layout.addWidget(self.charts_check)
 
         self.stack_widget.addWidget(self.step1)
@@ -118,10 +126,10 @@ class LinearModelingWidget(QWidget):
 
         worker = Worker(self.routine)
         worker.signals.result.connect(self.on_modeling_finish)
+        worker.signals.error.connect(self.on_modeling_corrupted)
         QThreadPool.globalInstance().start(worker)
 
     def routine(self):
-
         n = int(self.step1.lineedit_n.text())
         m = int(self.step1.lineedit_m.text())
         k = int(self.step1.lineedit_k.text())
@@ -129,20 +137,46 @@ class LinearModelingWidget(QWidget):
         dt = float(self.step8.lineedit_dt.text())
         t1 = float(self.step8.lineedit_t1.text())
 
+        self.logger.info("Reading input data")
+
         integral = Integral(n)
 
         integral.k, integral.m, integral.dt, integral.t0, integral.tk = \
             k, m, dt, t0, t1
 
-        integral.m_a = np.array([[float(self.step2.matrix.m[i][j]) for j in range(self.step2.matrix.columnCount())] for i in range(self.step2.matrix.rowCount())])
-        integral.mat_b = np.array([[float(self.step3.matrix.m[i][j]) for j in range(self.step3.matrix.columnCount())] for i in range(self.step3.matrix.rowCount())])
-        integral.mat_f = np.array([[float(self.step4.matrix.m[i][j]) for j in range(self.step4.matrix.columnCount())] for i in range(self.step4.matrix.rowCount())])
-        integral.m_h = np.array([[float(self.step6.matrix.m[i][j]) for j in range(self.step6.matrix.columnCount())] for i in range(self.step6.matrix.rowCount())])
-        integral.m_x0 = np.array([[float(self.step7.matrix.m[i][j]) for j in range(self.step7.matrix.columnCount())] for i in range(self.step7.matrix.rowCount())])
-        integral.m_mx0 = np.array([[float(self.step7.matrix.m[i][j]) for j in range(self.step7.matrix.columnCount())] for i in range(self.step7.matrix.rowCount())])
+        integral.m_a = np.array([[float(self.step2.matrix.m[i][j])
+                                  for j in range(self.step2.matrix.columnCount())]
+                                 for i in range(self.step2.matrix.rowCount())])
+
+        integral.mat_b = np.array([[float(self.step3.matrix.m[i][j])
+                                    for j in range(self.step3.matrix.columnCount())]
+                                   for i in range(self.step3.matrix.rowCount())])
+
+        integral.mat_f = np.array([[float(self.step4.matrix.m[i][j])
+                                    for j in range(self.step4.matrix.columnCount())]
+                                   for i in range(self.step4.matrix.rowCount())])
+
+        integral.m_h = np.array([[float(self.step6.matrix.m[i][j])
+                                  for j in range(self.step6.matrix.columnCount())]
+                                 for i in range(self.step6.matrix.rowCount())])
+
+        integral.m_x0 = np.array([[float(self.step7.matrix.m[i][j])
+                                   for j in range(self.step7.matrix.columnCount())]
+                                  for i in range(self.step7.matrix.rowCount())])
+
+        integral.m_mx0 = np.array([[float(self.step7.matrix.m[i][j])
+                                    for j in range(self.step7.matrix.columnCount())]
+                                   for i in range(self.step7.matrix.rowCount())])
 
         integral.m_dx0 = np.zeros((integral.n, integral.n))
+
+        self.logger.info("Input is correct")
+        self.logger.info("Calculation of Ad and Bd (Algorithm 11.2)")
+
         integral.m_ad, integral.m_bd = dindet(integral.n, integral.k, integral.m_a, integral.mat_b, integral.dt)
+
+        self.logger.info("Calculation of Fd (Algorithm 11.6)")
+
         integral.m_fd = stoch(integral.n, integral.m_a, integral.mat_f, integral.dt)
 
         mat_u = np.array([[object]] * self.step5.matrix.rowCount())
@@ -150,12 +184,13 @@ class LinearModelingWidget(QWidget):
             mat_u[i][0] = Symbolic(self.step5.matrix.m[i][0])
 
         integral.distortion = ComplexDistortion(self.step5.matrix.rowCount(), mat_u)
+
+        self.logger.info("Starting modeling loop")
+
+        start_time = time()
         integral.integrate()
 
-        return integral.m_xt, integral.v_t
-
-    def on_modeling_finish(self, result):
-        self.stop_progress.emit("The modeling has been completed!")
+        self.logger.info(f"Integration took {(time() - start_time):.3f} seconds")
 
         name = f"Linear, " \
                f"t=({self.step8.lineedit_t0.text()}, " \
@@ -163,8 +198,33 @@ class LinearModelingWidget(QWidget):
                f"{self.step8.lineedit_t1.text()})"
 
         lines = [Line(name,
-                      np.array(result[1]).astype(float),
-                      np.array(result[0][i, :]).astype(float))
-                 for i in range(len(result[0]))]
+                      np.array(integral.v_t).astype(float),
+                      np.array(integral.m_xt[i, :]).astype(float),
+                      mx=np.array(integral.m_mx[i, :]).astype(float),
+                      dx=np.array(integral.m_dx[i, :]).astype(float))
+                 for i in range(integral.m_xt.shape[0])]
 
-        self.draw_chart.emit(lines)
+        name = f"Linear exit pr., " \
+               f"t=({self.step8.lineedit_t0.text()}, " \
+               f"{self.step8.lineedit_dt.text()}, " \
+               f"{self.step8.lineedit_t1.text()})"
+
+        lines.append(Line(name,
+                          np.array(integral.v_t).astype(float),
+                          np.array(integral.v_yt).astype(float),
+                          mx=np.array(integral.v_my).astype(float),
+                          dx=np.array(integral.v_dy).astype(float)))
+
+        return lines
+
+    def on_modeling_finish(self, result):
+        self.stop_progress.emit("The modeling has been completed!")
+        self.draw_chart.emit(result)
+
+    def on_modeling_corrupted(self, result):
+
+        self.logger.error(result[0])
+        self.logger.error(result[1])
+        self.logger.error(result[2])
+
+        self.stop_progress.emit("The modeling failed!")

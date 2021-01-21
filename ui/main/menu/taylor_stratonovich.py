@@ -17,17 +17,6 @@ class StratonovichGroupWidget(QGroupBox):
         btn4 = QPushButton("Convergence order 2.5")
         btn5 = QPushButton("Convergence order 3.0")
 
-        btn1.setStyleSheet("padding-left: 10px; padding-right: 10px;"
-                           "padding-top: 4px; padding-bottom: 4px;")
-        btn2.setStyleSheet("padding-left: 10px; padding-right: 10px;"
-                           "padding-top: 4px; padding-bottom: 4px;")
-        btn3.setStyleSheet("padding-left: 10px; padding-right: 10px;"
-                           "padding-top: 4px; padding-bottom: 4px;")
-        btn4.setStyleSheet("padding-left: 10px; padding-right: 10px;"
-                           "padding-top: 4px; padding-bottom: 4px;")
-        btn5.setStyleSheet("padding-left: 10px; padding-right: 10px;"
-                           "padding-top: 4px; padding-bottom: 4px;")
-
         # layout configuration
 
         layout = QVBoxLayout()

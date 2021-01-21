@@ -15,12 +15,12 @@ class Step4(QWidget):
 
         # widgets creation
 
-        header = QLabel("Setting of F column", parent=self)
+        header = QLabel("Setting of matrix F", parent=self)
         font = header.font()
         font.setPointSize(15)
         header.setFont(font)
 
-        info = InfoIcon("")
+        info = InfoIcon("Size: n x m")
 
         self.matrix = MatrixWidget(self)
 

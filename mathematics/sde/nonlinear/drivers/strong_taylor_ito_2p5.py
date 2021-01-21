@@ -31,7 +31,10 @@ def strong_taylor_ito_2p5(y0: np.array, a: Matrix, b: Matrix, k: float, times: t
         list of time moments
     """
     start_time = time()
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong Taylor-Ito 2.5 start")
+
+    logger = logging.getLogger(__name__)
+
+    logger.info(f"[{(time() - start_time):.3f} seconds] Strong Taylor-Ito 2.5 start")
 
     # Ranges
     n = b.shape[0]
@@ -44,9 +47,9 @@ def strong_taylor_ito_2p5(y0: np.array, a: Matrix, b: Matrix, k: float, times: t
     args = symbols(f"x1:{n + 1}")
     ticks = int((t2 - t1) / dt)
     q = get_q(dt, k, 2.5)
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using C = {k}")
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using dt = {dt}")
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using q = {q}")
+    logger.info(f"[{(time() - start_time):.3f} seconds] Using C = {k}")
+    logger.info(f"[{(time() - start_time):.3f} seconds] Using dt = {dt}")
+    logger.info(f"[{(time() - start_time):.3f} seconds] Using q = {q}")
 
     # Symbols
     sym_i, sym_t = symbols("i t")
@@ -62,7 +65,7 @@ def strong_taylor_ito_2p5(y0: np.array, a: Matrix, b: Matrix, k: float, times: t
     for tr in range(n):
         y_compiled.append(lambdify(args_extended, sym_y.subs(sym_i, tr), "numpy"))
 
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong Taylor-Ito 2.5 subs are finished")
+    logger.info(f"[{(time() - start_time):.3f} seconds] Strong Taylor-Ito 2.5 subs are finished")
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]
@@ -75,6 +78,6 @@ def strong_taylor_ito_2p5(y0: np.array, a: Matrix, b: Matrix, k: float, times: t
         for tr in range(n):
             y[tr, p + 1] = y_compiled[tr](*values)
 
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong Taylor-Ito 2.5 calculations are finished")
+    logger.info(f"[{(time() - start_time):.3f} seconds] Strong Taylor-Ito 2.5 calculations are finished")
 
     return y, t

@@ -2,6 +2,7 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QGridLayout, QLineEdit, QLabel, QVBoxLayout, QSpacerItem, QSizePolicy, \
     QPushButton, QApplication, QStyle
 
+from ui.main.error import ErrorWidget
 from ui.main.info import InfoIcon
 
 
@@ -26,9 +27,9 @@ class Step1(QWidget):
 
         # widget creation
 
-        info_n = InfoIcon("TOOLTIP")
-        info_m = InfoIcon("TOOLTIP")
-        info_k = InfoIcon("TOOLTIP")
+        info_n = InfoIcon("Dimension of linear system of Ito SDEs")
+        info_m = InfoIcon("Dimension of vector Wiener process")
+        info_k = InfoIcon("Dimension of vector function u(t)")
 
         label_n = QLabel("n")
         label_m = QLabel("m")
@@ -38,16 +39,13 @@ class Step1(QWidget):
         self.lineedit_m = QLineEdit()
         self.lineedit_k = QLineEdit()
 
-        self.msg_n = QLabel()
-        self.msg_n.setStyleSheet("color: rgb(255, 0, 0);")
+        self.msg_n = ErrorWidget("Wrong value!")
         self.msg_n.hide()
 
-        self.msg_m = QLabel()
-        self.msg_m.setStyleSheet("color: rgb(255, 0, 0);")
+        self.msg_m = ErrorWidget("Wrong value!")
         self.msg_m.hide()
 
-        self.msg_k = QLabel()
-        self.msg_k.setStyleSheet("color: rgb(255, 0, 0);")
+        self.msg_k = ErrorWidget("Wrong value!")
         self.msg_k.hide()
 
         grid_layout = QGridLayout()
@@ -117,7 +115,7 @@ class Step1(QWidget):
         try:
             typed_value = int(value)
             if typed_value <= 0:
-                raise ValueError("input error")
+                raise ValueError()
 
             self.n_is_valid = True
             self.n_valid.emit(typed_value)
@@ -125,7 +123,6 @@ class Step1(QWidget):
 
         except ValueError:
             self.n_is_valid = False
-            self.msg_n.setText("Wrong value!")
             self.msg_n.show()
 
         finally:
@@ -135,7 +132,7 @@ class Step1(QWidget):
         try:
             typed_value = int(value)
             if typed_value <= 0:
-                raise ValueError("input error")
+                raise ValueError()
 
             self.m_is_valid = True
             self.m_valid.emit(typed_value)
@@ -143,7 +140,6 @@ class Step1(QWidget):
 
         except ValueError:
             self.m_is_valid = False
-            self.msg_m.setText("Wrong value!")
             self.msg_m.show()
 
         finally:
@@ -153,7 +149,7 @@ class Step1(QWidget):
         try:
             typed_value = int(value)
             if typed_value <= 0:
-                raise ValueError("input error")
+                raise ValueError()
 
             self.k_is_valid = True
             self.k_valid.emit(typed_value)
@@ -161,7 +157,6 @@ class Step1(QWidget):
 
         except ValueError:
             self.k_is_valid = False
-            self.msg_k.setText("Wrong value!")
             self.msg_k.show()
 
         finally:

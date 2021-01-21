@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(QMainWindow, self).__init__()
 
-        self.plot_window = PlotWindow(self)
+        self.plot_window = PlotWindow()
 
         self.stack_widget = QStackedWidget(self)
 
@@ -89,7 +89,7 @@ class MainWindow(QMainWindow):
 
         self.nonlinear_modeling.draw_chart.connect(self.plot_window.charts_list.new_items)
         self.nonlinear_modeling.draw_chart.connect(self.plot_window.plot_widget.new_items)
-        self.nonlinear_modeling.stop_progress.connect(self.plot_window.show)
+        self.nonlinear_modeling.draw_chart.connect(self.plot_window.show)
 
         self.nonlinear_modeling.charts_check.stateChanged.connect(self.plot_window.setVisible)
         self.plot_window.charts_show.connect(lambda: self.nonlinear_modeling.charts_check.setChecked(True))
@@ -97,7 +97,7 @@ class MainWindow(QMainWindow):
 
         self.linear_modeling.draw_chart.connect(self.plot_window.charts_list.new_items)
         self.linear_modeling.draw_chart.connect(self.plot_window.plot_widget.new_items)
-        self.linear_modeling.stop_progress.connect(self.plot_window.show)
+        self.linear_modeling.draw_chart.connect(self.plot_window.show)
 
         self.linear_modeling.charts_check.clicked.connect(self.plot_window.setVisible)
         self.plot_window.charts_show.connect(lambda: self.linear_modeling.charts_check.setChecked(True))

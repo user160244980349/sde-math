@@ -3,6 +3,7 @@ import sys
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QLineEdit, QGridLayout, QVBoxLayout, QSizePolicy, QSpacerItem, \
     QPushButton, QApplication, QStyle
 
+from ui.main.error import ErrorWidget
 from ui.main.info import InfoIcon
 
 
@@ -30,11 +31,15 @@ class Step8(QWidget):
 
         # widgets creation
 
-        info_t0 = InfoIcon("TOOLTIP")
-        info_dt = InfoIcon("TOOLTIP")
-        info_t1 = InfoIcon("TOOLTIP")
-        info_s = InfoIcon("TOOLTIP")
-        self.info_c = InfoIcon("TOOLTIP")
+        info_t0 = InfoIcon("Start point of integration interval\n"
+                           "Must be in [0, t1) range")
+        info_dt = InfoIcon("Integration step\n"
+                           "Must be set in (0, 1) interval")
+        info_t1 = InfoIcon("Final point of integration interval\n"
+                           "Must be more then t0")
+        info_s = InfoIcon("This is random generator seed\n"
+                          "If You do not want to use specific\n"
+                          "seed just leave this field empty")
 
         label_t0 = QLabel("t0")
         label_dt = QLabel("dt")
@@ -46,20 +51,16 @@ class Step8(QWidget):
         self.lineedit_t1 = QLineEdit()
         self.lineedit_s = QLineEdit()
 
-        self.msg_t0 = QLabel()
-        self.msg_t0.setStyleSheet("color: rgb(255, 0, 0);")
+        self.msg_t0 = ErrorWidget("Wrong value!")
         self.msg_t0.hide()
 
-        self.msg_dt = QLabel()
-        self.msg_dt.setStyleSheet("color: rgb(255, 0, 0);")
+        self.msg_dt = ErrorWidget("Wrong value!")
         self.msg_dt.hide()
 
-        self.msg_t1 = QLabel()
-        self.msg_t1.setStyleSheet("color: rgb(255, 0, 0);")
+        self.msg_t1 = ErrorWidget("Wrong value!")
         self.msg_t1.hide()
 
-        self.msg_s = QLabel()
-        self.msg_s.setStyleSheet("color: rgb(255, 0, 0);")
+        self.msg_s = ErrorWidget("Wrong value!")
         self.msg_s.hide()
 
         header = QLabel("Accuracy settings", parent=self)
@@ -171,14 +172,15 @@ class Step8(QWidget):
 
         except ValueError:
             self.t0_is_valid = False
-            self.msg_t0.setText("Wrong value!")
             self.msg_t0.show()
 
     def validate_dt(self):
         try:
             typed_value = float(self.lineedit_dt.text())
-            if typed_value <= 0 or (self.t1 - self.t0) / typed_value < 1 or typed_value >= 1:
-                raise ValueError("input error")
+            if typed_value <= 0 \
+                    or (self.t1 - self.t0) / typed_value < 1 \
+                    or typed_value >= 1:
+                raise ValueError()
 
             self.dt_is_valid = True
             self.dt = typed_value
@@ -187,7 +189,6 @@ class Step8(QWidget):
 
         except ValueError:
             self.dt_is_valid = False
-            self.msg_dt.setText("Wrong value!")
             self.msg_dt.show()
 
     def validate_t1(self):
@@ -202,7 +203,6 @@ class Step8(QWidget):
 
         except ValueError:
             self.t1_is_valid = False
-            self.msg_t1.setText("Wrong value!")
             self.msg_t1.show()
 
     def validate_s(self):
@@ -213,7 +213,7 @@ class Step8(QWidget):
             else:
                 typed_value = int(self.lineedit_s.text())
                 if typed_value <= 0:
-                    raise ValueError("input error")
+                    raise ValueError()
                 self.s = typed_value
 
             self.s_is_valid = True
@@ -221,7 +221,6 @@ class Step8(QWidget):
 
         except ValueError:
             self.s_is_valid = False
-            self.msg_s.setText("Wrong value!")
             self.msg_s.show()
 
         finally:

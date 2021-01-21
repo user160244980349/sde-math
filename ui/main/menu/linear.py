@@ -12,8 +12,6 @@ class LinearGroupWidget(QGroupBox):
         super(QGroupBox, self).__init__(parent)
 
         linear_btn = QPushButton("Dispersion spectral decomposition")
-        linear_btn.setStyleSheet("padding-left: 10px; padding-right: 10px;"
-                                 "padding-top: 4px; padding-bottom: 4px;")
 
         # layout configuration
 

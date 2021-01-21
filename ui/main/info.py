@@ -8,5 +8,6 @@ class InfoIcon(QLabel):
         super(QWidget, self).__init__(parent)
 
         self.setToolTip(text)
+        self.setStyleSheet("QToolTip {background: white;}")
         self.setPixmap(QApplication.style().standardIcon(
             QStyle.SP_MessageBoxInformation).pixmap(QSize(16, 16)))

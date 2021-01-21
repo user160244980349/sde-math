@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QMainWindow, QSplitter
 
 from ui.charts.side.available_charts_widget import AvailableChartsWidget
-from ui.charts.visuals.charts_widget import PlotWidget
+from ui.charts.visuals.charts_widget import ChartsWidget
 
 
 class PlotWindow(QMainWindow):
@@ -12,16 +12,17 @@ class PlotWindow(QMainWindow):
     charts_show = pyqtSignal()
     charts_hide = pyqtSignal()
 
-    def __init__(self, main_window):
+    def __init__(self):
         super(QMainWindow, self).__init__()
 
-        self.plot_widget = PlotWidget(self)
+        self.plot_widget = ChartsWidget(self)
         self.charts_list = AvailableChartsWidget(self)
 
         splitter = QSplitter()
         splitter.addWidget(self.charts_list)
         splitter.addWidget(self.plot_widget)
-        splitter.setSizes([splitter.width() / 0.75, splitter.width() / 0.25])
+        splitter.setSizes([splitter.width() / 0.75,
+                           splitter.width() / 0.25])
 
         layout = QHBoxLayout(self)
         layout.addWidget(splitter)

@@ -25,7 +25,7 @@ class ComplexProgressWidget(QWidget):
         self.label.setFont(font)
 
         self.back_btn = QPushButton("Ok")
-        self.back_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogOkButton))
+        self.back_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogApplyButton))
         self.back_btn.hide()
 
         # layout configuration

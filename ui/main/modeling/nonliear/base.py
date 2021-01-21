@@ -1,7 +1,9 @@
+import logging
+
 import numpy as np
 from PyQt5.QtCore import QThreadPool, pyqtSignal
 from PyQt5.QtWidgets import QCheckBox, QPushButton, QStyle, QApplication, QSizePolicy, QHBoxLayout, \
-    QSpacerItem, QVBoxLayout, QStackedWidget, QWidget
+    QSpacerItem, QVBoxLayout, QStackedWidget, QWidget, QLabel
 from sympy import Matrix
 
 import config
@@ -41,6 +43,7 @@ class NonlinearModelingWidget(QWidget):
 
         # other variables
 
+        self.logger = logging.getLogger(__name__)
         self.scheme_id = None
         self.schemes = {
             "Euler": euler,
@@ -73,9 +76,16 @@ class NonlinearModelingWidget(QWidget):
 
         # configuring layout
 
+        self.scheme_name = QLabel()
+        font = self.scheme_name.font()
+        font.setPointSize(11)
+        self.scheme_name.setFont(font)
+
         bar_layout = QHBoxLayout()
         bar_layout.addWidget(back_btn)
-        bar_layout.addItem(QSpacerItem(0, 40, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        bar_layout.addItem(QSpacerItem(10, 50, QSizePolicy.Minimum, QSizePolicy.Minimum))
+        bar_layout.addWidget(self.scheme_name)
+        bar_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         bar_layout.addWidget(self.charts_check)
 
         self.stack_widget.addWidget(self.step1)
@@ -115,6 +125,7 @@ class NonlinearModelingWidget(QWidget):
 
     def set_scheme(self, scheme_id):
         self.scheme_id = scheme_id
+        self.scheme_name.setText(scheme_id)
         if scheme_id == "Euler":
             self.step5.count_c(False)
         else:
@@ -125,6 +136,7 @@ class NonlinearModelingWidget(QWidget):
 
         worker = Worker(self.routine)
         worker.signals.result.connect(self.on_modeling_finish)
+        worker.signals.error.connect(self.on_modeling_corrupted)
         QThreadPool.globalInstance().start(worker)
 
     def routine(self):
@@ -160,11 +172,6 @@ class NonlinearModelingWidget(QWidget):
 
         database.disconnect()
 
-        return result
-
-    def on_modeling_finish(self, result):
-        self.stop_progress.emit("The modeling has been completed!")
-
         name = f"{self.scheme_id}, " \
                f"t=({self.step5.lineedit_t0.text()}, " \
                f"{self.step5.lineedit_dt.text()}, " \
@@ -178,4 +185,16 @@ class NonlinearModelingWidget(QWidget):
                       np.array(result[0][i, :]).astype(float))
                  for i in range(len(result[0]))]
 
-        self.draw_chart.emit(lines)
+        return lines
+
+    def on_modeling_finish(self, result):
+        self.stop_progress.emit("The modeling has been completed!")
+        self.draw_chart.emit(result)
+
+    def on_modeling_corrupted(self, result):
+
+        self.logger.error(result[0])
+        self.logger.error(result[1])
+        self.logger.error(result[2])
+
+        self.stop_progress.emit("The modeling failed!")

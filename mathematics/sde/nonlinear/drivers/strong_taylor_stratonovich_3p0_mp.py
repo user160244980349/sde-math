@@ -31,7 +31,10 @@ def strong_taylor_stratonovich_3p0_mp(y0: np.array, a: Matrix, b: Matrix, k: flo
         list of time moments
     """
     start_time = time()
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong Taylor-Stratonovich 3.0 start")
+
+    logger = logging.getLogger(__name__)
+
+    logger.info(f"[{(time() - start_time):.3f} seconds] Strong Taylor-Stratonovich 3.0 start")
 
     # Ranges
     n = b.shape[0]
@@ -44,9 +47,9 @@ def strong_taylor_stratonovich_3p0_mp(y0: np.array, a: Matrix, b: Matrix, k: flo
     args = symbols(f"x1:{n + 1}")
     ticks = int((t2 - t1) / dt)
     q = get_q(dt, k, 3)
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using C = {k}")
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using dt = {dt}")
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Using q = {q}")
+    logger.info(f"[{(time() - start_time):.3f} seconds] Using C = {k}")
+    logger.info(f"[{(time() - start_time):.3f} seconds] Using dt = {dt}")
+    logger.info(f"[{(time() - start_time):.3f} seconds] Using q = {q}")
 
     # Symbols
     sym_i, sym_t = symbols("i t")
@@ -65,8 +68,8 @@ def strong_taylor_stratonovich_3p0_mp(y0: np.array, a: Matrix, b: Matrix, k: flo
     for tr in range(n):
         y_compiled.append(lambdify(args_extended, sym_y.subs(sym_i, tr), "numpy"))
 
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong "
-                 f"Taylor-Stratonovich 3.0 subs are finished")
+    logger.info(f"[{(time() - start_time):.3f} seconds] Strong "
+                f"Taylor-Stratonovich 3.0 subs are finished")
 
     # Substitution values
     t = [t1 + i * dt for i in range(ticks)]
@@ -79,7 +82,7 @@ def strong_taylor_stratonovich_3p0_mp(y0: np.array, a: Matrix, b: Matrix, k: flo
         for tr in range(n):
             y[tr, p + 1] = y_compiled[tr](*values)
 
-    logging.info(f"Schemes: [{(time() - start_time):.3f} seconds] Strong "
-                 f"Taylor-Stratonovich 3.0 calculations are finished")
+    logger.info(f"[{(time() - start_time):.3f} seconds] Strong "
+                f"Taylor-Stratonovich 3.0 calculations are finished")
 
     return y, t
