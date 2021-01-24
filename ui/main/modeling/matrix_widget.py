@@ -11,11 +11,14 @@ class MatrixWidget(QTableWidget):
 
         self.setRowCount(1)
         self.setColumnCount(1)
-        self.setItem(0, 0, QTableWidgetItem("0"))
+        self.setItem(0, 0, CustomItem("0"))
 
         self.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 
     def resize_w(self, w: int):
+
+        self.blockSignals(True)
+
         old_w = self.columnCount()
         self.setColumnCount(w)
         h = self.rowCount()
@@ -30,9 +33,14 @@ class MatrixWidget(QTableWidget):
                 if item is not None:
                     item.setText(self.m[i][j])
                 else:
-                    self.setItem(i, j, QTableWidgetItem(self.m[i][j]))
+                    self.setItem(i, j, CustomItem(self.m[i][j]))
+
+        self.blockSignals(False)
 
     def resize_h(self, h: int):
+
+        self.blockSignals(True)
+
         old_h = self.rowCount()
         w = self.columnCount()
         self.setRowCount(h)
@@ -47,7 +55,17 @@ class MatrixWidget(QTableWidget):
                 if item is not None:
                     item.setText(self.m[i][j])
                 else:
-                    self.setItem(i, j, QTableWidgetItem(self.m[i][j]))
+                    self.setItem(i, j, CustomItem(self.m[i][j]))
+
+        self.blockSignals(False)
 
     def item_changed(self, item):
         self.m[item.row()][item.column()] = item.text()
+
+
+class CustomItem(QTableWidgetItem):
+
+    def __init__(self, value: str):
+        super(QTableWidgetItem, self).__init__(value)
+
+        self.valid = True

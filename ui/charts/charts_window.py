@@ -21,8 +21,8 @@ class PlotWindow(QMainWindow):
         splitter = QSplitter()
         splitter.addWidget(self.charts_list)
         splitter.addWidget(self.plot_widget)
-        splitter.setSizes([splitter.width() / 0.75,
-                           splitter.width() / 0.25])
+        splitter.setSizes([splitter.width() / 0.85,
+                           splitter.width() / 0.15])
 
         layout = QHBoxLayout(self)
         layout.addWidget(splitter)

@@ -6,16 +6,16 @@ class StratonovichGroupWidget(QGroupBox):
     """
     Application main window
     """
-    show_nonlinear_dialog = pyqtSignal(str)
+    show_nonlinear_dialog = pyqtSignal(int)
 
     def __init__(self, parent=None):
         super(QGroupBox, self).__init__(parent)
 
-        btn1 = QPushButton("Convergence order 1.0")
-        btn2 = QPushButton("Convergence order 1.5")
-        btn3 = QPushButton("Convergence order 2.0")
-        btn4 = QPushButton("Convergence order 2.5")
-        btn5 = QPushButton("Convergence order 3.0")
+        btn1 = QPushButton("Convergence Order 1.0")
+        btn2 = QPushButton("Convergence Order 1.5")
+        btn3 = QPushButton("Convergence Order 2.0")
+        btn4 = QPushButton("Convergence Order 2.5")
+        btn5 = QPushButton("Convergence Order 3.0")
 
         # layout configuration
 
@@ -29,13 +29,13 @@ class StratonovichGroupWidget(QGroupBox):
 
         self.setLayout(layout)
 
-        self.setTitle("Taylor-Stratonovich schemes")
+        self.setTitle("Taylor-Stratonovich Schemes")
         self.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 
         #  events
 
-        btn1.clicked.connect(lambda: self.show_nonlinear_dialog.emit("T.-Strat. 1.0"))
-        btn2.clicked.connect(lambda: self.show_nonlinear_dialog.emit("T.-Strat. 1.5"))
-        btn3.clicked.connect(lambda: self.show_nonlinear_dialog.emit("T.-Strat. 2.0"))
-        btn4.clicked.connect(lambda: self.show_nonlinear_dialog.emit("T.-Strat. 2.5"))
-        btn5.clicked.connect(lambda: self.show_nonlinear_dialog.emit("T.-Strat. 3.0"))
+        btn1.clicked.connect(lambda: self.show_nonlinear_dialog.emit(6))
+        btn2.clicked.connect(lambda: self.show_nonlinear_dialog.emit(7))
+        btn3.clicked.connect(lambda: self.show_nonlinear_dialog.emit(8))
+        btn4.clicked.connect(lambda: self.show_nonlinear_dialog.emit(9))
+        btn5.clicked.connect(lambda: self.show_nonlinear_dialog.emit(10))

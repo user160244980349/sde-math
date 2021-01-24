@@ -13,7 +13,7 @@ def get_files(path, pattern):
         list of available files
     """
     return [os.path.join(path, f)
-            for f in os.listdir(c.resources) if re.match(pattern, f)]
+            for f in os.listdir(path) if re.match(pattern, f)]
 
 
 def is_locked(filename: str):

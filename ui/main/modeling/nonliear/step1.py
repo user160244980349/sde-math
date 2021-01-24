@@ -24,7 +24,7 @@ class Step1(QWidget):
 
         self.input_stack = self.parent()
 
-        # widget creation
+        # widgets creation
 
         info_n = InfoIcon("Dimension of linear system of Ito SDEs")
         info_m = InfoIcon("Dimension of vector Wiener process")
@@ -78,12 +78,12 @@ class Step1(QWidget):
 
         eq2 = QHBoxLayout()
         eq2.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
-        eq2.addWidget(SVG("equation2.svg", scale_factor=0.8))
+        eq2.addWidget(SVG("equation2.svg", scale_factor=1.))
         eq2.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
         equalities_layout = QVBoxLayout()
         equalities_layout.addLayout(eq1)
-        equalities_layout.addItem(QSpacerItem(0, 10, QSizePolicy.Minimum, QSizePolicy.Minimum))
+        equalities_layout.addItem(QSpacerItem(0, 20, QSizePolicy.Minimum, QSizePolicy.Minimum))
         equalities_layout.addLayout(eq2)
 
         equalities_wrap = QHBoxLayout()

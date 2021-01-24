@@ -1,7 +1,8 @@
 from PyQt5.QtCore import QThreadPool, pyqtSignal
 from PyQt5.QtWidgets import QStackedWidget, QMainWindow
+from sympy.physics.mechanics.tests.test_system import lam
 
-from init.init import init
+from init.initialization import initialization
 from tools.fsys import is_locked
 from ui.async_calls.worker import Worker
 from ui.charts.charts_window import PlotWindow
@@ -116,7 +117,7 @@ class MainWindow(QMainWindow):
         self.simple_progress.spin("Preparing the database...")
         self.stack_widget.setCurrentWidget(self.simple_progress)
 
-        worker = Worker(init)
+        worker = Worker(initialization)
         worker.signals.finished.connect(self.init_done)
 
         QThreadPool.globalInstance().start(worker)

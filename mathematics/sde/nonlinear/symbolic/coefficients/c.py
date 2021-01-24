@@ -36,7 +36,7 @@ class C(Function):
         except KeyError:
             respond = cls._download_one(index)
             if len(respond) != 0:
-                cls._preloaded[respond[0]] = respond[1]
+                cls._preloaded[respond[0][0]] = respond[0][1]
                 return cls._value(index, to_float)
             else:
                 new_c = cls._calculate(index, indices, weights)

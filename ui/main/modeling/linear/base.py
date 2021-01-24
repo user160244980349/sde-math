@@ -54,7 +54,7 @@ class LinearModelingWidget(QWidget):
 
         self.charts_check = QCheckBox("Charts window", self)
 
-        self.scheme_name = QLabel("Linear Ito SDEs")
+        self.scheme_name = QLabel("Linear Systems of Ito SDEs")
 
         # configuring layout
 
@@ -189,24 +189,16 @@ class LinearModelingWidget(QWidget):
 
         self.logger.info(f"Integration took {(time() - start_time):.3f} seconds")
 
-        name = f"Linear, " \
-               f"t=({self.step8.lineedit_t0.text()}, " \
-               f"{self.step8.lineedit_dt.text()}, " \
-               f"{self.step8.lineedit_t1.text()})"
-
-        lines = [Line(name,
+        lines = [Line(f"Linear, x{i + 1}",
                       np.array(integral.v_t).astype(float),
                       np.array(integral.m_xt[i, :]).astype(float),
                       mx=np.array(integral.m_mx[i, :]).astype(float),
                       dx=np.array(integral.m_dx[i, :]).astype(float))
                  for i in range(integral.m_xt.shape[0])]
 
-        name = f"Linear exit pr., " \
-               f"t=({self.step8.lineedit_t0.text()}, " \
-               f"{self.step8.lineedit_dt.text()}, " \
-               f"{self.step8.lineedit_t1.text()})"
+        name = f"Linear"
 
-        lines.append(Line(name,
+        lines.append(Line(f"Linear, y",
                           np.array(integral.v_t).astype(float),
                           np.array(integral.v_yt).astype(float),
                           mx=np.array(integral.v_my).astype(float),

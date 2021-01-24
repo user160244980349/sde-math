@@ -3,12 +3,14 @@ from time import time
 
 import numpy as np
 import plotly.graph_objects as go
+from numpy import transpose
 
 from mathematics.sde.linear.dindet import dindet
 from mathematics.sde.linear.distortions import ComplexDistortion
 from mathematics.sde.linear.distortions_input import const, polynomial, harmonic, zero
 from mathematics.sde.linear.integration import Integral
 from mathematics.sde.linear.stoch import stoch
+from tools.input import input_matrix
 
 
 def main():
@@ -30,89 +32,62 @@ def main():
     n, k, m >= 1
     """)
 
-    # # input sizes
-    # n = int(input("n = ? (n >= 1)\n"))
-    # while n < 1:
-    #     n = int(input("input new n = ? (n >= 1)\n"))
-    #
-    # k = int(input("k = ? (k >= 1)\n"))
-    # while k < 1:
-    #     k = int(input("input new k = ? (k >= 1)\n"))
-    #
-    # m = int(input("m = ? (m >= 1)\n"))
-    # while m < 1:
-    #     m = int(input("input new m = ? (m >= 1)\n"))
-    #
-    # # input matrices
-    # print("A = ? - n x n")
-    # mat_a = input_matrix(n, n, " ").astype(float)
-    #
-    # print("B = ? - n x k")
-    # mat_b = input_matrix(n, k, " ").astype(float)
-    #
-    # print("F = ? - n x m")
-    # mat_f = input_matrix(n, m, " ").astype(float)
-    #
-    # print("H = ? - 1 x n")
-    # mat_h = input_matrix(1, n, " ").astype(float)
-    #
-    # print("x0 = ? - n x 1")
-    # mat_x0 = input_matrix(n, 1, " ").astype(float)
-    # print(transpose(mat_x0))
-    #
-    # # integration range
-    # dt = float(input("dt = ? (dt > 0)\n"))
-    # t0 = float(input("t0 = ?\n"))
-    # tk = float(input("tk = ? (tk > t0 + dt)\n"))
-    #
-    # while dt <= 0 or t0 > tk - dt:
-    #     dt = float(input("input new dt = ? (dt > 0)\n"))
-    #     t0 = float(input("input new t0 = ?\n"))
-    #     tk = float(input("input new tk = ? (tk > t0 + dt)\n"))
+    # input sizes
+    n = int(input("n = ? (n >= 1)\n"))
+    while n < 1:
+        n = int(input("input new n = ? (n >= 1)\n"))
+
+    k = int(input("k = ? (k >= 1)\n"))
+    while k < 1:
+        k = int(input("input new k = ? (k >= 1)\n"))
+
+    m = int(input("m = ? (m >= 1)\n"))
+    while m < 1:
+        m = int(input("input new m = ? (m >= 1)\n"))
+
+    # input matrices
+    print("A = ? - n x n")
+    mat_a = input_matrix(n, n, " ").astype(float)
+
+    print("B = ? - n x k")
+    mat_b = input_matrix(n, k, " ").astype(float)
+
+    print("F = ? - n x m")
+    mat_f = input_matrix(n, m, " ").astype(float)
+
+    print("H = ? - 1 x n")
+    mat_h = input_matrix(1, n, " ").astype(float)
+
+    print("x0 = ? - n x 1")
+    mat_x0 = input_matrix(n, 1, " ").astype(float)
+    print(transpose(mat_x0))
+
+    # integration range
+    dt = float(input("dt = ? (dt > 0)\n"))
+    t0 = float(input("t0 = ?\n"))
+    tk = float(input("tk = ? (tk > t0 + dt)\n"))
+
+    while dt <= 0 or t0 > tk - dt:
+        dt = float(input("input new dt = ? (dt > 0)\n"))
+        t0 = float(input("input new t0 = ?\n"))
+        tk = float(input("input new tk = ? (tk > t0 + dt)\n"))
 
     integral = Integral(4)
 
     integral.k, integral.m, integral.dt, integral.t0, integral.tk = \
-        3, 5, 0.001, 0, 10
+        k, m, dt, t0, tk
 
-    integral.m_a = np.array([
-        [-1, 0, 0, 0],
-        [0, -2, 0, 0],
-        [0, 0, -3, 0],
-        [0, 0, 0, -4]
-    ])
+    integral.m_a = mat_a
 
-    integral.mat_b = np.array([
-        [1, 1, 1],
-        [1, 1, 1],
-        [1, 1, 1],
-        [1, 1, 1]
-    ])
+    integral.mat_b = mat_b
 
-    integral.mat_f = np.array([
-        [0.2, 0.1, 0.1, 0.1, 0.1],
-        [0.1, 0.2, 0.1, 0.1, 0.1],
-        [0.1, 0.1, 0.2, 0.1, 0.1],
-        [0.1, 0.1, 0.1, 0.2, 0.1]
-    ])
+    integral.mat_f = mat_f
 
-    integral.m_h = np.array([
-        [0, 0, 1, 0]
-    ])
+    integral.m_h = mat_h
 
-    integral.m_x0 = np.array([
-        [2],
-        [2],
-        [2],
-        [2]
-    ])
+    integral.m_x0 = mat_x0
 
-    integral.m_mx0 = np.array([
-        [2],
-        [2],
-        [2],
-        [2]
-    ])
+    integral.m_mx0 = mat_x0
 
     integral.m_dx0 = np.zeros((integral.n, integral.n))
 

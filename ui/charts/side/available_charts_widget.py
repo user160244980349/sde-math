@@ -1,7 +1,11 @@
+import os
+
+from PyQt5 import QtGui
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QScrollArea, QLabel, QHBoxLayout, \
     QPushButton, QApplication, QStyle
 
+from config import images
 from ui.charts.side.item_widget import ItemWidget
 from ui.main.info import InfoIcon
 
@@ -26,16 +30,22 @@ class AvailableChartsWidget(QWidget):
         remove_all.setFlat(True)
         remove_all.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogResetButton))
 
-        hide_all = QPushButton("Hide all")
+        hide_all = QPushButton()
         hide_all.setFlat(True)
+        hide_all.setIcon(QtGui.QIcon(os.path.join(images, "crossed.png")))
 
-        show_all = QPushButton("Show all")
+        show_all = QPushButton()
         show_all.setFlat(True)
+        show_all.setIcon(QtGui.QIcon(os.path.join(images, "eye.png")))
 
         header_layout = QHBoxLayout()
         header_layout.addWidget(InfoIcon("Here You will see all modeling series\n"
                                          "You can hide them or delete, if you need to"))
-        header_layout.addWidget(QLabel("Series"))
+        header_layout.addItem(QSpacerItem(5, 0, QSizePolicy.Minimum, QSizePolicy.Minimum))
+        header_layout.addWidget(QLabel("Curves"))
+        header_layout.addItem(QSpacerItem(5, 0, QSizePolicy.Minimum, QSizePolicy.Minimum))
+        header_layout.setContentsMargins(0, 0, 0, 0)
+        header_layout.setSpacing(0)
         header_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         header_layout.addWidget(show_all)
         header_layout.addWidget(hide_all)
@@ -71,7 +81,7 @@ class AvailableChartsWidget(QWidget):
         self.layout.removeItem(self.spacer)
 
         for i in range(len(lines)):
-            item_widget = ItemWidget(f"{lines[i].name}, [{i}]", lines[i].color, parent=self)
+            item_widget = ItemWidget(lines[i].name, lines[i].color, parent=self)
             item_widget.uid = lines[i].uid
             item_widget.on_show.connect(self.plot_widget.show_item)
             item_widget.on_hide.connect(self.plot_widget.hide_item)

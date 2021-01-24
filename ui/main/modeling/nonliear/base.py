@@ -44,20 +44,29 @@ class NonlinearModelingWidget(QWidget):
         # other variables
 
         self.logger = logging.getLogger(__name__)
-        self.scheme_id = None
-        self.schemes = {
-            "Euler": euler,
-            "Milstein": milstein,
-            "T.-Ito 1.5": strong_taylor_ito_1p5,
-            "T.-Ito 2.0": strong_taylor_ito_2p0,
-            "T.-Ito 2.5": strong_taylor_ito_2p5,
-            "T.-Ito 3.0": strong_taylor_ito_3p0,
-            "T.-Strat. 1.0": strong_taylor_stratonovich_1p0,
-            "T.-Strat. 1.5": strong_taylor_stratonovich_1p5,
-            "T.-Strat. 2.0": strong_taylor_stratonovich_2p0,
-            "T.-Strat. 2.5": strong_taylor_stratonovich_2p5,
-            "T.-Strat. 3.0": strong_taylor_stratonovich_3p0,
-        }
+        self.scheme_id = 0
+        self.schemes = [
+            (euler, "Euler", "Euler Scheme"),
+            (milstein, "Milstein", "Milstein Scheme"),
+            (strong_taylor_ito_1p5, "Taylor-Ito 1.5",
+             "Strong Taylor-Ito Scheme with Convergence Order 1.5"),
+            (strong_taylor_ito_2p0, "Taylor-Ito 2.0",
+             "Strong Taylor-Ito Scheme with Convergence Order 2.0"),
+            (strong_taylor_ito_2p5, "Taylor-Ito 2.5",
+             "Strong Taylor-Ito Scheme with Convergence Order 2.5"),
+            (strong_taylor_ito_3p0, "Taylor-Ito 3.0",
+             "Strong Taylor-Ito Scheme with Convergence Order 3.0"),
+            (strong_taylor_stratonovich_1p0, "Taylor-Str. 1.0",
+             "Strong Taylor-Stratonovich Scheme with Convergence Order 1.0"),
+            (strong_taylor_stratonovich_1p5, "Taylor-Str. 1.5",
+             "Strong Taylor-Stratonovich Scheme with Convergence Order 1.5"),
+            (strong_taylor_stratonovich_2p0, "Taylor-Str. 2.0",
+             "Strong Taylor-Stratonovich Scheme with Convergence Order 2.0"),
+            (strong_taylor_stratonovich_2p5, "Taylor-Str. 2.5",
+             "Strong Taylor-Stratonovich Scheme with Convergence Order 2.5"),
+            (strong_taylor_stratonovich_3p0, "Taylor-Str. 3.0",
+             "Strong Taylor-Stratonovich Scheme with Convergence Order 3.0"),
+        ]
 
         # widgets creation
 
@@ -77,6 +86,7 @@ class NonlinearModelingWidget(QWidget):
         # configuring layout
 
         self.scheme_name = QLabel()
+        self.scheme_name.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         bar_layout = QHBoxLayout()
         bar_layout.addWidget(back_btn)
@@ -122,8 +132,8 @@ class NonlinearModelingWidget(QWidget):
 
     def set_scheme(self, scheme_id):
         self.scheme_id = scheme_id
-        self.scheme_name.setText(scheme_id)
-        if scheme_id == "Euler":
+        self.scheme_name.setText(self.schemes[scheme_id][2])
+        if scheme_id == 0:
             self.step5.count_c(False)
         else:
             self.step5.count_c(True)
@@ -138,6 +148,8 @@ class NonlinearModelingWidget(QWidget):
 
     def routine(self):
 
+        scheme = self.schemes[self.scheme_id]
+
         a = Matrix(self.step2.matrix.m)
         b = Matrix(self.step3.matrix.m)
 
@@ -151,8 +163,8 @@ class NonlinearModelingWidget(QWidget):
 
         database.connect(config.database)
 
-        if self.scheme_id == "Euler":
-            result = self.schemes[self.scheme_id](
+        if self.scheme_id == 0:
+            result = scheme[0](
                 x0, a, b,
                 (self.step5.t0,
                  self.step5.dt,
@@ -160,7 +172,7 @@ class NonlinearModelingWidget(QWidget):
             )
         else:
             C.preload(56, 56, 56, 56, 56)
-            result = self.schemes[self.scheme_id](
+            result = scheme[0](
                 x0, a, b, self.step5.c,
                 (self.step5.t0,
                  self.step5.dt,
@@ -169,15 +181,7 @@ class NonlinearModelingWidget(QWidget):
 
         database.disconnect()
 
-        name = f"{self.scheme_id}, " \
-               f"t=({self.step5.lineedit_t0.text()}, " \
-               f"{self.step5.lineedit_dt.text()}, " \
-               f"{self.step5.lineedit_t1.text()})"
-
-        if self.scheme_id != "Euler":
-            name = f"{name}, C={self.step5.lineedit_c.text()}"
-
-        lines = [Line(name,
+        lines = [Line(f"{scheme[1]}, x{i + 1}",
                       np.array(result[1]).astype(float),
                       np.array(result[0][i, :]).astype(float))
                  for i in range(len(result[0]))]

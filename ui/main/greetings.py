@@ -32,9 +32,10 @@ class GreetingsWidget(QWidget):
             "This means that in some cases, knowing the exact solution to the Ito "
             "SDE does not allow us to simulate it numerically in a simple way.", self
         )
-        # font = welcome.font()
-        # font.setPointSize(12)
-        # welcome.setFont(font)
+
+        font = welcome.font()
+        welcome.setFont(font)
+
         welcome.setAlignment(Qt.AlignJustify)
         welcome.setWordWrap(True)
         welcome.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum))
@@ -59,7 +60,7 @@ class GreetingsWidget(QWidget):
 
         eq2 = QHBoxLayout()
         eq2.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
-        eq2.addWidget(SVG("equation2.svg", scale_factor=0.8))
+        eq2.addWidget(SVG("equation2.svg", scale_factor=1.))
         eq2.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
         column = QVBoxLayout()
@@ -67,6 +68,7 @@ class GreetingsWidget(QWidget):
         column.addWidget(header)
         column.addItem(QSpacerItem(0, 15, QSizePolicy.Expanding, QSizePolicy.Minimum))
         column.addLayout(eq1)
+        column.addItem(QSpacerItem(0, 15, QSizePolicy.Expanding, QSizePolicy.Minimum))
         column.addLayout(eq2)
         column.addItem(QSpacerItem(0, 15, QSizePolicy.Expanding, QSizePolicy.Minimum))
         column.addWidget(welcome)

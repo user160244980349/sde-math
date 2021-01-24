@@ -32,9 +32,10 @@ class ChartsWidget(QFrame):
         self.toolbar = ToolBar(self.canvas, self)
 
         self.ax = self.figure.add_subplot(111)
+        self.ax.margins(0)
         self.ax.grid(axis='both', alpha=.3)
         self.ax.relim(visible_only=True)
-        self.ax.autoscale_view()
+        self.ax.autoscale()
 
         self.figure.tight_layout()
         self.canvas.draw()
@@ -75,7 +76,7 @@ class ChartsWidget(QFrame):
 
     def rescale(self):
         self.ax.relim(visible_only=True)
-        self.ax.autoscale_view()
+        self.ax.autoscale()
         self.canvas.draw()
 
     def clear(self):

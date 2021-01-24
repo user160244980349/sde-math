@@ -113,27 +113,28 @@ class Color:
         "#0000FF",
         "#0000CD",
         "#191970",
-
-        # contrast group 1
-        "#FF0000",
-
-        # contrast group 2
         "#00008B",
 
-        # contrast group 3
-        "#00FF00",
-
-        # contrast group 4
-        "#40E0D0",
-
-        # contrast group 5
-        "#800080",
+        # contrast group 7
+        "#8B4513",
 
         # contrast group 6
         "#FF1493",
 
-        # contrast group 7
-        "#8B4513",
+        # contrast group 5
+        "#800080",
+
+        # contrast group 4
+        "#40E0D0",
+
+        # contrast group 3
+        "#00FF00",
+
+        # contrast group 2
+        "#0000FF",
+
+        # contrast group 1
+        "#FF0000",
     ]
 
     def __new__(cls, *args, **kwargs):

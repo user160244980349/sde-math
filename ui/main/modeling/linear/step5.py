@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QSpacerItem, QSizePolicy, QPushButton, \
     QApplication, QStyle
 
+from ui.main.error import ErrorWidget
 from ui.main.info import InfoIcon
 from ui.main.modeling.matrix_widget import MatrixWidget
 
@@ -13,6 +14,8 @@ class Step5(QWidget):
     def __init__(self, parent=None):
         super(QWidget, self).__init__(parent)
 
+        self.errors = 0
+
         # widgets creation
 
         header = QLabel("Setting of vector function u(t)", parent=self)
@@ -23,6 +26,9 @@ class Step5(QWidget):
         info = InfoIcon("Elements of vector u(t) are expected to be functions\n"
                         "Size: k x 1\n"
                         "Functions must be set in python and SymPy notation")
+
+        self.msg = ErrorWidget("Wrong values in matrix!")
+        self.msg.hide()
 
         self.matrix = MatrixWidget(self)
 
@@ -37,6 +43,7 @@ class Step5(QWidget):
         header_layout = QHBoxLayout()
         header_layout.addWidget(info)
         header_layout.addWidget(header)
+        header_layout.addWidget(self.msg)
         header_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
         bottom_bar = QHBoxLayout()

@@ -26,7 +26,7 @@ class Step1(QWidget):
 
         self.input_stack = self.parent()
 
-        # widget creation
+        # widgets creation
 
         info_n = InfoIcon("Dimension of linear system of Ito SDEs")
         info_m = InfoIcon("Dimension of vector Wiener process")
@@ -90,12 +90,12 @@ class Step1(QWidget):
 
         eq2 = QHBoxLayout()
         eq2.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
-        eq2.addWidget(SVG("equation4.svg", scale_factor=0.8))
+        eq2.addWidget(SVG("equation4.svg", scale_factor=1.))
         eq2.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
 
         equalities_layout = QVBoxLayout()
         equalities_layout.addLayout(eq1)
-        equalities_layout.addItem(QSpacerItem(0, 15, QSizePolicy.Minimum, QSizePolicy.Minimum))
+        equalities_layout.addItem(QSpacerItem(0, 25, QSizePolicy.Minimum, QSizePolicy.Minimum))
         equalities_layout.addLayout(eq2)
 
         equalities_wrap = QHBoxLayout()
@@ -128,7 +128,7 @@ class Step1(QWidget):
         self.lineedit_k.textChanged.connect(self.validate_k)
 
     def validate_form(self):
-        if self.n_is_valid and self.m_is_valid:
+        if self.n_is_valid and self.m_is_valid and self.k_is_valid:
             self.next_btn.setEnabled(True)
         else:
             self.next_btn.setEnabled(False)

@@ -1,42 +1,38 @@
 #!/usr/bin/env python
 import logging
+import os
+import sys
 
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWinExtras import QWinTaskbarButton
 
+from config import database, images
+from mathematics.sde.nonlinear.symbolic.coefficients.c import C
+from tools.database import connect, disconnect
 from ui.main.main_window import MainWindow
 
 
 def main():
     """
-    Runs initialization of components if it is necessary and
-    runs gui application
+    Runs gui application
     """
 
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%H:%M:%S"
+    )
 
-    app = QApplication([])
-    app.setWindowIcon(QtGui.QIcon("resources/function.svg"))
+    app = QApplication(sys.argv)
+    app.setWindowIcon(QtGui.QIcon(os.path.join(images, "function.png")))
     app.setStyle(QtWidgets.QStyleFactory.create('Fusion'))
-
-    # font = app.font()
-    # font.setPointSize(12)
-    # app.setFont(font)
 
     main_window = MainWindow()
 
     main_window.taskbar_button = QWinTaskbarButton()
     main_window.taskbar_button.setOverlayIcon(QtGui.QIcon("resources/function.svg"))
 
-    # Это до кучи пример если в таскбаре надо показывать прогресс работы
-    # main_window.taskbar_progress = window.taskbar_button.progress()
-    # main_window.taskbar_progress.setRange(0, 100)
-    # main_window.taskbar_progress.setValue(50);
-    # main_window.taskbar_progress.show()
-    # main_window.taskbar_button.setWindow(main_window.windowHandle())
-
-    main_window.show()
     exit(app.exec())
 
 

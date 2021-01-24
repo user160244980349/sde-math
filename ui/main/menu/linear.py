@@ -11,7 +11,7 @@ class LinearGroupWidget(QGroupBox):
     def __init__(self, parent=None):
         super(QGroupBox, self).__init__(parent)
 
-        linear_btn = QPushButton("Dispersion spectral decomposition")
+        linear_btn = QPushButton("Dispersion Spectral Decomposition")
 
         # layout configuration
 
@@ -21,7 +21,7 @@ class LinearGroupWidget(QGroupBox):
 
         self.setLayout(layout)
 
-        self.setTitle("Linear Ito SDEs modeling methods")
+        self.setTitle("Linear Ito SDEs Systems Modeling")
         self.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 
         #  events

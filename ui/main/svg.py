@@ -4,14 +4,14 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtWidgets import QSizePolicy
 
-from config import resources
+from config import images
 
 
 class SVG(QSvgWidget):
     def __init__(self, name: str, scale_factor=1.):
         super(QSvgWidget, self).__init__()
 
-        self.load(os.path.join(resources, name))
+        self.load(os.path.join(images, name))
 
         self.scale_factor = scale_factor
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)

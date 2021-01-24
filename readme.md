@@ -130,7 +130,7 @@ Entry                         | Description
         - [x] t0 = t1 is causes error
         - [x] All empty fields cause errors
         - [x] Error icons
-        - [ ] Validate tables
+        - [x] Validate tables
     - [x] Actualize all tooltips
     - [x] Cleanup UI code
     - [x] Improve logging
@@ -142,6 +142,7 @@ Entry                         | Description
 - [ ] Fix memory error
 - [ ] More efficient C preload
 - [ ] Multiprocessing
+    - [x] C generation
     - [ ] Break schemes into pieces
 - [ ] Reimplement coefficients preload, so they will be preloaded by parts
 - [ ] Review all schemes and formulas
