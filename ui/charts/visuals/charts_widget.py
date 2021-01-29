@@ -3,10 +3,10 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QSizePolicy, QFrame, QHBoxLayout, QPushButton, \
     QSpacerItem
 from PyQt5.QtWidgets import QVBoxLayout
+from matplotlib.backends.backend_qt5 import NavigationToolbar2QT
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from ui.charts.visuals.color import Color
-from ui.charts.visuals.toolbar import ToolBar
 from ui.main.info import InfoIcon
 
 
@@ -29,7 +29,8 @@ class ChartsWidget(QFrame):
         self.figure = plt.figure()
         self.canvas = FigureCanvas(self.figure)
         self.canvas.mpl_connect('resize_event', self.on_resize)
-        self.toolbar = ToolBar(self.canvas, self)
+        self.toolbar = NavigationToolbar2QT(self.canvas, self)
+        # self.toolbar = ToolBar(self.canvas, self)
 
         self.ax = self.figure.add_subplot(111)
         self.ax.margins(0)
@@ -138,11 +139,11 @@ class ChartsWidget(QFrame):
 
         for f in self.plots.values():
             if f.line_fn is None and f.fn is not None:
-                f.line_fn = self.ax.plot(f.t, f.fn, linewidth=1, color=f.color)[0]
+                f.line_fn = self.ax.plot(f.t, f.fn, linewidth=0.6, color=f.color)[0]
             if f.line_mx is None and f.mx is not None:
-                f.line_mx = self.ax.plot(f.t, f.mx, linewidth=1, color=f.color)[0]
+                f.line_mx = self.ax.plot(f.t, f.mx, linewidth=0.6, color=f.color)[0]
             if f.line_dx is None and f.dx is not None:
-                f.line_dx = self.ax.plot(f.t, f.dx, linewidth=1, color=f.color)[0]
+                f.line_dx = self.ax.plot(f.t, f.dx, linewidth=0.6, color=f.color)[0]
 
         if self.mode == 0:
             self.fn_mode()

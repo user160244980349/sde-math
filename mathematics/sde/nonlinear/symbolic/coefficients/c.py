@@ -86,7 +86,7 @@ class C(Function):
         args
             Indices for coefficients_legacy to download them from database
         """
-        logging.info(f"C: PRELOADING COEFFICIENTS {args}")
+        # logging.info(f"C: PRELOADING COEFFICIENTS {args}")
 
         query = []
         for q in range(len(args)):

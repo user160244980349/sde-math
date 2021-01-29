@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 import logging
+import sys
 
 import numpy as np
 import plotly.graph_objects as go
 from sympy import Matrix
 
-from config import database
+from config import database, recursion_limit
 from init.initialization import initialization
 from mathematics.sde.nonlinear.drivers.euler import euler
 from mathematics.sde.nonlinear.drivers.milstein import milstein
@@ -40,6 +41,8 @@ def main():
         format="%(asctime)s - %(levelname)s - %(message)s",
         datefmt="%H:%M:%S"
     )
+
+    sys.setrecursionlimit(recursion_limit)
 
     initialization()
 

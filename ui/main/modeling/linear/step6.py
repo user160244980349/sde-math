@@ -64,7 +64,7 @@ class Step6(QWidget):
 
         value = item.text()
         try:
-            int(value)
+            float(value)
             if not item.valid:
                 item.valid = True
                 self.errors -= 1
