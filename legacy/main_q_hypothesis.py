@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+import logging
+import os
+
 import config as c
 import tools.database as db
 from mathematics.sde.nonlinear.symbolic.coefficients.c import C
@@ -141,16 +144,16 @@ def t2p5():
               f"\tiii.8  q4 (3, 4) = {q_00000_34(dt)}\n"
               f"\tiii.9  q4 (3, 5) = {q_00000_35(dt)}\n"
               f"\tiii.10 q4 (4, 5) = {q_00000_45(dt)}\n"
-              f"\tiv.1   q4 (1, 2) (3, 4, 5) = {q_00000_12_345(dt)}\n"
-              f"\tiv.2   q4 (1, 3) (2, 4, 5) = {q_00000_13_245(dt)}\n"
-              f"\tiv.3   q4 (1, 4) (2, 3, 5) = {q_00000_14_235(dt)}\n"
-              f"\tiv.4   q4 (1, 5) (2, 3, 4) = {q_00000_15_234(dt)}\n"
-              f"\tiv.5   q4 (2, 3) (1, 4, 5) = {q_00000_23_145(dt)}\n"
-              f"\tiv.6   q4 (2, 4) (1, 3, 5) = {q_00000_24_135(dt)}\n"
-              f"\tiv.7   q4 (2, 5) (1, 3, 4) = {q_00000_25_134(dt)}\n"
-              f"\tiv.8   q4 (3, 4) (1, 2, 5) = {q_00000_34_125(dt)}\n"
-              f"\tiv.9   q4 (3, 5) (1, 2, 4) = {q_00000_35_124(dt)}\n"
-              f"\tiv.10  q4 (4, 5) (1, 2, 3) = {q_00000_45_123(dt)}\n"
+              f"\tiv.1   q4 (3, 4, 5) = {q_00000_345(dt)}\n"
+              f"\tiv.2   q4 (2, 4, 5) = {q_00000_245(dt)}\n"
+              f"\tiv.3   q4 (2, 3, 5) = {q_00000_235(dt)}\n"
+              f"\tiv.4   q4 (2, 3, 4) = {q_00000_234(dt)}\n"
+              f"\tiv.5   q4 (1, 4, 5) = {q_00000_145(dt)}\n"
+              f"\tiv.6   q4 (1, 3, 5) = {q_00000_135(dt)}\n"
+              f"\tiv.7   q4 (1, 3, 4) = {q_00000_134(dt)}\n"
+              f"\tiv.8   q4 (1, 2, 5) = {q_00000_125(dt)}\n"
+              f"\tiv.9   q4 (1, 2, 4) = {q_00000_124(dt)}\n"
+              f"\tiv.10  q4 (1, 2, 3) = {q_00000_123(dt)}\n"
               f"\tv.1    q4 (1) (2, 3, 4, 5) = {q_00000_1_2345(dt)}\n"
               f"\tv.2    q4 (2) (1, 3, 4, 5) = {q_00000_2_1345(dt)}\n"
               f"\tv.3    q4 (3) (1, 2, 4, 5) = {q_00000_3_1245(dt)}\n"
@@ -195,16 +198,16 @@ def c00000_density(dt):
           f"\tiii.8  q4 (3, 4) = {q_00000_34(dt)}\n"
           f"\tiii.9  q4 (3, 5) = {q_00000_35(dt)}\n"
           f"\tiii.10 q4 (4, 5) = {q_00000_45(dt)}\n"
-          f"\tiv.1   q4 (1, 2) (3, 4, 5) = {q_00000_12_345(dt)}\n"
-          f"\tiv.2   q4 (1, 3) (2, 4, 5) = {q_00000_13_245(dt)}\n"
-          f"\tiv.3   q4 (1, 4) (2, 3, 5) = {q_00000_14_235(dt)}\n"
-          f"\tiv.4   q4 (1, 5) (2, 3, 4) = {q_00000_15_234(dt)}\n"
-          f"\tiv.5   q4 (2, 3) (1, 4, 5) = {q_00000_23_145(dt)}\n"
-          f"\tiv.6   q4 (2, 4) (1, 3, 5) = {q_00000_24_135(dt)}\n"
-          f"\tiv.7   q4 (2, 5) (1, 3, 4) = {q_00000_25_134(dt)}\n"
-          f"\tiv.8   q4 (3, 4) (1, 2, 5) = {q_00000_34_125(dt)}\n"
-          f"\tiv.9   q4 (3, 5) (1, 2, 4) = {q_00000_35_124(dt)}\n"
-          f"\tiv.10  q4 (4, 5) (1, 2, 3) = {q_00000_45_123(dt)}\n"
+          f"\tiv.1   q4 (1, 2) (3, 4, 5) = {q_00000_345(dt)}\n"
+          f"\tiv.2   q4 (1, 3) (2, 4, 5) = {q_00000_245(dt)}\n"
+          f"\tiv.3   q4 (1, 4) (2, 3, 5) = {q_00000_235(dt)}\n"
+          f"\tiv.4   q4 (1, 5) (2, 3, 4) = {q_00000_234(dt)}\n"
+          f"\tiv.5   q4 (2, 3) (1, 4, 5) = {q_00000_145(dt)}\n"
+          f"\tiv.6   q4 (2, 4) (1, 3, 5) = {q_00000_135(dt)}\n"
+          f"\tiv.7   q4 (2, 5) (1, 3, 4) = {q_00000_134(dt)}\n"
+          f"\tiv.8   q4 (3, 4) (1, 2, 5) = {q_00000_125(dt)}\n"
+          f"\tiv.9   q4 (3, 5) (1, 2, 4) = {q_00000_124(dt)}\n"
+          f"\tiv.10  q4 (4, 5) (1, 2, 3) = {q_00000_123(dt)}\n"
           f"\tv.1    q4 (1) (2, 3, 4, 5) = {q_00000_1_2345(dt)}\n"
           f"\tv.2    q4 (2) (1, 3, 4, 5) = {q_00000_2_1345(dt)}\n"
           f"\tv.3    q4 (3) (1, 2, 4, 5) = {q_00000_3_1245(dt)}\n"
@@ -287,31 +290,57 @@ def c11_density(dt):
 
 
 def main():
-    db.connect(c.database)
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%H:%M:%S"
+    )
+
+    db.connect(os.path.join("../", c.database))
 
     C.preload(56, 56, 56, 56, 56)
 
-    dts = [0.5, 0.25, 0.1, 0.05, 0.025, 0.005]
+    # dts = [0.01, 0.005, 0.0025]
+    # ps = [4, 8, 16]
 
-    print("\nfor q with C000")
-    for dt in dts:
-        print(
-            f"dt = {dt}, q1(1, 2) = {q_000_12(dt)}, q1(1, 3) = {q_000_13(dt)}, q1(2, 3) = {q_000_23(dt)}, q1 = {q_000(dt)}")
+    # print("\nfor q with C000")
+    # for dt in dts:
+    #     print(
+    #         f"dt = {dt}, q1(1, 2) = {q_000_12(dt)}, q1(1, 3) = {q_000_13(dt)}, q1(2, 3) = {q_000_23(dt)}, q1 = {q_000(dt)}")
+    #
+    # print("\nfor q with C0000")
+    # for dt in dts:
+    #     print(
+    #         f"dt = {dt}, q3(1, 2) = {q_0000_12(dt)}, q3(1, 3) = {q_0000_13(dt)}, q3(2, 3) = {q_0000_23(dt)}, q3 = {q_0000(dt)}")
+    #
+    # print("\nfor q with C00000")
+    # for dt in dts:
+    #     print(
+    #         f"dt = {dt}, q4(1, 2) = {q_00000_12(dt)}, q4(4, 5) = {q_00000_45(dt)}, q4(2, 3) = {q_00000_23(dt)}, q4 = {q_00000(dt)}")
 
-    print("\nfor q with C0000")
-    for dt in dts:
-        print(
-            f"dt = {dt}, q3(1, 2) = {q_0000_12(dt)}, q3(1, 3) = {q_0000_13(dt)}, q3(2, 3) = {q_0000_23(dt)}, q3 = {q_0000(dt)}")
+    dt = 0.008
 
-    print("\nfor q with C00000")
-    for dt in dts:
-        print(
-            f"dt = {dt}, q4(1, 2) = {q_00000_12(dt)}, q4(4, 5) = {q_00000_45(dt)}, q4(2, 3) = {q_00000_23(dt)}, q4 = {q_00000(dt)}")
+    print(f"q3 [001]           = {q_001(dt)}")
+    print(f"q3 [001] (1, 2)    = {q_001_12(dt)}")
+    print(f"q3 [001] (1, 3)    = {q_001_13(dt)}")
+    print(f"q3 [001] (2, 3)    = {q_001_23(dt)}")
+    print(f"q3 [001] (1, 2, 3) = {q_001_123(dt)}")
+    print(f"q3 [010]           = {q_010(dt)}")
+    print(f"q3 [010] (1, 2)    = {q_010_12(dt)}")
+    print(f"q3 [010] (1, 3)    = {q_010_13(dt)}")
+    print(f"q3 [010] (2, 3)    = {q_010_23(dt)}")
+    print(f"q3 [010] (1, 2, 3) = {q_010_123(dt)}")
+    print(f"q3 [100]           = {q_100(dt)}")
+    print(f"q3 [100] (1, 2)    = {q_100_12(dt)}")
+    print(f"q3 [100] (1, 3)    = {q_100_13(dt)}")
+    print(f"q3 [100] (2, 3)    = {q_100_23(dt)}")
+    print(f"q3 [100] (1, 2, 3) = {q_100_123(dt)}\n")
 
     # m()
     # t1p5()
-    t2p0()
-    t2p5()
+    # t2p0()
+    # t2p5()
 
 
 # ============================ #
@@ -327,6 +356,7 @@ def q(dt):
             for j in range(1, i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
@@ -337,8 +367,7 @@ def q(dt):
 # ============================ #
 
 
-def q_01_12(dt):
-    i = 0
+def q_01_12(dt, i=0):
     while True:
         value = 1 / 4 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -348,13 +377,13 @@ def q_01_12(dt):
             for j2 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_01_21(dt):
-    i = 0
+def q_01_21(dt, i=0):
     while True:
         value = 1 / 4 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -367,13 +396,13 @@ def q_01_21(dt):
             for j2 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_10_12(dt):
-    i = 0
+def q_10_12(dt, i=0):
     while True:
         value = 1 / 12 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -383,13 +412,13 @@ def q_10_12(dt):
             for j2 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_10_21(dt):
-    i = 0
+def q_10_21(dt, i=0):
     while True:
         value = 1 / 12 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -402,6 +431,7 @@ def q_10_21(dt):
             for j2 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
@@ -412,8 +442,7 @@ def q_10_21(dt):
 # ============================ #
 
 
-def q_000(dt):
-    i = 0
+def q_000(dt, i=0):
     while True:
         value = 1 / 6 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -425,6 +454,7 @@ def q_000(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
@@ -435,8 +465,7 @@ def q_000(dt):
 # ============================ #
 
 
-def q_000_12(dt):
-    i = 0
+def q_000_12(dt, i=0):
     while True:
         value = 1 / 6 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -450,13 +479,13 @@ def q_000_12(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_000_13(dt):
-    i = 0
+def q_000_13(dt, i=0):
     while True:
         value = 1 / 6 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -469,14 +498,14 @@ def q_000_13(dt):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            break
+        # if value <= dt:
+        # print(f"error = {value}")
+        break
         i += 1
     return i
 
 
-def q_000_23(dt):
-    i = 0
+def q_000_23(dt, i=0):
     while True:
         value = 1 / 6 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -490,6 +519,7 @@ def q_000_23(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
@@ -500,8 +530,7 @@ def q_000_23(dt):
 # ============================ #
 
 
-def q_001(dt):
-    i = 0
+def q_001(dt, i=0):
     while True:
         value = 1 / 10 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -513,13 +542,13 @@ def q_001(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_001_12(dt):
-    i = 0
+def q_001_12(dt, i=0):
     while True:
         value = 1 / 10 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -533,13 +562,13 @@ def q_001_12(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_001_13(dt):
-    i = 0
+def q_001_13(dt, i=0):
     while True:
         value = 1 / 10 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -553,13 +582,13 @@ def q_001_13(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_001_23(dt):
-    i = 0
+def q_001_23(dt, i=0):
     while True:
         value = 1 / 10 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -573,13 +602,13 @@ def q_001_23(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_001_123(dt):
-    i = 0
+def q_001_123(dt, i=0):
     while True:
         value = 1 / 10 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -598,13 +627,13 @@ def q_001_123(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_010(dt):
-    i = 0
+def q_010(dt, i=0):
     while True:
         value = 1 / 20 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -616,13 +645,13 @@ def q_010(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_010_12(dt):
-    i = 0
+def q_010_12(dt, i=0):
     while True:
         value = 1 / 20 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -636,13 +665,13 @@ def q_010_12(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_010_13(dt):
-    i = 0
+def q_010_13(dt, i=0):
     while True:
         value = 1 / 20 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -656,13 +685,13 @@ def q_010_13(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_010_23(dt):
-    i = 0
+def q_010_23(dt, i=0):
     while True:
         value = 1 / 20 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -676,13 +705,13 @@ def q_010_23(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_010_123(dt):
-    i = 0
+def q_010_123(dt, i=0):
     while True:
         value = 1 / 20 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -701,13 +730,13 @@ def q_010_123(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_100(dt):
-    i = 0
+def q_100(dt, i=0):
     while True:
         value = 1 / 60 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -719,13 +748,13 @@ def q_100(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_100_12(dt):
-    i = 0
+def q_100_12(dt, i=0):
     while True:
         value = 1 / 60 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -739,13 +768,13 @@ def q_100_12(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_100_13(dt):
-    i = 0
+def q_100_13(dt, i=0):
     while True:
         value = 1 / 60 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -759,13 +788,13 @@ def q_100_13(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_100_23(dt):
-    i = 0
+def q_100_23(dt, i=0):
     while True:
         value = 1 / 60 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -779,13 +808,13 @@ def q_100_23(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_100_123(dt):
-    i = 0
+def q_100_123(dt, i=0):
     while True:
         value = 1 / 60 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -804,6 +833,7 @@ def q_100_123(dt):
             for j3 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
@@ -814,8 +844,7 @@ def q_100_123(dt):
 # ============================ #
 
 
-def q_0000(dt):
-    i = 0
+def q_0000(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -829,6 +858,7 @@ def q_0000(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
@@ -839,8 +869,7 @@ def q_0000(dt):
 # ============================ #
 
 
-def q_0000_12(dt):
-    i = 0
+def q_0000_12(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -856,13 +885,13 @@ def q_0000_12(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_0000_13(dt):
-    i = 0
+def q_0000_13(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -878,13 +907,13 @@ def q_0000_13(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_0000_23(dt):
-    i = 0
+def q_0000_23(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -900,13 +929,13 @@ def q_0000_23(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_0000_14(dt):
-    i = 0
+def q_0000_14(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -922,13 +951,13 @@ def q_0000_14(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_0000_24(dt):
-    i = 0
+def q_0000_24(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -944,13 +973,13 @@ def q_0000_24(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_0000_34(dt):
-    i = 0
+def q_0000_34(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -966,6 +995,7 @@ def q_0000_34(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
@@ -976,8 +1006,7 @@ def q_0000_34(dt):
 # ============================ #
 
 
-def q_0000_4_123(dt):
-    i = 0
+def q_0000_4_123(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -998,13 +1027,13 @@ def q_0000_4_123(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_0000_3_124(dt):
-    i = 0
+def q_0000_3_124(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1025,13 +1054,13 @@ def q_0000_3_124(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_0000_2_134(dt):
-    i = 0
+def q_0000_2_134(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1052,13 +1081,13 @@ def q_0000_2_134(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_0000_1_234(dt):
-    i = 0
+def q_0000_1_234(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1079,13 +1108,13 @@ def q_0000_1_234(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_0000_12_34(dt):
-    i = 0
+def q_0000_12_34(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1104,13 +1133,13 @@ def q_0000_12_34(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_0000_13_24(dt):
-    i = 0
+def q_0000_13_24(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1129,13 +1158,13 @@ def q_0000_13_24(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_0000_14_23(dt):
-    i = 0
+def q_0000_14_23(dt, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1154,6 +1183,7 @@ def q_0000_14_23(dt):
             for j4 in range(i + 1)
         ])
         if value <= dt:
+#             # print(f"error = {value}")
             break
         i += 1
     return i
@@ -1164,8 +1194,7 @@ def q_0000_14_23(dt):
 # ============================ #
 
 
-def q_00000(dt):
-    i = 0
+def q_00000(dt, i=0):
     while True:
         value = 1 / 120 - 1 / (32 ** 2) * sum([
             (2 * j1 + 1) *
@@ -1181,6 +1210,7 @@ def q_00000(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
@@ -1191,8 +1221,7 @@ def q_00000(dt):
 # ============================ #
 
 
-def q_00000_12(dt):
-    i = 0
+def q_00000_12(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1210,13 +1239,13 @@ def q_00000_12(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_13(dt):
-    i = 0
+def q_00000_13(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1234,13 +1263,13 @@ def q_00000_13(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_14(dt):
-    i = 0
+def q_00000_14(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1258,13 +1287,13 @@ def q_00000_14(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_15(dt):
-    i = 0
+def q_00000_15(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1282,13 +1311,13 @@ def q_00000_15(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_23(dt):
-    i = 0
+def q_00000_23(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1306,13 +1335,13 @@ def q_00000_23(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_24(dt):
-    i = 0
+def q_00000_24(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1330,13 +1359,13 @@ def q_00000_24(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_25(dt):
-    i = 0
+def q_00000_25(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1354,13 +1383,13 @@ def q_00000_25(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_34(dt):
-    i = 0
+def q_00000_34(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1378,13 +1407,13 @@ def q_00000_34(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_35(dt):
-    i = 0
+def q_00000_35(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1402,13 +1431,13 @@ def q_00000_35(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_45(dt):
-    i = 0
+def q_00000_45(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1426,6 +1455,7 @@ def q_00000_45(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
@@ -1436,8 +1466,7 @@ def q_00000_45(dt):
 # ============================ #
 
 
-def q_00000_12_345(dt):
-    i = 0
+def q_00000_345(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1460,13 +1489,13 @@ def q_00000_12_345(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_13_245(dt):
-    i = 0
+def q_00000_245(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1489,13 +1518,13 @@ def q_00000_13_245(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_14_235(dt):
-    i = 0
+def q_00000_235(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1518,13 +1547,13 @@ def q_00000_14_235(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_15_234(dt):
-    i = 0
+def q_00000_234(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1547,13 +1576,13 @@ def q_00000_15_234(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_23_145(dt):
-    i = 0
+def q_00000_145(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1576,13 +1605,13 @@ def q_00000_23_145(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_24_135(dt):
-    i = 0
+def q_00000_135(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1605,13 +1634,13 @@ def q_00000_24_135(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_25_134(dt):
-    i = 0
+def q_00000_134(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1634,13 +1663,13 @@ def q_00000_25_134(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_34_125(dt):
-    i = 0
+def q_00000_125(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1663,13 +1692,13 @@ def q_00000_34_125(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_35_124(dt):
-    i = 0
+def q_00000_124(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1692,13 +1721,13 @@ def q_00000_35_124(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_45_123(dt):
-    i = 0
+def q_00000_123(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1721,6 +1750,7 @@ def q_00000_45_123(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
@@ -1731,8 +1761,7 @@ def q_00000_45_123(dt):
 # ============================ #
 
 
-def q_00000_1_2345(dt):
-    i = 0
+def q_00000_1_2345(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1773,13 +1802,13 @@ def q_00000_1_2345(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_2_1345(dt):
-    i = 0
+def q_00000_2_1345(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1820,13 +1849,13 @@ def q_00000_2_1345(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_3_1245(dt):
-    i = 0
+def q_00000_3_1245(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1867,13 +1896,13 @@ def q_00000_3_1245(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_4_1235(dt):
-    i = 0
+def q_00000_4_1235(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1914,13 +1943,13 @@ def q_00000_4_1235(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_5_1234(dt):
-    i = 0
+def q_00000_5_1234(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1961,6 +1990,7 @@ def q_00000_5_1234(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
@@ -1971,8 +2001,7 @@ def q_00000_5_1234(dt):
 # ============================ #
 
 
-def q_00000_vi_12_34(dt):
-    i = 0
+def q_00000_vi_12_34(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1983,7 +2012,7 @@ def q_00000_vi_12_34(dt):
             C((j5, j4, j3, j2, j1), (0, 0, 0, 0, 0), True) * (
                     C((j5, j4, j3, j2, j1), (0, 0, 0, 0, 0), True) +
                     C((j5, j3, j4, j2, j1), (0, 0, 0, 0, 0), True) +
-                    C((j5, j4, j3, j2, j1), (0, 0, 0, 0, 0), True) +
+                    C((j5, j4, j3, j1, j2), (0, 0, 0, 0, 0), True) +
                     C((j5, j3, j4, j1, j2), (0, 0, 0, 0, 0), True)
             )
             for j1 in range(i + 1)
@@ -1993,13 +2022,13 @@ def q_00000_vi_12_34(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_13_24(dt):
-    i = 0
+def q_00000_vi_13_24(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2020,13 +2049,13 @@ def q_00000_vi_13_24(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_14_23(dt):
-    i = 0
+def q_00000_vi_14_23(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2047,13 +2076,13 @@ def q_00000_vi_14_23(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_12_35(dt):
-    i = 0
+def q_00000_vi_12_35(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2074,13 +2103,13 @@ def q_00000_vi_12_35(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_15_23(dt):
-    i = 0
+def q_00000_vi_15_23(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2101,13 +2130,13 @@ def q_00000_vi_15_23(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_25_13(dt):
-    i = 0
+def q_00000_vi_25_13(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2128,13 +2157,13 @@ def q_00000_vi_25_13(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_25_14(dt):
-    i = 0
+def q_00000_vi_25_14(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2155,13 +2184,13 @@ def q_00000_vi_25_14(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_12_45(dt):
-    i = 0
+def q_00000_vi_12_45(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2182,13 +2211,13 @@ def q_00000_vi_12_45(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_24_15(dt):
-    i = 0
+def q_00000_vi_24_15(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2209,13 +2238,13 @@ def q_00000_vi_24_15(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_14_35(dt):
-    i = 0
+def q_00000_vi_14_35(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2236,13 +2265,13 @@ def q_00000_vi_14_35(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_13_45(dt):
-    i = 0
+def q_00000_vi_13_45(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2263,13 +2292,13 @@ def q_00000_vi_13_45(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_15_34(dt):
-    i = 0
+def q_00000_vi_15_34(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2290,13 +2319,13 @@ def q_00000_vi_15_34(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_23_45(dt):
-    i = 0
+def q_00000_vi_23_45(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2317,13 +2346,13 @@ def q_00000_vi_23_45(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_24_35(dt):
-    i = 0
+def q_00000_vi_24_35(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2344,13 +2373,13 @@ def q_00000_vi_24_35(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vi_25_34(dt):
-    i = 0
+def q_00000_vi_25_34(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2371,6 +2400,7 @@ def q_00000_vi_25_34(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
@@ -2381,8 +2411,7 @@ def q_00000_vi_25_34(dt):
 # ============================ #
 
 
-def q_00000_vii_123_45(dt):
-    i = 0
+def q_00000_vii_123_45(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2411,13 +2440,13 @@ def q_00000_vii_123_45(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vii_124_35(dt):
-    i = 0
+def q_00000_vii_124_35(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2446,13 +2475,13 @@ def q_00000_vii_124_35(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vii_125_34(dt):
-    i = 0
+def q_00000_vii_125_34(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2481,13 +2510,13 @@ def q_00000_vii_125_34(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vii_234_15(dt):
-    i = 0
+def q_00000_vii_234_15(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2516,13 +2545,13 @@ def q_00000_vii_234_15(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vii_235_14(dt):
-    i = 0
+def q_00000_vii_235_14(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2551,13 +2580,13 @@ def q_00000_vii_235_14(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vii_245_13(dt):
-    i = 0
+def q_00000_vii_245_13(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2586,13 +2615,13 @@ def q_00000_vii_245_13(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vii_345_12(dt):
-    i = 0
+def q_00000_vii_345_12(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2621,13 +2650,13 @@ def q_00000_vii_345_12(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vii_135_24(dt):
-    i = 0
+def q_00000_vii_135_24(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2656,13 +2685,13 @@ def q_00000_vii_135_24(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vii_134_25(dt):
-    i = 0
+def q_00000_vii_134_25(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2691,13 +2720,13 @@ def q_00000_vii_134_25(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
 
 
-def q_00000_vii_145_23(dt):
-    i = 0
+def q_00000_vii_145_23(dt, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2726,6 +2755,7 @@ def q_00000_vii_145_23(dt):
             for j5 in range(i + 1)
         ])
         if value <= dt:
+            # print(f"error = {value}")
             break
         i += 1
     return i
