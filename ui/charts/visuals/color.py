@@ -2,7 +2,6 @@ from random import choice
 
 
 class Color:
-
     reserved_colors = [
         "#ff834a",
         "#ffe100",

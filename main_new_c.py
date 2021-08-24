@@ -3,7 +3,6 @@ import logging
 import os
 from datetime import datetime
 from multiprocessing import cpu_count, Pool
-from pprint import pprint
 
 from config import csv, new_c_portion_size
 from mathematics.sde.nonlinear.new_c import thread_c, split_task

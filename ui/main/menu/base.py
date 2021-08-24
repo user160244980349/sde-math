@@ -17,7 +17,7 @@ class MainMenuWidget(QWidget):
         self.charts_check = QCheckBox("Charts window", self)
 
         icon = InfoIcon("This is charts window checkbox, it will\n"
-                        "follow you on every application dialog, so\n"
+                        "follow You on every application dialog, so\n"
                         "you can easily open or close window with available charts")
 
         bar_layout = QHBoxLayout()

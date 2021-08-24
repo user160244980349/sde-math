@@ -1,6 +1,5 @@
 from PyQt5.QtCore import QThreadPool, pyqtSignal
 from PyQt5.QtWidgets import QStackedWidget, QMainWindow
-from sympy.physics.mechanics.tests.test_system import lam
 
 from init.initialization import initialization
 from tools.fsys import is_locked
