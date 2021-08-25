@@ -3,14 +3,14 @@ import unittest
 import numpy as np
 from sympy import Symbol, pprint, diff, sympify
 
-from tools.input import input_matrix
+from tools.input import legacy_input_matrix
 
 
 @unittest.skip("Input is necessary")
 class TestInput(unittest.TestCase):
     def test_formula_matrix(self):
         print()
-        mat = input_matrix(2, 2, ";")
+        mat = legacy_input_matrix(2, 2, ";")
 
         x = Symbol("x")
         print()
@@ -44,7 +44,7 @@ class TestInput(unittest.TestCase):
         print(mat_a1)
 
         print("A[4, 3] =")
-        mat_a2 = input_matrix(4, 3, " ")
+        mat_a2 = legacy_input_matrix(4, 3, " ")
 
         self.assertEqual(np.testing.assert_array_equal(mat_a1, mat_a2.astype(int)), None)
 

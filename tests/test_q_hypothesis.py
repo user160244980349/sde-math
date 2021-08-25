@@ -63,6 +63,7 @@ class TestHypothesis(unittest.TestCase):
         # t2p0()
         # t2p5()
 
+
 def m():
     dts = [2 ** (-1), 2 ** (-4), 2 ** (-8), 2 ** (-12)]
 

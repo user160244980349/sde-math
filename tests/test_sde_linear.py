@@ -10,7 +10,7 @@ from mathematics.sde.linear.distortions import ComplexDistortion
 from mathematics.sde.linear.distortions_input import const, polynomial, harmonic, zero
 from mathematics.sde.linear.integration import Integral
 from mathematics.sde.linear.stoch import stoch
-from tools.input import input_matrix
+from tools.input import legacy_input_matrix
 
 from mathematics.sde.linear.dindet import dindet
 from mathematics.sde.linear.matrix import vec_to_eye
@@ -53,19 +53,19 @@ class TestSdeLinear(unittest.TestCase):
 
         # input matrices
         print("A = ? - n x n")
-        mat_a = input_matrix(n, n, " ").astype(float)
+        mat_a = legacy_input_matrix(n, n, " ").astype(float)
 
         print("B = ? - n x k")
-        mat_b = input_matrix(n, k, " ").astype(float)
+        mat_b = legacy_input_matrix(n, k, " ").astype(float)
 
         print("F = ? - n x m")
-        mat_f = input_matrix(n, m, " ").astype(float)
+        mat_f = legacy_input_matrix(n, m, " ").astype(float)
 
         print("H = ? - 1 x n")
-        mat_h = input_matrix(1, n, " ").astype(float)
+        mat_h = legacy_input_matrix(1, n, " ").astype(float)
 
         print("x0 = ? - n x 1")
-        mat_x0 = input_matrix(n, 1, " ").astype(float)
+        mat_x0 = legacy_input_matrix(n, 1, " ").astype(float)
         print(transpose(mat_x0))
 
         # integration range

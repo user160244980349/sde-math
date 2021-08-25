@@ -5,7 +5,7 @@ class BoundExceedError(Exception):
     pass
 
 
-def input_matrix(n, m, s):
+def legacy_input_matrix(n, m, s):
     """
     Input of matrix
     Parameters
@@ -33,7 +33,7 @@ def input_matrix(n, m, s):
     return np.array(mat)
 
 
-def input_vector(n, s):
+def legacy_input_vector(n, s):
     """
     Input of vector
     Parameters
