@@ -1,11 +1,67 @@
 #!/usr/bin/env python
 import logging
 import os
+import unittest
 
 import config as c
 import tools.database as db
 from mathematics.sde.nonlinear.symbolic.coefficients.c import C
 
+
+class TestHypothesis(unittest.TestCase):
+
+    # @unittest.skip("Success")
+    def test_run(self):
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(asctime)s - %(levelname)s - %(message)s",
+            datefmt="%H:%M:%S"
+        )
+
+        db.connect(os.path.join("../", c.database))
+
+        C.preload(56, 56, 56, 56, 56)
+
+        # dts = [0.01, 0.005, 0.0025]
+        # ps = [4, 8, 16]
+
+        # print("\nfor q with C000")
+        # for dt in dts:
+        #     print(
+        #         f"dt = {dt}, q1(1, 2) = {q_000_12(dt)}, q1(1, 3) = {q_000_13(dt)}, q1(2, 3) = {q_000_23(dt)}, q1 = {q_000(dt)}")
+        #
+        # print("\nfor q with C0000")
+        # for dt in dts:
+        #     print(
+        #         f"dt = {dt}, q3(1, 2) = {q_0000_12(dt)}, q3(1, 3) = {q_0000_13(dt)}, q3(2, 3) = {q_0000_23(dt)}, q3 = {q_0000(dt)}")
+        #
+        # print("\nfor q with C00000")
+        # for dt in dts:
+        #     print(
+        #         f"dt = {dt}, q4(1, 2) = {q_00000_12(dt)}, q4(4, 5) = {q_00000_45(dt)}, q4(2, 3) = {q_00000_23(dt)}, q4 = {q_00000(dt)}")
+
+        dt = 0.008
+
+        print(f"q3 [001]           = {q_001(dt)}")
+        print(f"q3 [001] (1, 2)    = {q_001_12(dt)}")
+        print(f"q3 [001] (1, 3)    = {q_001_13(dt)}")
+        print(f"q3 [001] (2, 3)    = {q_001_23(dt)}")
+        print(f"q3 [001] (1, 2, 3) = {q_001_123(dt)}")
+        print(f"q3 [010]           = {q_010(dt)}")
+        print(f"q3 [010] (1, 2)    = {q_010_12(dt)}")
+        print(f"q3 [010] (1, 3)    = {q_010_13(dt)}")
+        print(f"q3 [010] (2, 3)    = {q_010_23(dt)}")
+        print(f"q3 [010] (1, 2, 3) = {q_010_123(dt)}")
+        print(f"q3 [100]           = {q_100(dt)}")
+        print(f"q3 [100] (1, 2)    = {q_100_12(dt)}")
+        print(f"q3 [100] (1, 3)    = {q_100_13(dt)}")
+        print(f"q3 [100] (2, 3)    = {q_100_23(dt)}")
+        print(f"q3 [100] (1, 2, 3) = {q_100_123(dt)}\n")
+
+        # m()
+        # t1p5()
+        # t2p0()
+        # t2p5()
 
 def m():
     dts = [2 ** (-1), 2 ** (-4), 2 ** (-8), 2 ** (-12)]
@@ -287,59 +343,6 @@ def c11_density(dt):
           f"\tq2 [01] (2, 1) = {q_01_21(dt)}\n"
           f"\tq2 [10]        = {q_10_12(dt)}\n"
           f"\tq2 [10] (2, 1) = {q_10_21(dt)}\n\n")
-
-
-def main():
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-        datefmt="%H:%M:%S"
-    )
-
-    db.connect(os.path.join("../", c.database))
-
-    C.preload(56, 56, 56, 56, 56)
-
-    # dts = [0.01, 0.005, 0.0025]
-    # ps = [4, 8, 16]
-
-    # print("\nfor q with C000")
-    # for dt in dts:
-    #     print(
-    #         f"dt = {dt}, q1(1, 2) = {q_000_12(dt)}, q1(1, 3) = {q_000_13(dt)}, q1(2, 3) = {q_000_23(dt)}, q1 = {q_000(dt)}")
-    #
-    # print("\nfor q with C0000")
-    # for dt in dts:
-    #     print(
-    #         f"dt = {dt}, q3(1, 2) = {q_0000_12(dt)}, q3(1, 3) = {q_0000_13(dt)}, q3(2, 3) = {q_0000_23(dt)}, q3 = {q_0000(dt)}")
-    #
-    # print("\nfor q with C00000")
-    # for dt in dts:
-    #     print(
-    #         f"dt = {dt}, q4(1, 2) = {q_00000_12(dt)}, q4(4, 5) = {q_00000_45(dt)}, q4(2, 3) = {q_00000_23(dt)}, q4 = {q_00000(dt)}")
-
-    dt = 0.008
-
-    print(f"q3 [001]           = {q_001(dt)}")
-    print(f"q3 [001] (1, 2)    = {q_001_12(dt)}")
-    print(f"q3 [001] (1, 3)    = {q_001_13(dt)}")
-    print(f"q3 [001] (2, 3)    = {q_001_23(dt)}")
-    print(f"q3 [001] (1, 2, 3) = {q_001_123(dt)}")
-    print(f"q3 [010]           = {q_010(dt)}")
-    print(f"q3 [010] (1, 2)    = {q_010_12(dt)}")
-    print(f"q3 [010] (1, 3)    = {q_010_13(dt)}")
-    print(f"q3 [010] (2, 3)    = {q_010_23(dt)}")
-    print(f"q3 [010] (1, 2, 3) = {q_010_123(dt)}")
-    print(f"q3 [100]           = {q_100(dt)}")
-    print(f"q3 [100] (1, 2)    = {q_100_12(dt)}")
-    print(f"q3 [100] (1, 3)    = {q_100_13(dt)}")
-    print(f"q3 [100] (2, 3)    = {q_100_23(dt)}")
-    print(f"q3 [100] (1, 2, 3) = {q_100_123(dt)}\n")
-
-    # m()
-    # t1p5()
-    # t2p0()
-    # t2p5()
 
 
 # ============================ #
@@ -2761,4 +2764,4 @@ def q_00000_vii_145_23(dt, i=0):
 
 
 if __name__ == "__main__":
-    main()
+    unittest.main()
