@@ -1,4 +1,4 @@
-import tools.input as inp
+import tools.legacy_input as inp
 from mathematics.sde.linear.distortions import Const, Polynomial, Harmonic, Zero
 
 

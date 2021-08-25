@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 from sympy import Symbol, pprint, diff, sympify
 
-from tools.input import legacy_input_matrix
+from tools.legacy_input import legacy_input_matrix
 
 
 @unittest.skip("Input is necessary")

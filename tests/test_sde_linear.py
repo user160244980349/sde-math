@@ -10,7 +10,7 @@ from mathematics.sde.linear.distortions import ComplexDistortion
 from mathematics.sde.linear.distortions_input import const, polynomial, harmonic, zero
 from mathematics.sde.linear.integration import Integral
 from mathematics.sde.linear.stoch import stoch
-from tools.input import legacy_input_matrix
+from tools.legacy_input import legacy_input_matrix
 
 from mathematics.sde.linear.dindet import dindet
 from mathematics.sde.linear.matrix import vec_to_eye

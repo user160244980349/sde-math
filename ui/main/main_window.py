@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QStackedWidget, QMainWindow
 from init.initialization import initialization
 from tools.fsys import is_locked
 from ui.async_calls.worker import Worker
-from ui.charts.charts_window import PlotWindow
+from ui.charts.plot_window import PlotWindow
 from ui.main.greetings import GreetingsWidget
 from ui.main.menu.base import MainMenuWidget
 from ui.main.modeling.linear.base import LinearModelingWidget
