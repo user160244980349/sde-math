@@ -171,6 +171,8 @@ class NonlinearModelingWidget(QWidget):
                  self.step5.t1)
             )
         else:
+            # TODO: rework this thing by doing "frame"
+            #   steps and loading only this frames
             C.preload(56, 56, 56, 56, 56)
             result = scheme[0](
                 x0, a, b, self.step5.c,
