@@ -18,48 +18,17 @@ class TestHypothesis(unittest.TestCase):
             datefmt="%H:%M:%S"
         )
 
-        db.connect(os.path.join("../", c.database))
+        db.connect(c.database)
 
         C.preload(56, 56, 56, 56, 56)
 
-        # dts = [0.01, 0.005, 0.0025]
-        # ps = [4, 8, 16]
-
-        # print("\nfor q with C000")
-        # for dt in dts:
-        #     print(
-        #         f"dt = {dt}, q1(1, 2) = {q_000_12(dt)}, q1(1, 3) = {q_000_13(dt)}, q1(2, 3) = {q_000_23(dt)}, q1 = {q_000(dt)}")
-        #
-        # print("\nfor q with C0000")
-        # for dt in dts:
-        #     print(
-        #         f"dt = {dt}, q3(1, 2) = {q_0000_12(dt)}, q3(1, 3) = {q_0000_13(dt)}, q3(2, 3) = {q_0000_23(dt)}, q3 = {q_0000(dt)}")
-        #
-        # print("\nfor q with C00000")
-        # for dt in dts:
-        #     print(
-        #         f"dt = {dt}, q4(1, 2) = {q_00000_12(dt)}, q4(4, 5) = {q_00000_45(dt)}, q4(2, 3) = {q_00000_23(dt)}, q4 = {q_00000(dt)}")
-
-        dt = 0.008
-
-        print(f"q3 [001]           = {q_001(dt)}")
-        print(f"q3 [001] (1, 2)    = {q_001_12(dt)}")
-        print(f"q3 [001] (1, 3)    = {q_001_13(dt)}")
-        print(f"q3 [001] (2, 3)    = {q_001_23(dt)}")
-        print(f"q3 [001] (1, 2, 3) = {q_001_123(dt)}")
-        print(f"q3 [010]           = {q_010(dt)}")
-        print(f"q3 [010] (1, 2)    = {q_010_12(dt)}")
-        print(f"q3 [010] (1, 3)    = {q_010_13(dt)}")
-        print(f"q3 [010] (2, 3)    = {q_010_23(dt)}")
-        print(f"q3 [010] (1, 2, 3) = {q_010_123(dt)}")
-        print(f"q3 [100]           = {q_100(dt)}")
-        print(f"q3 [100] (1, 2)    = {q_100_12(dt)}")
-        print(f"q3 [100] (1, 3)    = {q_100_13(dt)}")
-        print(f"q3 [100] (2, 3)    = {q_100_23(dt)}")
-        print(f"q3 [100] (1, 2, 3) = {q_100_123(dt)}\n")
-
         # m()
         # t1p5()
+        # t1p5exponential()
+        # t1p5fixed()
+        t1p5s()
+        t1p5sexponential()
+        t1p5sfixed()
         # t2p0()
         # t2p5()
 
@@ -79,22 +48,147 @@ def m():
 
 
 def t1p5():
-    dts = [2 ** (-1), 2 ** (-3), 2 ** (-5), 2 ** (-8)]
+    dts = [0.011, 0.008, 0.0045, 0.0035, 0.0027, 0.0025]
+    ps = [0, 0, 0, 0, 0, 0]
 
     print(f" # ============================================ #\n"
-          f" # TAYLOR 1.5\n"
-          f" # dts = [2**(-1), 2**(-3), 2**(-5), 2**(-8)]\n"
+          f" # TAYLOR 1.5 (Ito)\n"
           f" # dts = {dts}\n"
           f" # ============================================ #\n")
 
-    for dt in dts:
+    for i, dt in enumerate(dts):
+        q0 = q(dt ** 2)
+        q1 = q_000(dt, max_i=ps[i])
+        q2 = q_000_12(dt, max_i=ps[i])
+        q3 = q_000_13(dt, max_i=ps[i])
+        q4 = q_000_23(dt, max_i=ps[i])
         print(f"dt = {dt},\n\n"
-              f"\tq = {q(dt ** 2)}\n\n"
+              f"\tq = {q0[0]},\tE = {q0[1]}\n\n"
 
-              f"\tq1        = {q_000(dt)}\n"
-              f"\tq1 (1, 2) = {q_000_12(dt)}\n"
-              f"\tq1 (1, 3) = {q_000_13(dt)}\n"
-              f"\tq1 (2, 3) = {q_000_23(dt)}\n\n")
+              f"\tq1        = {q1[0]},\tE = {q1[1]}\n"
+              f"\tq1 (1, 2) = {q2[0]},\tE = {q2[1]}\n"
+              f"\tq1 (2, 3) = {q4[0]},\tE = {q4[1]}\n"
+              f"\tq1 (1, 3) = {q3[0]},\tE = {q3[1]}\n\n")
+
+
+def t1p5exponential():
+    dts = [2 ** (-2), 2 ** (-3), 2 ** (-4), 2 ** (-5), 2 ** (-6), 2 ** (-7), 2 ** (-8)]
+    ps = [0, 0, 0, 0, 0, 0, 0]
+
+    print(f" # ============================================ #\n"
+          f" # EXPONENTIAL TAYLOR 1.5 (Ito)\n"
+          f" # dts = {dts}\n"
+          f" # ============================================ #\n")
+
+    for i, dt in enumerate(dts):
+        q0 = q(dt ** 2)
+        q1 = q_000(dt, max_i=ps[i])
+        q2 = q_000_12(dt, max_i=ps[i])
+        q3 = q_000_13(dt, max_i=ps[i])
+        q4 = q_000_23(dt, max_i=ps[i])
+        print(f"dt = {dt},\n\n"
+              f"\tq = {q0[0]},\tE = {q0[1]}\n\n"
+
+              f"\tq1        = {q1[0]},\tE = {q1[1]}\n"
+              f"\tq1 (1, 2) = {q2[0]},\tE = {q2[1]}\n"
+              f"\tq1 (2, 3) = {q4[0]},\tE = {q4[1]}\n"
+              f"\tq1 (1, 3) = {q3[0]},\tE = {q3[1]}\n\n")
+
+
+def t1p5fixed():
+    dts = [0.011, 0.008, 0.0045, 0.0035, 0.0027, 0.0025]
+    ps = [12, 16, 28, 36, 47, 50]
+
+    print(f" # ============================================ #\n"
+          f" # FIXED TAYLOR 1.5 (Ito)\n"
+          f" # dts = {dts}\n"
+          f" # ============================================ #\n")
+
+    for i, dt in enumerate(dts):
+        q0 = q(dt ** 2)
+        q1 = q_000(dt, max_i=ps[i])
+        q2 = q_000_12(dt, max_i=ps[i])
+        q3 = q_000_13(dt, max_i=ps[i])
+        q4 = q_000_23(dt, max_i=ps[i])
+        print(f"dt = {dt},\n\n"
+              f"\tq = {q0[0]},\tE = {q0[1]}\n\n"
+
+              f"\tq1        = {q1[0]},\tE = {q1[1]}\n"
+              f"\tq1 (1, 2) = {q2[0]},\tE = {q2[1]}\n"
+              f"\tq1 (2, 3) = {q4[0]},\tE = {q4[1]}\n"
+              f"\tq1 (1, 3) = {q3[0]},\tE = {q3[1]}\n\n")
+
+
+def t1p5s():
+    dts = [0.011, 0.008, 0.0045, 0.0035, 0.0027, 0.0025]
+    ps = [0, 0, 0, 0, 0, 0]
+
+    print(f" # ============================================ #\n"
+          f" # TAYLOR 1.5 (Stratonovich)\n"
+          f" # dts = {dts}\n"
+          f" # ============================================ #\n")
+
+    for i, dt in enumerate(dts):
+        q0 = q(dt ** 2)
+        q1 = q_000(dt, max_i=ps[i])
+        q2 = qs_000_12(dt, max_i=ps[i])
+        q3 = qs_000_13(dt, max_i=ps[i])
+        q4 = qs_000_23(dt, max_i=ps[i])
+        print(f"dt = {dt},\n\n"
+              f"\tq = {q0[0]},\tE = {q0[1]}\n\n"
+
+              f"\tq1        = {q1[0]},\tE = {q1[1]}\n"
+              f"\tq1 (1, 2) = {q2[0]},\tE = {q2[1]}\n"
+              f"\tq1 (2, 3) = {q4[0]},\tE = {q4[1]}\n"
+              f"\tq1 (1, 3) = {q3[0]},\tE = {q3[1]}\n\n")
+
+
+def t1p5sexponential():
+    dts = [2 ** (-2), 2 ** (-3), 2 ** (-4), 2 ** (-5), 2 ** (-6), 2 ** (-7), 2 ** (-8)]
+    ps = [0, 0, 0, 0, 0, 0, 0]
+
+    print(f" # ============================================ #\n"
+          f" # EXPONENTIAL TAYLOR 1.5 (Stratonovich)\n"
+          f" # dts = {dts}\n"
+          f" # ============================================ #\n")
+
+    for i, dt in enumerate(dts):
+        q0 = q(dt ** 2)
+        q1 = q_000(dt, max_i=ps[i])
+        q2 = qs_000_12(dt, max_i=ps[i])
+        q3 = qs_000_13(dt, max_i=ps[i])
+        q4 = qs_000_23(dt, max_i=ps[i])
+        print(f"dt = {dt},\n\n"
+              f"\tq = {q0[0]},\tE = {q0[1]}\n\n"
+
+              f"\tq1        = {q1[0]},\tE = {q1[1]}\n"
+              f"\tq1 (1, 2) = {q2[0]},\tE = {q2[1]}\n"
+              f"\tq1 (2, 3) = {q4[0]},\tE = {q4[1]}\n"
+              f"\tq1 (1, 3) = {q3[0]},\tE = {q3[1]}\n\n")
+
+
+def t1p5sfixed():
+    dts = [0.011, 0.008, 0.0045, 0.0035, 0.0027, 0.0025]
+    ps = [12, 16, 28, 36, 47, 50]
+
+    print(f" # ============================================ #\n"
+          f" # FIXED TAYLOR 1.5 (Stratonovich)\n"
+          f" # dts = {dts}\n"
+          f" # ============================================ #\n")
+
+    for i, dt in enumerate(dts):
+        q0 = q(dt ** 2)
+        q1 = q_000(dt, max_i=ps[i])
+        q2 = qs_000_12(dt, max_i=ps[i])
+        q3 = qs_000_13(dt, max_i=ps[i])
+        q4 = qs_000_23(dt, max_i=ps[i])
+        print(f"dt = {dt},\n\n"
+              f"\tq = {q0[0]},\tE = {q0[1]}\n\n"
+
+              f"\tq1        = {q1[0]},\tE = {q1[1]}\n"
+              f"\tq1 (1, 2) = {q2[0]},\tE = {q2[1]}\n"
+              f"\tq1 (2, 3) = {q4[0]},\tE = {q4[1]}\n"
+              f"\tq1 (1, 3) = {q3[0]},\tE = {q3[1]}\n\n")
 
 
 def t2p0():
@@ -112,8 +206,8 @@ def t2p0():
 
               f"\tq1        = {q_000(dt ** 2)}\n"
               f"\tq1 (1, 2) = {q_000_12(dt ** 2)}\n"
-              f"\tq1 (1, 3) = {q_000_13(dt ** 2)}\n"
-              f"\tq1 (2, 3) = {q_000_23(dt ** 2)}\n\n"
+              f"\tq1 (2, 3) = {q_000_13(dt ** 2)}\n"
+              f"\tq1 (1, 3) = {q_000_23(dt ** 2)}\n\n"
 
               f"\tq2 [01]        = {q_01_12(dt)}\n"
               f"\tq2 [01] (2, 1) = {q_01_21(dt)}\n"
@@ -151,8 +245,8 @@ def t2p5():
 
               f"\tq1        = {q_000(dt ** 3)}\n"
               f"\tq1 (1, 2) = {q_000_12(dt ** 3)}\n"
-              f"\tq1 (1, 3) = {q_000_13(dt ** 3)}\n"
-              f"\tq1 (2, 3) = {q_000_23(dt ** 3)}\n\n"
+              f"\tq1 (2, 3) = {q_000_13(dt ** 3)}\n"
+              f"\tq1 (1, 3) = {q_000_23(dt ** 3)}\n\n"
 
               f"\tq2 [01]        = {q_01_12(dt ** 2)}\n"
               f"\tq2 [01] (2, 1) = {q_01_21(dt ** 2)}\n"
@@ -317,8 +411,8 @@ def c0000_density(dt):
 def c000_density(dt):
     print(f"\tq1        = {q_000(dt)}\n"
           f"\tq1 (1, 2) = {q_000_12(dt)}\n"
-          f"\tq1 (1, 3) = {q_000_13(dt)}\n"
-          f"\tq1 (2, 3) = {q_000_23(dt)}\n\n")
+          f"\tq1 (2, 3) = {q_000_13(dt)}\n"
+          f"\tq1 (1, 3) = {q_000_23(dt)}\n\n")
 
 
 def c111_density(dt):
@@ -351,18 +445,19 @@ def c11_density(dt):
 # ============================ #
 
 
-def q(dt):
+def q(dt, max_i=0):
     i = 1
     while True:
         value = 1 / 4 - 1 / 2 * sum([
             1 / (4 * j ** 2 - 1)
             for j in range(1, i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 # ============================ #
@@ -370,7 +465,7 @@ def q(dt):
 # ============================ #
 
 
-def q_01_12(dt, i=0):
+def q_01_12(dt, max_i=0, i=0):
     while True:
         value = 1 / 4 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -379,14 +474,15 @@ def q_01_12(dt, i=0):
             for j1 in range(i + 1)
             for j2 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_01_21(dt, i=0):
+def q_01_21(dt, max_i=0, i=0):
     while True:
         value = 1 / 4 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -398,14 +494,15 @@ def q_01_21(dt, i=0):
             for j1 in range(i + 1)
             for j2 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_10_12(dt, i=0):
+def q_10_12(dt, max_i=0, i=0):
     while True:
         value = 1 / 12 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -414,14 +511,15 @@ def q_10_12(dt, i=0):
             for j1 in range(i + 1)
             for j2 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_10_21(dt, i=0):
+def q_10_21(dt, max_i=0, i=0):
     while True:
         value = 1 / 12 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -433,11 +531,12 @@ def q_10_21(dt, i=0):
             for j1 in range(i + 1)
             for j2 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 # ============================ #
@@ -445,7 +544,7 @@ def q_10_21(dt, i=0):
 # ============================ #
 
 
-def q_000(dt, i=0):
+def q_000(dt, max_i=0, i=0):
     while True:
         value = 1 / 6 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -456,19 +555,20 @@ def q_000(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 # ============================ #
-# C000 group III               #
+# C000 group III (I)           #
 # ============================ #
 
 
-def q_000_12(dt, i=0):
+def q_000_12(dt, max_i=0, i=0):
     while True:
         value = 1 / 6 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -481,14 +581,15 @@ def q_000_12(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_000_13(dt, i=0):
+def q_000_13(dt, max_i=0, i=0):
     while True:
         value = 1 / 6 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -501,14 +602,15 @@ def q_000_13(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        # if value <= dt:
-        # print(f"error = {value}")
-        break
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
+            break
         i += 1
-    return i
+    return i, value
 
 
-def q_000_23(dt, i=0):
+def q_000_23(dt, max_i=0, i=0):
     while True:
         value = 1 / 6 - 1 / 64 * sum([
             (2 * j1 + 1) *
@@ -521,11 +623,112 @@ def q_000_23(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
+
+
+# ============================ #
+# C000 group III (S)           #
+# ============================ #
+
+
+def qs_000_12(dt, max_i=0, i=0):
+    while True:
+        value = 1 / 4 - 1 / 64 * sum([
+            (2 * j1 + 1) *
+            (2 * j2 + 1) *
+            (2 * j3 + 1) *
+            (C((j3, j2, j1), (0, 0, 0), True) ** 2 +
+             C((j3, j2, j1), (0, 0, 0), True) *
+             C((j3, j1, j2), (0, 0, 0), True))
+            for j1 in range(i + 1)
+            for j2 in range(i + 1)
+            for j3 in range(i + 1)
+        ]) - 1 / 16 * sum([
+            (2 * j1 + 1) *
+            (C((0, j1, j1), (0, 0, 0), True) +
+             C((1, j1, j1), (0, 0, 0), True))
+            for j1 in range(i + 1)
+        ]) + 1 / 64 * sum([
+            (2 * j3 + 1) *
+            sum([
+                (2 * j1 + 1) * C((j3, j1, j1), (0, 0, 0), True)
+                for j1 in range(i + 1)
+            ]) ** 2
+            for j3 in range(i + 1)
+        ])
+
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
+            break
+        i += 1
+    return i, value
+
+
+def qs_000_23(dt, max_i=0, i=0):
+    while True:
+        value = 1 / 4 - 1 / 64 * sum([
+            (2 * j1 + 1) *
+            (2 * j2 + 1) *
+            (2 * j3 + 1) *
+            (C((j3, j2, j1), (0, 0, 0), True) ** 2 +
+             C((j3, j2, j1), (0, 0, 0), True) *
+             C((j2, j3, j1), (0, 0, 0), True))
+            for j1 in range(i + 1)
+            for j2 in range(i + 1)
+            for j3 in range(i + 1)
+        ]) - 1 / 16 * sum([
+            (2 * j3 + 1) *
+            (C((j3, j3, 0), (0, 0, 0), True) -
+             C((j3, j3, 1), (0, 0, 0), True))
+            for j3 in range(i + 1)
+        ]) + 1 / 64 * sum([
+            (2 * j1 + 1) *
+            sum([
+                (2 * j3 + 1) * C((j3, j3, j1), (0, 0, 0), True)
+                for j3 in range(i + 1)
+            ]) ** 2
+            for j1 in range(i + 1)
+        ])
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
+            break
+        i += 1
+    return i, value
+
+
+def qs_000_13(dt, max_i=0, i=0):
+    while True:
+        value = 1 / 6 - 1 / 64 * sum([
+            (2 * j1 + 1) *
+            (2 * j2 + 1) *
+            (2 * j3 + 1) *
+            (C((j3, j2, j1), (0, 0, 0), True) ** 2 +
+             C((j3, j2, j1), (0, 0, 0), True) *
+             C((j1, j2, j3), (0, 0, 0), True))
+            for j1 in range(i + 1)
+            for j2 in range(i + 1)
+            for j3 in range(i + 1)
+        ]) + 1 / 64 * sum([
+            (2 * j2 + 1) *
+            sum([
+                (2 * j1 + 1) * C((j1, j2, j1), (0, 0, 0), True)
+                for j1 in range(i + 1)
+            ]) ** 2
+            for j2 in range(i + 1)
+        ])
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
+            break
+        i += 1
+    return i, value
 
 
 # ============================ #
@@ -533,7 +736,7 @@ def q_000_23(dt, i=0):
 # ============================ #
 
 
-def q_001(dt, i=0):
+def q_001(dt, max_i=0, i=0):
     while True:
         value = 1 / 10 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -544,14 +747,15 @@ def q_001(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_001_12(dt, i=0):
+def q_001_12(dt, max_i=0, i=0):
     while True:
         value = 1 / 10 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -564,14 +768,15 @@ def q_001_12(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_001_13(dt, i=0):
+def q_001_13(dt, max_i=0, i=0):
     while True:
         value = 1 / 10 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -584,14 +789,15 @@ def q_001_13(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_001_23(dt, i=0):
+def q_001_23(dt, max_i=0, i=0):
     while True:
         value = 1 / 10 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -604,14 +810,15 @@ def q_001_23(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_001_123(dt, i=0):
+def q_001_123(dt, max_i=0, i=0):
     while True:
         value = 1 / 10 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -629,14 +836,15 @@ def q_001_123(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_010(dt, i=0):
+def q_010(dt, max_i=0, i=0):
     while True:
         value = 1 / 20 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -647,14 +855,15 @@ def q_010(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_010_12(dt, i=0):
+def q_010_12(dt, max_i=0, i=0):
     while True:
         value = 1 / 20 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -667,14 +876,15 @@ def q_010_12(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_010_13(dt, i=0):
+def q_010_13(dt, max_i=0, i=0):
     while True:
         value = 1 / 20 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -687,14 +897,15 @@ def q_010_13(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_010_23(dt, i=0):
+def q_010_23(dt, max_i=0, i=0):
     while True:
         value = 1 / 20 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -707,14 +918,15 @@ def q_010_23(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_010_123(dt, i=0):
+def q_010_123(dt, max_i=0, i=0):
     while True:
         value = 1 / 20 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -732,14 +944,15 @@ def q_010_123(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_100(dt, i=0):
+def q_100(dt, max_i=0, i=0):
     while True:
         value = 1 / 60 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -750,14 +963,15 @@ def q_100(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_100_12(dt, i=0):
+def q_100_12(dt, max_i=0, i=0):
     while True:
         value = 1 / 60 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -770,14 +984,15 @@ def q_100_12(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_100_13(dt, i=0):
+def q_100_13(dt, max_i=0, i=0):
     while True:
         value = 1 / 60 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -790,14 +1005,15 @@ def q_100_13(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_100_23(dt, i=0):
+def q_100_23(dt, max_i=0, i=0):
     while True:
         value = 1 / 60 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -810,14 +1026,15 @@ def q_100_23(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_100_123(dt, i=0):
+def q_100_123(dt, max_i=0, i=0):
     while True:
         value = 1 / 60 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -835,11 +1052,12 @@ def q_100_123(dt, i=0):
             for j2 in range(i + 1)
             for j3 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 # ============================ #
@@ -847,7 +1065,7 @@ def q_100_123(dt, i=0):
 # ============================ #
 
 
-def q_0000(dt, i=0):
+def q_0000(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -860,11 +1078,12 @@ def q_0000(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 # ============================ #
@@ -872,7 +1091,7 @@ def q_0000(dt, i=0):
 # ============================ #
 
 
-def q_0000_12(dt, i=0):
+def q_0000_12(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -887,14 +1106,15 @@ def q_0000_12(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_0000_13(dt, i=0):
+def q_0000_13(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -909,14 +1129,15 @@ def q_0000_13(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_0000_23(dt, i=0):
+def q_0000_23(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -931,14 +1152,15 @@ def q_0000_23(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_0000_14(dt, i=0):
+def q_0000_14(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -953,14 +1175,15 @@ def q_0000_14(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_0000_24(dt, i=0):
+def q_0000_24(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -975,14 +1198,15 @@ def q_0000_24(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_0000_34(dt, i=0):
+def q_0000_34(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -997,11 +1221,12 @@ def q_0000_34(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 # ============================ #
@@ -1009,7 +1234,7 @@ def q_0000_34(dt, i=0):
 # ============================ #
 
 
-def q_0000_4_123(dt, i=0):
+def q_0000_4_123(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1029,14 +1254,15 @@ def q_0000_4_123(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_0000_3_124(dt, i=0):
+def q_0000_3_124(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1056,14 +1282,15 @@ def q_0000_3_124(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_0000_2_134(dt, i=0):
+def q_0000_2_134(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1083,14 +1310,15 @@ def q_0000_2_134(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_0000_1_234(dt, i=0):
+def q_0000_1_234(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1110,14 +1338,15 @@ def q_0000_1_234(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_0000_12_34(dt, i=0):
+def q_0000_12_34(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1135,14 +1364,15 @@ def q_0000_12_34(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_0000_13_24(dt, i=0):
+def q_0000_13_24(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1160,14 +1390,15 @@ def q_0000_13_24(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_0000_14_23(dt, i=0):
+def q_0000_14_23(dt, max_i=0, i=0):
     while True:
         value = 1 / 24 - 1 / 256 * sum([
             (2 * j1 + 1) *
@@ -1185,11 +1416,12 @@ def q_0000_14_23(dt, i=0):
             for j3 in range(i + 1)
             for j4 in range(i + 1)
         ])
-        if value <= dt:
-            #             # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 # ============================ #
@@ -1197,7 +1429,7 @@ def q_0000_14_23(dt, i=0):
 # ============================ #
 
 
-def q_00000(dt, i=0):
+def q_00000(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / (32 ** 2) * sum([
             (2 * j1 + 1) *
@@ -1212,11 +1444,12 @@ def q_00000(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 # ============================ #
@@ -1224,7 +1457,7 @@ def q_00000(dt, i=0):
 # ============================ #
 
 
-def q_00000_12(dt, i=0):
+def q_00000_12(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1241,14 +1474,15 @@ def q_00000_12(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_13(dt, i=0):
+def q_00000_13(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1265,14 +1499,15 @@ def q_00000_13(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_14(dt, i=0):
+def q_00000_14(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1289,14 +1524,15 @@ def q_00000_14(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_15(dt, i=0):
+def q_00000_15(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1313,14 +1549,15 @@ def q_00000_15(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_23(dt, i=0):
+def q_00000_23(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1337,14 +1574,15 @@ def q_00000_23(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_24(dt, i=0):
+def q_00000_24(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1361,14 +1599,15 @@ def q_00000_24(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_25(dt, i=0):
+def q_00000_25(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1385,14 +1624,15 @@ def q_00000_25(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_34(dt, i=0):
+def q_00000_34(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1409,14 +1649,15 @@ def q_00000_34(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_35(dt, i=0):
+def q_00000_35(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1433,14 +1674,15 @@ def q_00000_35(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_45(dt, i=0):
+def q_00000_45(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1457,11 +1699,12 @@ def q_00000_45(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 # ============================ #
@@ -1469,7 +1712,7 @@ def q_00000_45(dt, i=0):
 # ============================ #
 
 
-def q_00000_345(dt, i=0):
+def q_00000_345(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1491,14 +1734,15 @@ def q_00000_345(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_245(dt, i=0):
+def q_00000_245(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1520,14 +1764,15 @@ def q_00000_245(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_235(dt, i=0):
+def q_00000_235(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1549,14 +1794,15 @@ def q_00000_235(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_234(dt, i=0):
+def q_00000_234(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1578,14 +1824,15 @@ def q_00000_234(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_145(dt, i=0):
+def q_00000_145(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1607,14 +1854,15 @@ def q_00000_145(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_135(dt, i=0):
+def q_00000_135(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1636,14 +1884,15 @@ def q_00000_135(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_134(dt, i=0):
+def q_00000_134(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1665,14 +1914,15 @@ def q_00000_134(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_125(dt, i=0):
+def q_00000_125(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1694,14 +1944,15 @@ def q_00000_125(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_124(dt, i=0):
+def q_00000_124(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1723,14 +1974,15 @@ def q_00000_124(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_123(dt, i=0):
+def q_00000_123(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1752,11 +2004,12 @@ def q_00000_123(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 # ============================ #
@@ -1764,7 +2017,7 @@ def q_00000_123(dt, i=0):
 # ============================ #
 
 
-def q_00000_1_2345(dt, i=0):
+def q_00000_1_2345(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1804,14 +2057,15 @@ def q_00000_1_2345(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_2_1345(dt, i=0):
+def q_00000_2_1345(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1851,14 +2105,15 @@ def q_00000_2_1345(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_3_1245(dt, i=0):
+def q_00000_3_1245(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1898,14 +2153,15 @@ def q_00000_3_1245(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_4_1235(dt, i=0):
+def q_00000_4_1235(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1945,14 +2201,15 @@ def q_00000_4_1235(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_5_1234(dt, i=0):
+def q_00000_5_1234(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -1992,11 +2249,12 @@ def q_00000_5_1234(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 # ============================ #
@@ -2004,7 +2262,7 @@ def q_00000_5_1234(dt, i=0):
 # ============================ #
 
 
-def q_00000_vi_12_34(dt, i=0):
+def q_00000_vi_12_34(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2024,14 +2282,15 @@ def q_00000_vi_12_34(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_13_24(dt, i=0):
+def q_00000_vi_13_24(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2051,14 +2310,15 @@ def q_00000_vi_13_24(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_14_23(dt, i=0):
+def q_00000_vi_14_23(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2078,14 +2338,15 @@ def q_00000_vi_14_23(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_12_35(dt, i=0):
+def q_00000_vi_12_35(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2105,14 +2366,15 @@ def q_00000_vi_12_35(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_15_23(dt, i=0):
+def q_00000_vi_15_23(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2132,14 +2394,15 @@ def q_00000_vi_15_23(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_25_13(dt, i=0):
+def q_00000_vi_25_13(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2159,14 +2422,15 @@ def q_00000_vi_25_13(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_25_14(dt, i=0):
+def q_00000_vi_25_14(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2186,14 +2450,15 @@ def q_00000_vi_25_14(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_12_45(dt, i=0):
+def q_00000_vi_12_45(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2213,14 +2478,15 @@ def q_00000_vi_12_45(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_24_15(dt, i=0):
+def q_00000_vi_24_15(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2240,14 +2506,15 @@ def q_00000_vi_24_15(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_14_35(dt, i=0):
+def q_00000_vi_14_35(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2267,14 +2534,15 @@ def q_00000_vi_14_35(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_13_45(dt, i=0):
+def q_00000_vi_13_45(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2294,14 +2562,15 @@ def q_00000_vi_13_45(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_15_34(dt, i=0):
+def q_00000_vi_15_34(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2321,14 +2590,15 @@ def q_00000_vi_15_34(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_23_45(dt, i=0):
+def q_00000_vi_23_45(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2348,14 +2618,15 @@ def q_00000_vi_23_45(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_24_35(dt, i=0):
+def q_00000_vi_24_35(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2375,14 +2646,15 @@ def q_00000_vi_24_35(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vi_25_34(dt, i=0):
+def q_00000_vi_25_34(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2402,11 +2674,12 @@ def q_00000_vi_25_34(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 # ============================ #
@@ -2414,7 +2687,7 @@ def q_00000_vi_25_34(dt, i=0):
 # ============================ #
 
 
-def q_00000_vii_123_45(dt, i=0):
+def q_00000_vii_123_45(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2442,14 +2715,15 @@ def q_00000_vii_123_45(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vii_124_35(dt, i=0):
+def q_00000_vii_124_35(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2477,14 +2751,15 @@ def q_00000_vii_124_35(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vii_125_34(dt, i=0):
+def q_00000_vii_125_34(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2512,14 +2787,15 @@ def q_00000_vii_125_34(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vii_234_15(dt, i=0):
+def q_00000_vii_234_15(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2547,14 +2823,15 @@ def q_00000_vii_234_15(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vii_235_14(dt, i=0):
+def q_00000_vii_235_14(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2582,14 +2859,15 @@ def q_00000_vii_235_14(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vii_245_13(dt, i=0):
+def q_00000_vii_245_13(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2617,14 +2895,15 @@ def q_00000_vii_245_13(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vii_345_12(dt, i=0):
+def q_00000_vii_345_12(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2652,14 +2931,15 @@ def q_00000_vii_345_12(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vii_135_24(dt, i=0):
+def q_00000_vii_135_24(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2687,14 +2967,15 @@ def q_00000_vii_135_24(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vii_134_25(dt, i=0):
+def q_00000_vii_134_25(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2722,14 +3003,15 @@ def q_00000_vii_134_25(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
-def q_00000_vii_145_23(dt, i=0):
+def q_00000_vii_145_23(dt, max_i=0, i=0):
     while True:
         value = 1 / 120 - 1 / 32 ** 2 * sum([
             (2 * j1 + 1) *
@@ -2757,11 +3039,12 @@ def q_00000_vii_145_23(dt, i=0):
             for j4 in range(i + 1)
             for j5 in range(i + 1)
         ])
-        if value <= dt:
-            # print(f"error = {value}")
+        if max_i == 0 and value <= dt:
+            break
+        if i >= max_i > 0:
             break
         i += 1
-    return i
+    return i, value
 
 
 if __name__ == "__main__":
